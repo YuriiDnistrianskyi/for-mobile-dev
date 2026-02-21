@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           setState(() {
                             _counter = 0;
                           });
-                        } else if (_offset <= 150){
+                        } else if (_offset < 150){
                           setState(() {
                             _offset = _offset + 50;
                           });
