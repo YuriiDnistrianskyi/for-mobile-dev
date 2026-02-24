@@ -68,6 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: .center,
             children: [
+              Image.asset(
+                'assets/photo.jpg',
+                height: 200,
+                width: 200,
+              ),
               const Text('You have pushed the button this many times:'),
               Text(
                 '$_counter',
