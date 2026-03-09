@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
@@ -19,6 +20,12 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() {
     widget.setLogging(true);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const HomePage()
+      )
+    );
   }
 
   @override

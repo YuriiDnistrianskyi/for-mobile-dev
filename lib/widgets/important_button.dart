@@ -19,7 +19,7 @@ class _ImportantButtonState extends State<ImportantButton> {
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF033E27),
         foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       child: Text(widget.text)
