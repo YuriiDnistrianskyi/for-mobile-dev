@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/register_page.dart';
+import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({required this.setLogging, super.key});
-
-  final void Function(bool) setLogging;
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    widget.setLogging(true);
+    Provider.of<AuthProvider>(context, listen: false).login();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(

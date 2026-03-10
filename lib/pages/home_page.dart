@@ -52,12 +52,13 @@ class _HomePageState extends State<HomePage> {
           Center(
             child:
               SizedBox(
-                width: 320,
+                width: MediaQuery.of(context).size.width * 0.95,
                 height: 50,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 180,
+                      width: MediaQuery.of(context).size.width * 0.5,
                       height: 50,
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                       onTap: _addObject,
                       child: 
                       Container(
-                        width: 120,
+                        width: MediaQuery.of(context).size.width * 0.3,
                         decoration: const BoxDecoration(
                           color: Color(0xFF033E27),
                           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            width: 320,
+            width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.6,
             child: Expanded(
               child: GridView.builder(
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 2,
+                  childAspectRatio: 1.8,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                 ),
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           )
         ]
       ),
-      bottomNavigationBar: const CustomNavigationBar(current_page: 'home')
+      bottomNavigationBar: const CustomNavigationBar(currentPage: 'home')
     );
   }
 }

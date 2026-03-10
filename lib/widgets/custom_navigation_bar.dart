@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
-// import 'package:my_project/pages/profile_page.dart';
+import 'package:my_project/pages/profile_page.dart';
 
 class CustomNavigationBar extends StatefulWidget {
-  const CustomNavigationBar({required this.current_page, super.key});
+  const CustomNavigationBar({required this.currentPage, super.key});
 
-  final String current_page;
+  final String currentPage;
 
   @override
   State<CustomNavigationBar> createState() => _CustomNavigationBarState();
@@ -14,7 +14,7 @@ class CustomNavigationBar extends StatefulWidget {
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
 
   void _navigateToSetting() {
-    if (widget.current_page != 'setting') {
+    if (widget.currentPage != 'setting') {
       // Navigator.push(
       //   context,
       //   MaterialPageRoute<void>(
@@ -25,8 +25,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   }
 
   void _navigateToHome() {
-    if (widget.current_page != 'home') {
-      Navigator.push(
+    if (widget.currentPage != 'home') {
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
           builder: (context) => const HomePage()
@@ -36,13 +36,13 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   }
 
   void _navigateToProfile() {
-    if (widget.current_page != 'profile') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute<void>(
-      //     builder: (context) => const ProfilePage()
-      //   )
-      // );
+    if (widget.currentPage != 'profile') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => const ProfilePage()
+        )
+      );
     }
   }
 

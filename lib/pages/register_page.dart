@@ -54,21 +54,24 @@ class _RegisterPageState extends State<RegisterPage> {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(20))
           ),
-          child: Column(
-            children: [
-              CustomField(
-                text: 'Name',
-                icon: const Icon(Icons.account_circle),
-                controller: _nameController,
-                keyboardType: TextInputType.name
-              ),
-              EmailField(controller: _emailController),
-              PasswordField(controller: _passwordController),
-              ApprovePasswordField(controller: _aprovePasswordController),
-              const SizedBox(height: 20),
-              ImportantButton(text: 'Sign up', func: _signUp)
-            ]
-          )
+          child: SingleChildScrollView(
+            child: 
+            Column(
+              children: [
+                CustomField(
+                  text: 'Name',
+                  icon: const Icon(Icons.account_circle),
+                  controller: _nameController,
+                  keyboardType: TextInputType.name
+                ),
+                EmailField(controller: _emailController),
+                PasswordField(controller: _passwordController),
+                ApprovePasswordField(controller: _aprovePasswordController),
+                const SizedBox(height: 20),
+                ImportantButton(text: 'Sign up', func: _signUp)
+              ]
+            )
+         )
         )
       )
     );
