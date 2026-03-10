@@ -40,7 +40,9 @@ class _PasswordFieldState extends State<PasswordField> {
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 icon:
-                  _isHidden ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                  _isHidden ? 
+                  const Icon(Icons.visibility_off) : 
+                  const Icon(Icons.visibility),
                 onPressed: _togglePasswordVisibility,
               ),
               border: const OutlineInputBorder(
