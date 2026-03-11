@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/pages/object_page.dart';
 
 class ObjectItem extends StatefulWidget {
   const ObjectItem({required this.object, super.key});
@@ -14,7 +15,12 @@ class _ObjectItemState extends State<ObjectItem> {
   final double temperature = 12.32;
 
   void _navigateToObjectPage() {
-    //
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const ObjectPage()
+      )
+    );
   }
 
   @override
