@@ -55,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   children: [
                     const CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 93, 174, 129),
                       radius: 50,
                       child: Icon(Icons.account_circle),
                     ),

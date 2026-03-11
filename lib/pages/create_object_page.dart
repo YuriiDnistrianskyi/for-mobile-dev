@@ -5,8 +5,6 @@ import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 
-
-
 class CreateObjectPage extends StatefulWidget {
   const CreateObjectPage({super.key});
 
@@ -45,7 +43,6 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
         child: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.95,
-            height: 350,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20))
