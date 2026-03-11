@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
 import 'package:my_project/widgets/title_page_text.dart';
@@ -28,7 +29,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void _addObject() {
-    
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const CreateObjectPage()
+      )
+    );
   }
 
   @override
