@@ -5,6 +5,7 @@ import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
+import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,17 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Login',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-            )
-          )
-        ),
-        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const TitlePageText(text: 'Login'),
+        backgroundColor: Colors.transparent
       ),
       body: Center(
         child: Column(

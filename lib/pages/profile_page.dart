@@ -3,6 +3,7 @@ import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/setting_field.dart';
+import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -37,14 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold            
-          )
-        ),
+        title: const TitlePageText(text: 'Profile')
       ),
       body: Center(
         child: Column(

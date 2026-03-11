@@ -4,6 +4,7 @@ import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
+import 'package:my_project/widgets/title_page_text.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -37,14 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
-            'Sign Up',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-          )
-        )
+        title: const TitlePageText(text: 'Sign Up')
       ),
       body: Center(
         child: Container(

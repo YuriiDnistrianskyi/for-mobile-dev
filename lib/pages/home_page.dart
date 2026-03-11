@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
+import 'package:my_project/widgets/title_page_text.dart';
 
 class ObjectData {
   int id = 0;
@@ -36,16 +37,8 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Center(
-          child: Text(
-            'Home',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold
-            )
-          )
-        )
+        centerTitle: true,
+        title: const TitlePageText(text: 'Home')
       ),
       body: Column(
         children: [
