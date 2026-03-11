@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
 
 // Поки нехай так, щоб просто якийсь графік був, потім це перенеситься
 class GraphPoint {
