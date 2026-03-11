@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:my_project/pages/create_device_page.dart';
+import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/important_button.dart';
@@ -18,12 +18,12 @@ class _ObjectPageState extends State<ObjectPage> {
   final List<int> deviceList = [1, 2, 3];
 
   void _navigateToCreateDevice() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute<void>(
-    //     builder: (context) => const CreateDevicePage()
-    //   )
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const CreateDevicePage()
+      )
+    );
   }
 
   void _navigateToGraph() {
