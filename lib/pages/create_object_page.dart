@@ -21,7 +21,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _maxTemperatureComtroller = TextEditingController();
 
   void _createObject() {
-
+    Navigator.pop(context);
   }
 
   @override
@@ -47,32 +47,35 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20))
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomField(
-                  text: 'Name', 
-                  icon: const Icon(Icons.devices_rounded), 
-                  controller: _nameComtroller, 
-                  keyboardType: TextInputType.text
-                ),
-                CustomField(
-                  text: 'Max Temperature', 
-                  icon: const Icon(Icons.thermostat), 
-                  controller: _maxTemperatureComtroller, 
-                  keyboardType: TextInputType.number),
-                PasswordField(
-                  controller: _passwordComtroller
-                ),
-                ApprovePasswordField(
-                  controller: _approvePasswordComtroller
-                ),
-                const SizedBox(height: 20),
-                ImportantButton(
-                  text: 'Create object', 
-                  func: _createObject,
-                )
-              ]
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomField(
+                    text: 'Name', 
+                    icon: const Icon(Icons.devices_rounded), 
+                    controller: _nameComtroller, 
+                    keyboardType: TextInputType.text
+                  ),
+                  CustomField(
+                    text: 'Max Temperature', 
+                    icon: const Icon(Icons.thermostat), 
+                    controller: _maxTemperatureComtroller, 
+                    keyboardType: TextInputType.number),
+                  PasswordField(
+                    controller: _passwordComtroller
+                  ),
+                  ApprovePasswordField(
+                    controller: _approvePasswordComtroller
+                  ),
+                  const SizedBox(height: 20),
+                  ImportantButton(
+                    text: 'Create object', 
+                    func: _createObject,
+                  )
+                ]
+              )
             )
           )
         )
