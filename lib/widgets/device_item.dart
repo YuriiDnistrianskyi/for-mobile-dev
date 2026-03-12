@@ -49,12 +49,21 @@ class _DeviceItemState extends State<DeviceItem> {
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       children: [
+                        const Text(
+                          'Current power:',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
                         Expanded(
-                          child: Text(
-                            '$power %',
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold
+                          child: Center(
+                            child: Text(
+                              '$power %',
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold
+                              )
                             )
                           )
                         ),
