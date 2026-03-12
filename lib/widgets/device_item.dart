@@ -22,7 +22,7 @@ class _DeviceItemState extends State<DeviceItem> {
       onTap: _navigateToDevice,
       child: DecoratedBox(
         decoration: const BoxDecoration(
-          color: Color.fromARGB(96, 82, 95, 87),
+          color:Color.fromARGB(150, 0, 0, 0),
           borderRadius: BorderRadius.all(Radius.circular(20))
         ),
         child: Center(
