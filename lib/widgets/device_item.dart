@@ -12,9 +12,7 @@ class _DeviceItemState extends State<DeviceItem> {
   final String deviceName = 'Device 1';
   final String power = '76';
 
-  void _navigateToDevice() {
-
-  }
+  void _navigateToDevice() {}
 
   @override
   Widget build(BuildContext cotext) {
@@ -22,8 +20,8 @@ class _DeviceItemState extends State<DeviceItem> {
       onTap: _navigateToDevice,
       child: DecoratedBox(
         decoration: const BoxDecoration(
-          color:Color.fromARGB(150, 0, 0, 0),
-          borderRadius: BorderRadius.all(Radius.circular(20))
+          color: Color.fromARGB(150, 0, 0, 0),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Center(
           child: Padding(
@@ -35,15 +33,15 @@ class _DeviceItemState extends State<DeviceItem> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.bold
-                  )
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Container(
                   height: 50,
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20))
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
@@ -54,7 +52,7 @@ class _DeviceItemState extends State<DeviceItem> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                          )
+                          ),
                         ),
                         Expanded(
                           child: Center(
@@ -62,23 +60,23 @@ class _DeviceItemState extends State<DeviceItem> {
                               '$power %',
                               style: const TextStyle(
                                 fontSize: 17,
-                                fontWeight: FontWeight.bold
-                              )
-                            )
-                          )
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                        const Icon(Icons.speed)
+                        const Icon(Icons.speed),
                       ],
-                    )
-                  )
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
-                GraphBox(text: 'Speed graph', func: () {}) 
-              ]
-            )
-          )
-        )
-      )
+                GraphBox(text: 'Speed graph', func: () {}),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

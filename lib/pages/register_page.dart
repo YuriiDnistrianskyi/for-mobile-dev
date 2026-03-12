@@ -18,7 +18,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   // ignore: lines_longer_than_80_chars
-  final TextEditingController _aprovePasswordController = TextEditingController();
+  final TextEditingController _aprovePasswordController =
+      TextEditingController();
 
   void _signUp() {
     Navigator.pop(context);
@@ -38,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Navigator.pop(context);
           },
         ),
-        title: const TitlePageText(text: 'Sign Up')
+        title: const TitlePageText(text: 'Sign Up'),
       ),
       body: Center(
         child: Container(
@@ -46,28 +47,27 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 350,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20))
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           child: SingleChildScrollView(
-            child: 
-            Column(
+            child: Column(
               children: [
                 CustomField(
                   text: 'Name',
                   icon: const Icon(Icons.account_circle),
                   controller: _nameController,
-                  keyboardType: TextInputType.name
+                  keyboardType: TextInputType.name,
                 ),
                 EmailField(controller: _emailController),
                 PasswordField(controller: _passwordController),
                 ConfirmPasswordField(controller: _aprovePasswordController),
                 const SizedBox(height: 20),
-                ImportantButton(text: 'Sign up', func: _signUp)
-              ]
-            )
-         )
-        )
-      )
+                ImportantButton(text: 'Sign up', func: _signUp),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

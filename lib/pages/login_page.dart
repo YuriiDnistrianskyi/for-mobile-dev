@@ -23,9 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     Provider.of<AuthProvider>(context, listen: false).login();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const HomePage()
-      )
+      MaterialPageRoute<void>(builder: (context) => const HomePage()),
     );
   }
 
@@ -36,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const TitlePageText(text: 'Login'),
-        backgroundColor: Colors.transparent
+        backgroundColor: Colors.transparent,
       ),
       body: Center(
         child: Column(
@@ -51,38 +49,29 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Column(
                 children: [
-                  EmailField(
-                    controller: _emailController,
-                  ),
-                  PasswordField(
-                    controller: _passwordController,
-                  ),
+                  EmailField(controller: _emailController),
+                  PasswordField(controller: _passwordController),
                   const SizedBox(height: 20),
-                  ImportantButton(
-                    text: 'Login',
-                    func: _login,
-                  )
-                ]
-              )
+                  ImportantButton(text: 'Login', func: _login),
+                ],
+              ),
             ),
             TextButton(
               child: const Text(
                 'Dont have an account? Sign up',
-                style: TextStyle(
-                  color: Colors.white
-                )
-                ),
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => const RegisterPage()
-                  )
+                    builder: (context) => const RegisterPage(),
+                  ),
                 );
-              }
-            )
-          ]
-        )
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

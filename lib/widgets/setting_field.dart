@@ -5,7 +5,7 @@ class SettingField extends StatefulWidget {
     required this.text,
     required this.icon,
     required this.func,
-    super.key
+    super.key,
   });
 
   final String text;
@@ -26,17 +26,15 @@ class _SettingFieldState extends State<SettingField> {
         height: 70,
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20))
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            Expanded(
-              child: Text(widget.text),
-            ),
-            widget.icon
+            Expanded(child: Text(widget.text)),
+            widget.icon,
           ],
-        )
+        ),
       ),
     );
   }

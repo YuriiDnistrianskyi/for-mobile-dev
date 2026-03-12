@@ -17,9 +17,7 @@ class _ObjectItemState extends State<ObjectItem> {
   void _navigateToObjectPage() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const ObjectPage()
-      )
+      MaterialPageRoute<void>(builder: (context) => const ObjectPage()),
     );
   }
 
@@ -34,12 +32,7 @@ class _ObjectItemState extends State<ObjectItem> {
         ),
         child: Column(
           children: [
-            Text(
-              name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                )
-              ),
+            Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(9),
@@ -53,21 +46,19 @@ class _ObjectItemState extends State<ObjectItem> {
                         child: DecoratedBox(
                           decoration: const BoxDecoration(
                             color: Color.fromARGB(96, 82, 95, 87),
-                            borderRadius: BorderRadius.all(Radius.circular(20))
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          child: Center(
-                            child: Text('$temperature℃')
-                          )
-                        )
-                      )
-                    )
-                  ]
-                )
-              )
-            )
-          ]
-        )
-      )
+                          child: Center(child: Text('$temperature℃')),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

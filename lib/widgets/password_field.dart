@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
-  const PasswordField({
-    required this.controller,
-    super.key
-  });
+  const PasswordField({required this.controller, super.key});
 
   final TextEditingController controller;
 
@@ -25,9 +22,7 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(
-          height: 20
-        ),
+        const SizedBox(height: 20),
         SizedBox(
           width: 250,
           height: 50,
@@ -39,19 +34,18 @@ class _PasswordFieldState extends State<PasswordField> {
               labelText: 'Enter Password',
               icon: const Icon(Icons.lock),
               suffixIcon: IconButton(
-                icon:
-                  _isHidden ? 
-                  const Icon(Icons.visibility_off) : 
-                  const Icon(Icons.visibility),
+                icon: _isHidden
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility),
                 onPressed: _togglePasswordVisibility,
               ),
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11))
+                borderRadius: BorderRadius.all(Radius.circular(11)),
               ),
-            )
-          )
-        )
-      ]
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

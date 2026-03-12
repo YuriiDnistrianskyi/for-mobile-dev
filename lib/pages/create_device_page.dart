@@ -15,9 +15,8 @@ class CreateDevicePage extends StatefulWidget {
 class _CreateDevicePageState extends State<CreateDevicePage> {
   final TextEditingController _nameComtroller = TextEditingController();
   final TextEditingController _passwordComtroller = TextEditingController();
-  // ignore: lines_longer_than_80_chars
-  final TextEditingController _approvePasswordComtroller = TextEditingController();
-  // ignore: lines_longer_than_80_chars
+  final TextEditingController _approvePasswordComtroller =
+      TextEditingController();
 
   void _createDevice() {
     Navigator.pop(context);
@@ -35,7 +34,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Colors.white)
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -44,7 +43,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
             width: MediaQuery.of(context).size.width * 0.95,
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20))
+              borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -52,28 +51,21 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomField(
-                    text: 'Name', 
-                    icon: const Icon(Icons.devices_rounded), 
-                    controller: _nameComtroller, 
-                    keyboardType: TextInputType.text
+                    text: 'Name',
+                    icon: const Icon(Icons.devices_rounded),
+                    controller: _nameComtroller,
+                    keyboardType: TextInputType.text,
                   ),
-                  PasswordField(
-                    controller: _passwordComtroller
-                  ),
-                  ConfirmPasswordField(
-                    controller: _approvePasswordComtroller
-                  ),
+                  PasswordField(controller: _passwordComtroller),
+                  ConfirmPasswordField(controller: _approvePasswordComtroller),
                   const SizedBox(height: 20),
-                  ImportantButton(
-                    text: 'Create device', 
-                    func: _createDevice,
-                  )
-                ]
-              )
-            )
-          )
-        )
-      )
+                  ImportantButton(text: 'Create device', func: _createDevice),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
-} 
+}

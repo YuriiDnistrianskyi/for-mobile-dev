@@ -12,13 +12,12 @@ class CustomNavigationBar extends StatefulWidget {
 }
 
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
-
   void _navigateToSetting() {
     if (widget.currentPage != 'setting') {
       // Navigator.push(
       //   context,
       //   MaterialPageRoute<void>(
-      //     builder: (context) => const 
+      //     builder: (context) => const
       //   )
       // )
     }
@@ -28,9 +27,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     if (widget.currentPage != 'home') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(
-          builder: (context) => const HomePage()
-        )
+        MaterialPageRoute<void>(builder: (context) => const HomePage()),
       );
     }
   }
@@ -39,35 +36,33 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     if (widget.currentPage != 'profile') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(
-          builder: (context) => const ProfilePage()
-        )
+        MaterialPageRoute<void>(builder: (context) => const ProfilePage()),
       );
     }
   }
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return BottomAppBar(
       color: Colors.transparent,
       child: Padding(
-         padding: const EdgeInsetsGeometry.all(15),
+        padding: const EdgeInsetsGeometry.all(15),
         child: OverflowBar(
           overflowAlignment: OverflowBarAlignment.center,
           alignment: MainAxisAlignment.center,
           children: [
             IconButton(
-                icon: const Icon(Icons.settings),
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                onPressed: _navigateToSetting
+              icon: const Icon(Icons.settings),
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              onPressed: _navigateToSetting,
             ),
             const SizedBox(width: 40),
             IconButton(
               icon: const Icon(Icons.home),
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              onPressed: _navigateToHome
+              onPressed: _navigateToHome,
             ),
             const SizedBox(width: 40),
             IconButton(
@@ -75,10 +70,10 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               onPressed: _navigateToProfile,
-            )
-          ]
-        )
-      )
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

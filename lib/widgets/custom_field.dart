@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomField extends StatefulWidget {
   const CustomField({
-    required this.text, 
-    required this.icon, 
+    required this.text,
+    required this.icon,
     required this.controller,
     required this.keyboardType,
-    super.key
+    super.key,
   });
 
   final String text;
@@ -15,7 +15,7 @@ class CustomField extends StatefulWidget {
   final TextEditingController controller;
 
   @override
-  State<CustomField> createState() => _CustomFieldState(); 
+  State<CustomField> createState() => _CustomFieldState();
 }
 
 class _CustomFieldState extends State<CustomField> {
@@ -34,12 +34,12 @@ class _CustomFieldState extends State<CustomField> {
               labelText: 'Enter ${widget.text}',
               icon: widget.icon,
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11))
-              )
-            )
-          )
-        )
-      ]
+                borderRadius: BorderRadius.all(Radius.circular(11)),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
-} 
+}

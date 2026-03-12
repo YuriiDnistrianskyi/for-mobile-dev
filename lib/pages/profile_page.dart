@@ -17,17 +17,13 @@ class _ProfilePageState extends State<ProfilePage> {
   final String name = 'My name';
   final String email = 'my_email@gmail.com';
 
-  void _edit() {
-    
-  }
+  void _edit() {}
 
   void _logOut() {
     Provider.of<AuthProvider>(context, listen: false).logout();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const LoginPage()
-      )
+      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
     );
   }
 
@@ -38,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const TitlePageText(text: 'Profile')
+        title: const TitlePageText(text: 'Profile'),
       ),
       body: Center(
         child: Column(
@@ -48,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 170,
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20))
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -65,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 100,
                         decoration: const BoxDecoration(
                           color: Color.fromARGB(96, 82, 95, 87),
-                          borderRadius: BorderRadius.all(Radius.circular(20))
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -75,40 +71,37 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                              )
+                              ),
                             ),
-                            Text(
-                              email,
-                              style: const TextStyle(fontSize: 15)
-                            )
+                            Text(email, style: const TextStyle(fontSize: 15)),
                           ],
                         ),
-                      )
-                    )
-                  ]
-                )
-              )
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: Column(
                 children: [
                   SettingField(
-                    text: 'Edit', 
-                    icon: const Icon(Icons.edit), 
+                    text: 'Edit',
+                    icon: const Icon(Icons.edit),
                     func: _edit,
                   ),
                   const SizedBox(height: 20),
                   SettingField(
                     text: 'Log Out',
                     icon: const Icon(Icons.logout),
-                    func: _logOut
-                  )
-                ]
-              )
-            )
-          ]
-        )
+                    func: _logOut,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: const CustomNavigationBar(currentPage: 'profile'),
     );

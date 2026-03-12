@@ -20,9 +20,7 @@ class _ObjectPageState extends State<ObjectPage> {
   void _navigateToCreateDevice() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const CreateDevicePage()
-      )
+      MaterialPageRoute<void>(builder: (context) => const CreateDevicePage()),
     );
   }
 
@@ -30,9 +28,7 @@ class _ObjectPageState extends State<ObjectPage> {
     //
   }
 
-  void _navigateToDdevice() {
-
-  }
+  void _navigateToDdevice() {}
 
   @override
   Widget build(BuildContext context) {
@@ -46,75 +42,72 @@ class _ObjectPageState extends State<ObjectPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Colors.white)
-        )
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 50,
-                    child: CustomButton(
-                      text: 'Add device',
-                      func: _navigateToCreateDevice,
-                    )
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.95,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                  child: CustomButton(
+                    text: 'Add device',
+                    func: _navigateToCreateDevice,
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Current Temperature: ',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              '$currentTemperature ℃',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.thermostat),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'Current Temperature: ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                '$currentTemperature ℃',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold
-                                )
-                              )
-                            )
-                          ),
-                          const Icon(Icons.thermostat)
-                        ]
-                      )
-                    )
                   ),
-                  const SizedBox(height: 20),
-                  GraphBox(text: 'Temparature graph', func: _navigateToGraph,),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: deviceList.length,
-                    itemBuilder:(context, index) {
-                      return const Column(
-                        children: [
-                          SizedBox(height: 20),
-                          DeviceItem()
-                        ]
-                      );
-                    },
-                  )
-                ],
-              )
-            )
-        )
+                ),
+                const SizedBox(height: 20),
+                GraphBox(text: 'Temparature graph', func: _navigateToGraph),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: deviceList.length,
+                  itemBuilder: (context, index) {
+                    return const Column(
+                      children: [SizedBox(height: 20), DeviceItem()],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

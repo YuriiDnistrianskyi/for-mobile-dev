@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TitlePageText extends StatelessWidget{
+class TitlePageText extends StatelessWidget {
   const TitlePageText({required this.text, super.key});
 
   final String text;
@@ -12,8 +12,8 @@ class TitlePageText extends StatelessWidget{
       style: const TextStyle(
         color: Colors.white,
         fontSize: 24,
-        fontWeight: FontWeight.bold
-      )
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

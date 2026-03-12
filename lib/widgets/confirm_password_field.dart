@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ConfirmPasswordField extends StatefulWidget {
-  const ConfirmPasswordField({
-    required this.controller,
-    super.key
-  });
+  const ConfirmPasswordField({required this.controller, super.key});
 
   final TextEditingController controller;
 
   @override
-  State<ConfirmPasswordField> createState() => _ConfirmPasswordFieldFieldState();
+  State<ConfirmPasswordField> createState() =>
+      _ConfirmPasswordFieldFieldState();
 }
 
 class _ConfirmPasswordFieldFieldState extends State<ConfirmPasswordField> {
@@ -25,9 +23,7 @@ class _ConfirmPasswordFieldFieldState extends State<ConfirmPasswordField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(
-          height: 20
-        ),
+        const SizedBox(height: 20),
         SizedBox(
           width: 250,
           height: 50,
@@ -39,19 +35,18 @@ class _ConfirmPasswordFieldFieldState extends State<ConfirmPasswordField> {
               labelText: 'Confirm Password',
               icon: const Icon(Icons.lock_reset),
               suffixIcon: IconButton(
-                icon:
-                  _isHidden ? 
-                  const Icon(Icons.visibility_off) : 
-                  const Icon(Icons.visibility),
+                icon: _isHidden
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility),
                 onPressed: _togglePasswordVisibility,
               ),
               border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11))
+                borderRadius: BorderRadius.all(Radius.circular(11)),
               ),
-            )
-          )
-        )
-      ]
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

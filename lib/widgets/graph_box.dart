@@ -1,16 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-
 // Поки нехай так, щоб просто якийсь графік був, потім це перенеситься
 class GraphPoint {
   final DateTime time;
   final double value;
 
-  GraphPoint({
-    required this.time,
-    required this.value
-  });
+  GraphPoint({required this.time, required this.value});
 }
 
 final List<GraphPoint> data = [
@@ -24,7 +20,6 @@ final List<GraphPoint> data = [
 ];
 //
 
-
 class GraphBox extends StatefulWidget {
   const GraphBox({required this.text, required this.func, super.key});
 
@@ -36,17 +31,11 @@ class GraphBox extends StatefulWidget {
 }
 
 class _GraphBoxState extends State<GraphBox> {
-
   List<FlSpot> _buildSpots(List<GraphPoint> data) {
     final List<FlSpot> spots = [];
 
     for (int i = 0; i < data.length; i++) {
-      spots.add(
-        FlSpot(
-          i.toDouble(),
-          data[i].value
-        )
-      );
+      spots.add(FlSpot(i.toDouble(), data[i].value));
     }
 
     return spots;
@@ -59,7 +48,7 @@ class _GraphBoxState extends State<GraphBox> {
       child: DecoratedBox(
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20))
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         child: Center(
           child: Column(
@@ -68,8 +57,8 @@ class _GraphBoxState extends State<GraphBox> {
                 widget.text,
                 style: const TextStyle(
                   fontSize: 17,
-                  fontWeight: FontWeight.bold
-                )
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 10),
               SizedBox(
@@ -86,17 +75,17 @@ class _GraphBoxState extends State<GraphBox> {
                           spots: _buildSpots(data),
                           isCurved: true,
                           barWidth: 3,
-                          dotData: const FlDotData(show: false)
-                        )
-                      ]
-                    )
-                  )
-                )
-              )
-            ]
-          )
-        )
-      )
+                          dotData: const FlDotData(show: false),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

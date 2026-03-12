@@ -10,15 +10,9 @@ class ObjectData {
 }
 
 final List<Map<String, dynamic>> _objects = [
-  {
-    'id': 1
-  },
-  {
-    'id': 2
-  },
-  {
-    'id': 3
-  }
+  {'id': 1},
+  {'id': 2},
+  {'id': 3},
 ];
 
 class HomePage extends StatefulWidget {
@@ -32,9 +26,7 @@ class _HomePageState extends State<HomePage> {
   void _navigateToCreateObject() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const CreateObjectPage()
-      )
+      MaterialPageRoute<void>(builder: (context) => const CreateObjectPage()),
     );
   }
 
@@ -45,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const TitlePageText(text: 'Home')
+        title: const TitlePageText(text: 'Home'),
       ),
       body: Column(
         children: [
@@ -59,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                     height: 50,
                     decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     child: const Center(
                       child: Text(
@@ -67,25 +59,23 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 18,
-                          fontWeight: FontWeight.bold
-                        )
-                      )
-                    )
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  const Expanded(
-                    child: SizedBox()
-                  ),
+                  const Expanded(child: SizedBox()),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: 50,
                     child: CustomButton(
                       text: 'Add Object',
                       func: _navigateToCreateObject,
-                    )
-                  )
-                ]
-              )
-            )
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -103,13 +93,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 itemBuilder: (context, index) {
                   return ObjectItem(object: _objects[index]);
-                }
-              )
-            )
-          )
-        ]
+                },
+              ),
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: const CustomNavigationBar(currentPage: 'home')
+      bottomNavigationBar: const CustomNavigationBar(currentPage: 'home'),
     );
   }
 }

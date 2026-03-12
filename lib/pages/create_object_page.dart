@@ -16,9 +16,11 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _nameComtroller = TextEditingController();
   final TextEditingController _passwordComtroller = TextEditingController();
   // ignore: lines_longer_than_80_chars
-  final TextEditingController _approvePasswordComtroller = TextEditingController();
+  final TextEditingController _approvePasswordComtroller =
+      TextEditingController();
   // ignore: lines_longer_than_80_chars
-  final TextEditingController _maxTemperatureComtroller = TextEditingController();
+  final TextEditingController _maxTemperatureComtroller =
+      TextEditingController();
 
   void _createObject() {
     Navigator.pop(context);
@@ -36,7 +38,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Colors.white)
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(
@@ -45,7 +47,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
             width: MediaQuery.of(context).size.width * 0.95,
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20))
+              borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -53,33 +55,27 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomField(
-                    text: 'Name', 
-                    icon: const Icon(Icons.devices_rounded), 
-                    controller: _nameComtroller, 
-                    keyboardType: TextInputType.text
+                    text: 'Name',
+                    icon: const Icon(Icons.devices_rounded),
+                    controller: _nameComtroller,
+                    keyboardType: TextInputType.text,
                   ),
                   CustomField(
-                    text: 'Max Temperature', 
-                    icon: const Icon(Icons.thermostat), 
-                    controller: _maxTemperatureComtroller, 
-                    keyboardType: TextInputType.number),
-                  PasswordField(
-                    controller: _passwordComtroller
+                    text: 'Max Temperature',
+                    icon: const Icon(Icons.thermostat),
+                    controller: _maxTemperatureComtroller,
+                    keyboardType: TextInputType.number,
                   ),
-                  ConfirmPasswordField(
-                    controller: _approvePasswordComtroller
-                  ),
+                  PasswordField(controller: _passwordComtroller),
+                  ConfirmPasswordField(controller: _approvePasswordComtroller),
                   const SizedBox(height: 20),
-                  ImportantButton(
-                    text: 'Create object', 
-                    func: _createObject,
-                  )
-                ]
-              )
-            )
-          )
-        )
-      )
+                  ImportantButton(text: 'Create object', func: _createObject),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
-} 
+}

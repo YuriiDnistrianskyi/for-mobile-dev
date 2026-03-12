@@ -27,12 +27,12 @@ class _CustomButtonState extends State<CustomButton> {
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
-                fontWeight: FontWeight.bold
-              )
-            )
-          )
-        )
-      )
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

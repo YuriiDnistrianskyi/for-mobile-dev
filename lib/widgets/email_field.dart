@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmailField extends StatefulWidget {
-  const EmailField({
-    required this.controller,
-    super.key
-  });
+  const EmailField({required this.controller, super.key});
 
   final TextEditingController controller;
 
@@ -17,9 +14,7 @@ class _EmailFieldState extends State<EmailField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(
-          height: 20
-        ),
+        const SizedBox(height: 20),
         SizedBox(
           width: 250,
           height: 50,
@@ -30,12 +25,12 @@ class _EmailFieldState extends State<EmailField> {
               labelText: 'Enter Email',
               icon: Icon(Icons.mail),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11))
+                borderRadius: BorderRadius.all(Radius.circular(11)),
               ),
-            )
-          )
-        )
-      ]
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -5,13 +5,12 @@ class ImportantButton extends StatefulWidget {
 
   final String text;
   final void Function() func;
-  
+
   @override
   State<ImportantButton> createState() => _ImportantButtonState();
 }
 
 class _ImportantButtonState extends State<ImportantButton> {
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -22,8 +21,7 @@ class _ImportantButtonState extends State<ImportantButton> {
         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
         textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      child: Text(widget.text)
+      child: Text(widget.text),
     );
   }
-
 }
