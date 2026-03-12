@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/create_device_page.dart';
+import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
-import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 
 class ObjectPage extends StatefulWidget {
@@ -53,14 +53,13 @@ class _ObjectPageState extends State<ObjectPage> {
         child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
-              // color: Colors.blue,
               child: Column(
                 children: [
                   SizedBox(
                     height: 50,
-                    child: ImportantButton(
-                      text: 'Add device', 
-                      func: _navigateToCreateDevice
+                    child: CustomButton(
+                      text: 'Add device',
+                      func: _navigateToCreateDevice,
                     )
                   ),
                   const SizedBox(height: 20),
@@ -104,7 +103,12 @@ class _ObjectPageState extends State<ObjectPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: deviceList.length,
                     itemBuilder:(context, index) {
-                      return const DeviceItem();
+                      return const Column(
+                        children: [
+                          SizedBox(height: 20),
+                          DeviceItem()
+                        ]
+                      );
                     },
                   )
                 ],
