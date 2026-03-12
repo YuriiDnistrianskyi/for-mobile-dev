@@ -5,8 +5,6 @@ import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 
-
-
 class CreateDevicePage extends StatefulWidget {
   const CreateDevicePage({super.key});
 
@@ -48,27 +46,30 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20))
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomField(
-                  text: 'Name', 
-                  icon: const Icon(Icons.devices_rounded), 
-                  controller: _nameComtroller, 
-                  keyboardType: TextInputType.text
-                ),
-                PasswordField(
-                  controller: _passwordComtroller
-                ),
-                ApprovePasswordField(
-                  controller: _approvePasswordComtroller
-                ),
-                const SizedBox(height: 20),
-                ImportantButton(
-                  text: 'Create device', 
-                  func: _createDevice,
-                )
-              ]
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomField(
+                    text: 'Name', 
+                    icon: const Icon(Icons.devices_rounded), 
+                    controller: _nameComtroller, 
+                    keyboardType: TextInputType.text
+                  ),
+                  PasswordField(
+                    controller: _passwordComtroller
+                  ),
+                  ApprovePasswordField(
+                    controller: _approvePasswordComtroller
+                  ),
+                  const SizedBox(height: 20),
+                  ImportantButton(
+                    text: 'Create device', 
+                    func: _createDevice,
+                  )
+                ]
+              )
             )
           )
         )
