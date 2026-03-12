@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/create_object_page.dart';
+import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
 import 'package:my_project/widgets/title_page_text.dart';
@@ -28,7 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _addObject() {
+  void _navigateToCreateObject() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
@@ -49,53 +50,46 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Center(
-            child:
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      child: const Center(
-                        child: Text(
-                        'Your objects',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold
-                          )
-                        )
-                      )
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
-                    const SizedBox(width: 20),
-                    GestureDetector(
-                      onTap: _addObject,
-                      child: 
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF033E27),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.add_sharp, color: Colors.white)
+                    child: const Center(
+                      child: Text(
+                        'Your Objects',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
                         )
                       )
                     )
-                  ]
-                )
+                  ),
+                  const Expanded(
+                    child: SizedBox()
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 50,
+                    child: CustomButton(
+                      text: 'Add Object',
+                      func: _navigateToCreateObject,
+                    )
+                  )
+                ]
               )
+            )
           ),
           const SizedBox(height: 20),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
+            width: MediaQuery.of(context).size.width * 0.95,
             height: MediaQuery.of(context).size.height * 0.6,
             child: Expanded(
               child: GridView.builder(
@@ -103,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 1.8,
+                  childAspectRatio: 1.7,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                 ),
