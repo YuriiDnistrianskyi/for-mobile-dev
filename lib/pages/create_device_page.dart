@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/widgets/approve_password_field.dart';
+import 'package:my_project/widgets/confirm_password_field.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
@@ -60,7 +60,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                   PasswordField(
                     controller: _passwordComtroller
                   ),
-                  ApprovePasswordField(
+                  ConfirmPasswordField(
                     controller: _approvePasswordComtroller
                   ),
                   const SizedBox(height: 20),

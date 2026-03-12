@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ApprovePasswordField extends StatefulWidget {
-  const ApprovePasswordField({
+class ConfirmPasswordField extends StatefulWidget {
+  const ConfirmPasswordField({
     required this.controller,
     super.key
   });
@@ -9,10 +9,10 @@ class ApprovePasswordField extends StatefulWidget {
   final TextEditingController controller;
 
   @override
-  State<ApprovePasswordField> createState() => _ApprovePasswordFieldState();
+  State<ConfirmPasswordField> createState() => _ConfirmPasswordFieldFieldState();
 }
 
-class _ApprovePasswordFieldState extends State<ApprovePasswordField> {
+class _ConfirmPasswordFieldFieldState extends State<ConfirmPasswordField> {
   bool _isHidden = true;
 
   void _togglePasswordVisibility() {
@@ -36,7 +36,7 @@ class _ApprovePasswordFieldState extends State<ApprovePasswordField> {
             obscureText: _isHidden,
             keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
-              labelText: 'Approve Password',
+              labelText: 'Confirm Password',
               icon: const Icon(Icons.lock_reset),
               suffixIcon: IconButton(
                 icon:

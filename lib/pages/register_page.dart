@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/widgets/approve_password_field.dart';
+import 'package:my_project/widgets/confirm_password_field.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 EmailField(controller: _emailController),
                 PasswordField(controller: _passwordController),
-                ApprovePasswordField(controller: _aprovePasswordController),
+                ConfirmPasswordField(controller: _aprovePasswordController),
                 const SizedBox(height: 20),
                 ImportantButton(text: 'Sign up', func: _signUp)
               ]
