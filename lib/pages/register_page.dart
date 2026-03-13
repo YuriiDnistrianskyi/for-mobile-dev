@@ -17,7 +17,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  // ignore: lines_longer_than_80_chars
   final TextEditingController _aprovePasswordController =
       TextEditingController();
 

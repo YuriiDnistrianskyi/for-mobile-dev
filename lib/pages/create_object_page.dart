@@ -15,10 +15,8 @@ class CreateObjectPage extends StatefulWidget {
 class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _nameComtroller = TextEditingController();
   final TextEditingController _passwordComtroller = TextEditingController();
-  // ignore: lines_longer_than_80_chars
   final TextEditingController _approvePasswordComtroller =
       TextEditingController();
-  // ignore: lines_longer_than_80_chars
   final TextEditingController _maxTemperatureComtroller =
       TextEditingController();
 
