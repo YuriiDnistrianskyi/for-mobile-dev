@@ -60,12 +60,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 PasswordField(
                   text: 'Password',
                   icon: const Icon(Icons.lock),
-                  controller: _passwordController
+                  controller: _passwordController,
                 ),
                 PasswordField(
                   text: 'Confirm Password',
                   icon: const Icon(Icons.lock_reset),
-                  controller: _confirmPasswordController
+                  controller: _confirmPasswordController,
                 ),
                 const SizedBox(height: 20),
                 ImportantButton(text: 'Sign up', func: _signUp),

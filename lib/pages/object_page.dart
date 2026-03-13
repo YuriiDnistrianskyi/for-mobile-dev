@@ -89,7 +89,7 @@ class _ObjectPageState extends State<ObjectPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GraphBox(text: 'Temparature graph'),
+                const GraphBox(text: 'Temparature graph'),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

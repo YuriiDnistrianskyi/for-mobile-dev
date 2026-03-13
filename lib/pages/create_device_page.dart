@@ -56,14 +56,14 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                     keyboardType: TextInputType.text,
                   ),
                   PasswordField(
-                    text: 'Password', 
-                    icon: const Icon(Icons.lock), 
-                    controller: _passwordController
+                    text: 'Password',
+                    icon: const Icon(Icons.lock),
+                    controller: _passwordController,
                   ),
                   PasswordField(
                     text: 'Confirm Password',
                     icon: const Icon(Icons.lock_reset),
-                    controller: _confirmPasswordController
+                    controller: _confirmPasswordController,
                   ),
                   const SizedBox(height: 20),
                   ImportantButton(text: 'Create device', func: _createDevice),
