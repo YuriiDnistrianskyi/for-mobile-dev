@@ -24,10 +24,6 @@ class _ObjectPageState extends State<ObjectPage> {
     );
   }
 
-  void _navigateToGraph() {
-    //
-  }
-
   void _navigateToDdevice() {}
 
   @override
@@ -93,7 +89,7 @@ class _ObjectPageState extends State<ObjectPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GraphBox(text: 'Temparature graph', func: _navigateToGraph),
+                GraphBox(text: 'Temparature graph'),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

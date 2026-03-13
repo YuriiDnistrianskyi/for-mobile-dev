@@ -21,10 +21,9 @@ final List<GraphPoint> data = [
 //
 
 class GraphBox extends StatefulWidget {
-  const GraphBox({required this.text, required this.func, super.key});
+  const GraphBox({required this.text, super.key});
 
   final String text;
-  final void Function() func;
 
   @override
   State<GraphBox> createState() => _GraphBoxState();
@@ -44,7 +43,6 @@ class _GraphBoxState extends State<GraphBox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.func,
       child: DecoratedBox(
         decoration: const BoxDecoration(
           color: Colors.white,

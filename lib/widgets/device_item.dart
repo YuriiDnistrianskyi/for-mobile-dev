@@ -71,7 +71,7 @@ class _DeviceItemState extends State<DeviceItem> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                GraphBox(text: 'Speed graph', func: () {}),
+                const GraphBox(text: 'Speed graph'),
               ],
             ),
           ),
