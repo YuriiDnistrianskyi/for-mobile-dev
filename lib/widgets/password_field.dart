@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
-  const PasswordField({required this.controller, super.key});
+  const PasswordField({
+    required this.text,
+    required this.icon,
+    required this.controller,
+    super.key,
+  });
 
+  final String text;
+  final Icon icon;
   final TextEditingController controller;
 
   @override
@@ -31,8 +38,8 @@ class _PasswordFieldState extends State<PasswordField> {
             obscureText: _isHidden,
             keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
-              labelText: 'Enter Password',
-              icon: const Icon(Icons.lock),
+              labelText: 'Enter ${widget.text}',
+              icon: widget.icon,
               suffixIcon: IconButton(
                 icon: _isHidden
                     ? const Icon(Icons.visibility_off)

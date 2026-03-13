@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/widgets/confirm_password_field.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
@@ -17,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _aprovePasswordController =
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
   void _signUp() {
@@ -58,8 +57,16 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.name,
                 ),
                 EmailField(controller: _emailController),
-                PasswordField(controller: _passwordController),
-                ConfirmPasswordField(controller: _aprovePasswordController),
+                PasswordField(
+                  text: 'Password',
+                  icon: const Icon(Icons.lock),
+                  controller: _passwordController
+                ),
+                PasswordField(
+                  text: 'Confirm Password',
+                  icon: const Icon(Icons.lock_reset),
+                  controller: _confirmPasswordController
+                ),
                 const SizedBox(height: 20),
                 ImportantButton(text: 'Sign up', func: _signUp),
               ],

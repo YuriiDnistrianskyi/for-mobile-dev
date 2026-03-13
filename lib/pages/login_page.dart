@@ -50,7 +50,11 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   EmailField(controller: _emailController),
-                  PasswordField(controller: _passwordController),
+                  PasswordField(
+                    text: 'Password', 
+                    icon: const Icon(Icons.lock),
+                    controller: _passwordController
+                  ),
                   const SizedBox(height: 20),
                   ImportantButton(text: 'Login', func: _login),
                 ],

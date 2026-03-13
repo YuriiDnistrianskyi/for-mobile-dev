@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/widgets/confirm_password_field.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
@@ -13,9 +12,9 @@ class CreateDevicePage extends StatefulWidget {
 }
 
 class _CreateDevicePageState extends State<CreateDevicePage> {
-  final TextEditingController _nameComtroller = TextEditingController();
-  final TextEditingController _passwordComtroller = TextEditingController();
-  final TextEditingController _approvePasswordComtroller =
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
   void _createDevice() {
@@ -53,11 +52,19 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                   CustomField(
                     text: 'Name',
                     icon: const Icon(Icons.devices_rounded),
-                    controller: _nameComtroller,
+                    controller: _nameController,
                     keyboardType: TextInputType.text,
                   ),
-                  PasswordField(controller: _passwordComtroller),
-                  ConfirmPasswordField(controller: _approvePasswordComtroller),
+                  PasswordField(
+                    text: 'Password', 
+                    icon: const Icon(Icons.lock), 
+                    controller: _passwordController
+                  ),
+                  PasswordField(
+                    text: 'Confirm Password',
+                    icon: const Icon(Icons.lock_reset),
+                    controller: _confirmPasswordController
+                  ),
                   const SizedBox(height: 20),
                   ImportantButton(text: 'Create device', func: _createDevice),
                 ],

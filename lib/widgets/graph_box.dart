@@ -42,46 +42,41 @@ class _GraphBoxState extends State<GraphBox> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                widget.text,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 300,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: LineChart(
-                    LineChartData(
-                      borderData: FlBorderData(show: false),
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              widget.text,
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: LineChart(
+                  LineChartData(
+                    borderData: FlBorderData(show: false),
 
-                      lineBarsData: [
-                        LineChartBarData(
-                          color: Colors.black,
-                          spots: _buildSpots(data),
-                          isCurved: true,
-                          barWidth: 3,
-                          dotData: const FlDotData(show: false),
-                        ),
-                      ],
-                    ),
+                    lineBarsData: [
+                      LineChartBarData(
+                        color: Colors.black,
+                        spots: _buildSpots(data),
+                        isCurved: true,
+                        barWidth: 3,
+                        dotData: const FlDotData(show: false),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
