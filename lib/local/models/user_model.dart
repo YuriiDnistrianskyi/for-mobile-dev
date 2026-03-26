@@ -16,15 +16,13 @@ class User extends IModel {
   });
 
   @override
-  User fromMap(Map<String, dynamic> map) {
-    return User(
-      id: map['id'] as int,
-      firstName: map['firstName'] as String,
-      lastName: map['lastName'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
-    );
-  }
+  factory User.fromMap(Map<String, dynamic> map) => User(
+    id: map['id'] as int,
+    firstName: map['firstName'] as String,
+    lastName: map['lastName'] as String,
+    email: map['email'] as String,
+    password: map['password'] as String,
+  );
 
   @override
   String getTableName() => 'user';
@@ -38,7 +36,7 @@ class User extends IModel {
       'email': email,
       'password': password,
     };
-  
+
     return data;
   }
 }

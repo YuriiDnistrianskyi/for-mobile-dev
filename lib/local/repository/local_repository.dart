@@ -2,7 +2,7 @@
 import 'package:my_project/local/models/i_model.dart';
 // import 'package:my_project/local_server/models/object_model.dart';
 // import 'package:my_project/local_server/models/temperature_graph_point_model.dart';
-// import 'package:my_project/local_server/models/user_model.dart';
+import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/local/repository/i_local_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -102,6 +102,19 @@ class Repository implements ILocalRepository {
 
     if (maps.isNotEmpty) {
       return table.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<User?> getUser(String email) async {
+    final List<Map<String, Object?>> maps = await db.query(
+      'user',
+      where: 'email = ?',
+      whereArgs: [email]
+    );
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
     }
     return null;
   }

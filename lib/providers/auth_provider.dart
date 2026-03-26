@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/local/repository/local_repository.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -11,11 +12,12 @@ class AuthProvider with ChangeNotifier {
 
   bool get isLoggin => _isLoggin;
 
-  void login() {
-    setState() {
-      _isLoggin = true;
+  Future<void> login(String email, String password) async {
+    final User? user = await repository.getUser(email);
+    if (user == null || user.password != password) {
+      return;
     }
-    // _isLoggin = true;
+    _isLoggin = true;
     notifyListeners();
   }
 

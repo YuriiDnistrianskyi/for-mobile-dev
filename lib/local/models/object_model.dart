@@ -20,17 +20,15 @@ class _Object extends IModel {
   });
 
   @override
-  _Object fromMap(Map<String, dynamic> map) {
-    return _Object(
-      id: map['id'] as int,
-      publicName: map['publicName'] as String,
-      privateName: map['privateName'] as String,
-      password: map['password'] as String,
-      userId: map['userId'] as int,
-      maxTemperature: map['maxTemperature'] as double,
-      defaultSpeedForDevices: map['defaultSpeedForDevices'] as int,
-    );
-  }
+  factory _Object.fromMap(Map<String, dynamic> map) => _Object(
+    id: map['id'] as int,
+    publicName: map['publicName'] as String,
+    privateName: map['privateName'] as String,
+    password: map['password'] as String,
+    userId: map['userId'] as int,
+    maxTemperature: map['maxTemperature'] as double,
+    defaultSpeedForDevices: map['defaultSpeedForDevices'] as int,
+  );
 
   @override
   String getTableName() => 'object';

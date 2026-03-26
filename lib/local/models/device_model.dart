@@ -16,15 +16,13 @@ class Device extends IModel {
   });
 
   @override
-  Device fromMap(Map<String, dynamic> map) {
-    return Device(
-      id: map['id'] as int,
-      publicName: map['publicName'] as String,
-      privatName: map['privatName'] as String,
-      password: map['password'] as String,
-      objectId: map['objectId'] as int,
-    );
-  }
+  factory Device.fromMap(Map<String, dynamic> map) => Device(
+    id: map['id'] as int,
+    publicName: map['publicName'] as String,
+    privatName: map['privatName'] as String,
+    password: map['password'] as String,
+    objectId: map['objectId'] as int,
+  );
 
   @override
   String getTableName() => 'device';
