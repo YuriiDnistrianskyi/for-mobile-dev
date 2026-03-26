@@ -1,4 +1,6 @@
-class TemperatureGraphPoint {
+import 'package:my_project/local_server/models/i_model.dart';
+
+class TemperatureGraphPoint extends IModel {
   final int objectId;
   final DateTime time;
   final double value;
@@ -16,6 +18,7 @@ class TemperatureGraphPoint {
         value: map['value'] as double,
       );
 
+  @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'object_id': objectId,

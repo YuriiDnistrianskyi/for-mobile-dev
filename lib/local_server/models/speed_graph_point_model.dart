@@ -1,4 +1,6 @@
-class SpeedGraphPointModel {
+import 'package:my_project/local_server/models/i_model.dart';
+
+class SpeedGraphPointModel extends IModel {
   final int deviceId;
   final DateTime time;
   final int value;
@@ -16,6 +18,7 @@ class SpeedGraphPointModel {
       value: map['value'] as int,
     );
 
+  @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'deviceId': deviceId,

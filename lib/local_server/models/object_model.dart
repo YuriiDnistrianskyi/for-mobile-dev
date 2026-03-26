@@ -1,4 +1,6 @@
-class Object {
+import 'package:my_project/local_server/models/i_model.dart';
+
+class _Object extends IModel {
   final int id;
   final String publicName;
   final String privateName;
@@ -7,28 +9,29 @@ class Object {
   final double maxTemperature;
   final int defaultSpeedForDevices;
 
-  Object({
+  _Object({
     required this.id,
     required this.publicName,
     required this.privateName,
     required this.password,
     required this.userId,
     required this.maxTemperature,
-    required this.defaultSpeedForDevices
+    required this.defaultSpeedForDevices,
   });
 
-  factory Object.fromMap(Map<String, dynamic> map) {
-    return Object(
+  factory _Object.fromMap(Map<String, dynamic> map) {
+    return _Object(
       id: map['id'] as int,
       publicName: map['publicName'] as String,
       privateName: map['privateName'] as String,
       password: map['password'] as String,
       userId: map['userId'] as int,
       maxTemperature: map['maxTemperature'] as double,
-      defaultSpeedForDevices: map['defaultSpeedForDevices'] as int
+      defaultSpeedForDevices: map['defaultSpeedForDevices'] as int,
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'id': id,
@@ -37,7 +40,7 @@ class Object {
       'password': password,
       'userId': userId,
       'maxTemperature': maxTemperature,
-      'defaultSpeedForDevices': defaultSpeedForDevices
+      'defaultSpeedForDevices': defaultSpeedForDevices,
     };
     return data;
   }

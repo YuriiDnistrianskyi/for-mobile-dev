@@ -1,4 +1,6 @@
-class Device {
+import 'package:my_project/local_server/models/i_model.dart';
+
+class Device extends IModel {
   final int id;
   final String publicName;
   final String privatName;
@@ -23,6 +25,7 @@ class Device {
     );
   }
 
+  @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'id': id,
