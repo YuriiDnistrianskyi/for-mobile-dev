@@ -1,4 +1,4 @@
-import 'package:my_project/local_server/models/i_model.dart';
+import 'package:my_project/local/models/i_model.dart';
 
 class TemperatureGraphPoint extends IModel {
   final int objectId;
