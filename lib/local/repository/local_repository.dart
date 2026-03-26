@@ -56,11 +56,7 @@ const String createSpeedGraphPointTable = '''
           ''';
 
 class Repository implements ILocalRepository {
-  Database db;
-
-  Repository({
-    required this.db
-  });
+  late Database db;
 
   @override
   Future<void> open(String path) async {

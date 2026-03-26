@@ -1,38 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/pages/home_page.dart';
-import 'package:my_project/pages/login_page.dart';
+import 'package:my_project/local/repository/local_repository.dart';
+import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/device_provider.dart';
+import 'package:my_project/providers/object_provider.dart';
+import 'package:my_project/providers/speed_graph_provider.dart';
+import 'package:my_project/providers/temperature_graph_provider.dart';
+import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/app_background.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final dbPath = await getDatabasesPath();
+  final path = join(dbPath, 'cooling_system_db');
+
+  final appRepository = Repository();
+  await appRepository.open(path);
+
+  runApp(MyApp(repository: appRepository));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Repository repository;
+
+  const MyApp({required this.repository, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider(repository: repository)),
+        ChangeNotifierProvider(
+          create: (_) => DeviceProvider(repository: repository)
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ObjectProvider(repository: repository)
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SpeedGraphProvider(repository: repository)
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TemperatureGraphProvider(repository: repository)
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(repository: repository)
+        ),
+      ],
       child: MaterialApp(
         title: 'Cooling System',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 3, 79, 49)
-          )
-        ),
         builder: (context, child) {
           return AppBackground(child: child!);
         },
-        home: Consumer<AuthProvider>(
-          builder: (context, auth, child) {
-            return auth.isLoggin ?
-              const HomePage() :
-              const LoginPage();
-          }
-        )
+        home: const RootPage()
       )
     );
   }
