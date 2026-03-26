@@ -15,7 +15,8 @@ class Device extends IModel {
     required this.objectId,
   });
 
-  factory Device.fromMap(Map<String, dynamic> map) {
+  @override
+  Device fromMap(Map<String, dynamic> map) {
     return Device(
       id: map['id'] as int,
       publicName: map['publicName'] as String,
@@ -24,6 +25,9 @@ class Device extends IModel {
       objectId: map['objectId'] as int,
     );
   }
+
+  @override
+  String getTableName() => 'device';
 
   @override
   Map<String, dynamic> toMap() {

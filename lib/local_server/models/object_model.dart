@@ -19,7 +19,8 @@ class _Object extends IModel {
     required this.defaultSpeedForDevices,
   });
 
-  factory _Object.fromMap(Map<String, dynamic> map) {
+  @override
+  _Object fromMap(Map<String, dynamic> map) {
     return _Object(
       id: map['id'] as int,
       publicName: map['publicName'] as String,
@@ -30,6 +31,9 @@ class _Object extends IModel {
       defaultSpeedForDevices: map['defaultSpeedForDevices'] as int,
     );
   }
+
+  @override
+  String getTableName() => 'object';
 
   @override
   Map<String, dynamic> toMap() {

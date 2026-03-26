@@ -15,7 +15,8 @@ class User extends IModel {
     required this.password,
   });
 
-  factory User.fromMap(Map<String, dynamic> map) {
+  @override
+  User fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'] as int,
       firstName: map['firstName'] as String,
@@ -24,6 +25,9 @@ class User extends IModel {
       password: map['password'] as String,
     );
   }
+
+  @override
+  String getTableName() => 'user';
 
   @override
   Map<String, dynamic> toMap() {

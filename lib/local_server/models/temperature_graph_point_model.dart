@@ -11,12 +11,16 @@ class TemperatureGraphPoint extends IModel {
     required this.value,
   });
 
-  factory TemperatureGraphPoint.fromMap(Map<String, dynamic> map) =>
+  @override
+  TemperatureGraphPoint fromMap(Map<String, dynamic> map) =>
       TemperatureGraphPoint(
         objectId: map['objectId'] as int,
         time: map['time'] as DateTime,
         value: map['value'] as double,
       );
+
+  @override
+  String getTableName() => 'temperatureGraphPoint';
 
   @override
   Map<String, dynamic> toMap() {

@@ -11,12 +11,16 @@ class SpeedGraphPointModel extends IModel {
     required this.value,
   });
 
-  factory SpeedGraphPointModel.fromMap(Map<String, dynamic> map) =>
+  @override
+  IModel fromMap(Map<String, dynamic> map) =>
     SpeedGraphPointModel(
       deviceId: map['daviceId'] as int,
       time: map['time'] as DateTime,
       value: map['value'] as int,
     );
+
+  @override
+  String getTableName() => 'SpeedGraphPoint';
 
   @override
   Map<String, dynamic> toMap() {
