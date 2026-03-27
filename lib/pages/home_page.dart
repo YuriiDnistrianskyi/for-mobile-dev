@@ -17,19 +17,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<MyObject> _objects;
+  final List<MyObject> _objects = [MyObject(id: 1, publicName: 'publicName', privateName: 'privateName', password: 'password', userId: 1, maxTemperature: 12.0, defaultSpeedForDevices: 12)];
   
   Future<void> init() async {
     final userId = context.read<AuthProvider>().userId;
     final objectProvider = context.read<ObjectProvider>();
 
-    _objects = await objectProvider.getObjects(userId);
+    // _objects = await objectProvider.getObjects(userId);
   }
 
   void _navigateToCreateObject() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => const CreateObjectPage()),
+      MaterialPageRoute<void>(builder: (context) => const CreateObjectPage(
+        type: 'Create'
+        )
+      ),
     );
   }
 

@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
+import 'package:provider/provider.dart';
 
 class CreateDevicePage extends StatefulWidget {
-  const CreateDevicePage({super.key});
+  final int objectId;
+
+  const CreateDevicePage({required this.objectId, super.key});
 
   @override
   State<CreateDevicePage> createState() => _CreateDevicePageState();
 }
 
 class _CreateDevicePageState extends State<CreateDevicePage> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _publicNameController = TextEditingController();
+  final TextEditingController _privateNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
+  final TextEditingController _confirmPasswordController = 
       TextEditingController();
 
-  void _createDevice() {
+  void _createDevice() async {
+    final deviceProvider = context.read<DeviceProvider>();
+
+    await deviceProvider.createDevice(
+      _publicNameController.text.trim(), 
+      _privateNameController.text.trim(), 
+      _passwordController.text.trim(), 
+      widget.objectId,
+    );
+
+    if (!mounted) return;
+
     Navigator.pop(context);
   }
 
@@ -50,9 +66,15 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomField(
-                    text: 'Name',
+                    text: 'Public Name',
                     icon: const Icon(Icons.devices_rounded),
-                    controller: _nameController,
+                    controller: _publicNameController,
+                    keyboardType: TextInputType.text,
+                  ),
+                  CustomField(
+                    text: 'Private Name', 
+                    icon: const Icon(Icons.shield), 
+                    controller: _privateNameController, 
                     keyboardType: TextInputType.text,
                   ),
                   PasswordField(

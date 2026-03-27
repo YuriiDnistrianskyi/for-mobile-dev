@@ -8,14 +8,20 @@ import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class CreateObjectPage extends StatefulWidget {
-  const CreateObjectPage({super.key});
+  final String type;
+  final int? id;
+
+  const CreateObjectPage({
+    required this.type, 
+    this.id,
+    super.key
+  });
 
   @override
   State<CreateObjectPage> createState() => _CreateObjectPageState();
 }
 
 class _CreateObjectPageState extends State<CreateObjectPage> {
-
   final TextEditingController _publicNameController = TextEditingController();
   final TextEditingController _privateNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -24,7 +30,6 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _maxTemperatureComtroller =
       TextEditingController();
   final TextEditingController _defaulSpeedController = TextEditingController();
-
 
   void _createObject() async {
     final objectProvider = context.read<ObjectProvider>();
@@ -44,6 +49,13 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     Navigator.pop(context);
   }
 
+  void _updateObject() async {
+    final objectProvider = context.read<ObjectProvider>();
+    final authProvider = context.read<AuthProvider>();
+
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +63,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const TitlePageText(text: 'Create Object'),
+        title: TitlePageText(text: '${widget.type} Object'),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -109,7 +121,12 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                     controller: _confirmPasswordController,
                   ),
                   const SizedBox(height: 20),
-                  ImportantButton(text: 'Create object', func: _createObject),
+                  ImportantButton(
+                    text: 'Create object', 
+                    func: widget.type == 'Create' ?
+                      _createObject :
+                      _updateObject
+                    ),
                 ],
               ),
             ),

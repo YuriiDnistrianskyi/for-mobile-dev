@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/widgets/custom_button.dart';
@@ -24,7 +23,9 @@ class _ObjectPageState extends State<ObjectPage> {
   void _navigateToCreateDevice() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => const CreateDevicePage()),
+      MaterialPageRoute<void>(builder: (context) => CreateDevicePage(
+        objectId: widget.object.id)
+      ),
     );
   }
 
@@ -51,14 +52,6 @@ class _ObjectPageState extends State<ObjectPage> {
             width: MediaQuery.of(context).size.width * 0.95,
             child: Column(
               children: [
-                SizedBox(
-                  height: 50,
-                  child: CustomButton(
-                    text: 'Add device',
-                    func: _navigateToCreateDevice,
-                  ),
-                ),
-                const SizedBox(height: 20),
                 Container(
                   height: 50,
                   decoration: const BoxDecoration(
@@ -94,6 +87,14 @@ class _ObjectPageState extends State<ObjectPage> {
                 ),
                 const SizedBox(height: 20),
                 const GraphBox(text: 'Temparature graph'),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  child: CustomButton(
+                    text: 'Edit object',
+                    func: _navigateToCreateDevice,
+                  ),
+                ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -104,6 +105,14 @@ class _ObjectPageState extends State<ObjectPage> {
                     );
                   },
                 ),
+                SizedBox(
+                  height: 50,
+                  child: CustomButton(
+                    text: 'Add device',
+                    func: _navigateToCreateDevice,
+                  ),
+                ),
+                const SizedBox(height: 70)
               ],
             ),
           ),

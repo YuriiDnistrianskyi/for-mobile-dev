@@ -10,7 +10,9 @@ class DeviceProvider extends ChangeNotifier {
   });
 
   Future<List<Device>> getDevices(int objectId) async {
-    final List<Device> devices = await repository.getDevicesByObjectIs(objectId);
+    final List<Device> devices = await repository.getDevicesByObjectIs(
+      objectId
+    );
     return devices;
   }
 
