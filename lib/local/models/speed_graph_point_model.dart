@@ -1,19 +1,19 @@
 import 'package:my_project/local/models/i_model.dart';
 
-class SpeedGraphPointModel extends IModel {
+class SpeedGraphPoint extends IModel {
   final int deviceId;
   final DateTime time;
   final int value;
 
-  SpeedGraphPointModel({
+  SpeedGraphPoint({
     required this.deviceId,
     required this.time,
     required this.value,
   });
 
   @override
-  factory SpeedGraphPointModel.fromMap(Map<String, dynamic> map) =>
-      SpeedGraphPointModel(
+  factory SpeedGraphPoint.fromMap(Map<String, dynamic> map) =>
+      SpeedGraphPoint(
         deviceId: map['daviceId'] as int,
         time: map['time'] as DateTime,
         value: map['value'] as int,

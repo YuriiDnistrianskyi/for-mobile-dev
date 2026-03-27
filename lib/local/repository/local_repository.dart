@@ -144,6 +144,23 @@ class Repository implements ILocalRepository {
   }
 
   @override
+  Future<List<T>> getGraph<T> (
+    String table,
+    String columnId,
+    int id,
+    T Function(Map<String, dynamic>) fromMap
+  ) async {
+    final List<Map<String, Object?>> graph = await db.query(
+      table,
+      where: '$columnId = ?',
+      whereArgs: [id],
+      limit: 50
+    );
+    final List<T> result = graph.map(fromMap).toList();
+    return result;
+  }
+
+  @override
   Future<int> update(IModel obj, int id) async {
     return await db.update(
       obj.getTableName(), 

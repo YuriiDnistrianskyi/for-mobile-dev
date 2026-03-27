@@ -19,6 +19,12 @@ abstract class ILocalRepository {
   Future<User?> getUser(String email);
   Future<List<MyObject>> getObjectsByUserId(int userId);
   Future<List<Device>> getDevicesByObjectIs(int objectId);
+  Future<List<T>> getGraph<T> (
+    String table, 
+    String columnId,
+    int id,
+    T Function(Map<String, dynamic>) fromMap
+  );
   Future<int> delete(String table, int id);
   Future<int> update(IModel obj, int id);
 
