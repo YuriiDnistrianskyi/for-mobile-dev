@@ -31,7 +31,7 @@ class User extends IModel {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'id': id,
-      'fisrtName': firstName,
+      'firstName': firstName,
       'lastName': lastName,
       'email': email,
       'password': password,
