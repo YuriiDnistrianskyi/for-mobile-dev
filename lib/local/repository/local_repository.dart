@@ -1,4 +1,4 @@
-// import 'package:my_project/local_server/models/device_model.dart';
+import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/i_model.dart';
 import 'package:my_project/local/models/object_model.dart';
 // import 'package:my_project/local_server/models/temperature_graph_point_model.dart';
@@ -128,8 +128,19 @@ class Repository implements ILocalRepository {
       where: 'user_id = ?',
       whereArgs: [userId]
     );
-    final List<MyObject> list = objects.map(MyObject.fromMap).toList();
-    return list;
+    final List<MyObject> result = objects.map(MyObject.fromMap).toList();
+    return result;
+  }
+
+  @override
+  Future<List<Device>> getDevicesByObjectIs(int objectId) async {
+    final List<Map<String, Object?>> devices = await db.query(
+      'device',
+      where: 'object_id = ?',
+      whereArgs: [objectId]
+    );
+    final List<Device> result = devices.map(Device.fromMap).toList();
+    return result;
   }
 
   @override

@@ -1,6 +1,7 @@
+import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/i_model.dart';
-import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/local/models/object_model.dart';
+import 'package:my_project/local/models/user_model.dart';
 
 abstract class ILocalRepository {
   Future<void> open(String path);
@@ -17,6 +18,7 @@ abstract class ILocalRepository {
   );
   Future<User?> getUser(String email);
   Future<List<MyObject>> getObjectsByUserId(int userId);
+  Future<List<Device>> getDevicesByObjectIs(int objectId);
   Future<int> delete(String table, int id);
   Future<int> update(IModel obj, int id);
 
