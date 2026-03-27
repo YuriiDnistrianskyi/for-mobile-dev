@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
+import 'package:provider/provider.dart';
 
 class CreateObjectPage extends StatefulWidget {
   const CreateObjectPage({super.key});
@@ -12,14 +15,32 @@ class CreateObjectPage extends StatefulWidget {
 }
 
 class _CreateObjectPageState extends State<CreateObjectPage> {
-  final TextEditingController _nameController = TextEditingController();
+
+  final TextEditingController _publicNameController = TextEditingController();
+  final TextEditingController _privateNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _maxTemperatureComtroller =
       TextEditingController();
+  final TextEditingController _defaulSpeedController = TextEditingController();
 
-  void _createObject() {
+
+  void _createObject() async {
+    final objectProvider = context.read<ObjectProvider>();
+    final authProvider = context.read<AuthProvider>();
+
+    await objectProvider.createObject(
+      _publicNameController.text, 
+      _privateNameController.text, 
+      _passwordController.text, 
+      authProvider.userId, 
+      double.parse(_maxTemperatureComtroller.text.trim()), 
+      int.parse(_defaulSpeedController.text),
+    );
+
+    if (!mounted) return;
+
     Navigator.pop(context);
   }
 
@@ -52,15 +73,29 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomField(
-                    text: 'Name',
+                    text: 'Public Name',
                     icon: const Icon(Icons.devices_rounded),
-                    controller: _nameController,
+                    controller: _publicNameController,
+                    keyboardType: TextInputType.text,
+                  ),
+                  CustomField(
+                    text: 'Private Name',
+                    icon: const Icon(Icons.shield),
+                    controller: _privateNameController,
                     keyboardType: TextInputType.text,
                   ),
                   CustomField(
                     text: 'Max Temperature',
                     icon: const Icon(Icons.thermostat),
                     controller: _maxTemperatureComtroller,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true
+                    ),
+                  ),
+                  CustomField(
+                    text: 'Defaul Speed for Devices',
+                    icon: const Icon(Icons.speed),
+                    controller: _defaulSpeedController,
                     keyboardType: TextInputType.number,
                   ),
                   PasswordField(

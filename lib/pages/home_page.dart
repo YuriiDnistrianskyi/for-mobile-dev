@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
+import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
 import 'package:my_project/widgets/title_page_text.dart';
-
-class ObjectData {
-  int id = 0;
-}
-
-final List<Map<String, dynamic>> _objects = [
-  {'id': 1},
-  {'id': 2},
-  {'id': 3},
-];
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +17,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late List<MyObject> _objects;
+  
+  Future<void> init() async {
+    final userId = context.read<AuthProvider>().userId;
+    final objectProvider = context.read<ObjectProvider>();
+
+    _objects = await objectProvider.getObjects(userId);
+  }
+
   void _navigateToCreateObject() {
     Navigator.push(
       context,

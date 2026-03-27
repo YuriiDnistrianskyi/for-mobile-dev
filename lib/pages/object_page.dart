@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+// import 'package:my_project/local/models/device_model.dart';
+import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 
+
 class ObjectPage extends StatefulWidget {
-  const ObjectPage({super.key});
+  final MyObject object;
+
+  const ObjectPage({required this.object, super.key});
 
   @override
   State<ObjectPage> createState() => _ObjectPageState();
 }
 
 class _ObjectPageState extends State<ObjectPage> {
-  final String objectName = 'Object 1';
   final double currentTemperature = 45.65;
   final List<int> deviceList = [1, 2, 3];
 
@@ -33,7 +37,7 @@ class _ObjectPageState extends State<ObjectPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: TitlePageText(text: objectName),
+        title: TitlePageText(text: widget.object.publicName),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
