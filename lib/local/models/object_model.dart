@@ -1,6 +1,6 @@
 import 'package:my_project/local/models/i_model.dart';
 
-class _Object extends IModel {
+class MyObject extends IModel {
   final int id;
   final String publicName;
   final String privateName;
@@ -9,7 +9,7 @@ class _Object extends IModel {
   final double maxTemperature;
   final int defaultSpeedForDevices;
 
-  _Object({
+  MyObject({
     required this.id,
     required this.publicName,
     required this.privateName,
@@ -20,7 +20,7 @@ class _Object extends IModel {
   });
 
   @override
-  factory _Object.fromMap(Map<String, dynamic> map) => _Object(
+  factory MyObject.fromMap(Map<String, dynamic> map) => MyObject(
     id: map['id'] as int,
     publicName: map['publicName'] as String,
     privateName: map['privateName'] as String,

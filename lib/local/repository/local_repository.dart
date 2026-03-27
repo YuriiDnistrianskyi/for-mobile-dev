@@ -1,6 +1,6 @@
 // import 'package:my_project/local_server/models/device_model.dart';
 import 'package:my_project/local/models/i_model.dart';
-// import 'package:my_project/local_server/models/object_model.dart';
+import 'package:my_project/local/models/object_model.dart';
 // import 'package:my_project/local_server/models/temperature_graph_point_model.dart';
 import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/local/repository/i_local_repository.dart';
@@ -86,8 +86,7 @@ class Repository implements ILocalRepository {
     T Function(Map<String, dynamic>) fromMap
   ) async {
     final List<Map<String, Object?>> maps = await db.query(table);
-    final List<T> list = [];
-    maps.map(fromMap).toList();
+    final List<T> list = maps.map(fromMap).toList();
     return list;
   }
 
@@ -120,6 +119,17 @@ class Repository implements ILocalRepository {
       return User.fromMap(maps.first);
     }
     return null;
+  }
+
+  @override
+  Future<List<MyObject>> getObjectsByUserId(int userId) async{
+    final List<Map<String, Object?>> objects = await db.query(
+      'object',
+      where: 'user_id = ?',
+      whereArgs: [userId]
+    );
+    final List<MyObject> list = objects.map(MyObject.fromMap).toList();
+    return list;
   }
 
   @override
