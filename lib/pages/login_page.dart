@@ -19,12 +19,26 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {
-    Provider.of<AuthProvider>(context, listen: false).login();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(builder: (context) => const HomePage()),
+  void _login() async {
+    final auth = context.read<AuthProvider>();
+
+    await auth.login(
+      _emailController.text,
+      _passwordController.text,
     );
+
+    if (!mounted) return;
+
+    if (auth.isLoggin) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(builder: (context) => const HomePage())
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Wrong email or password'))
+      );
+    }
   }
 
   @override

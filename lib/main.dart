@@ -8,8 +8,8 @@ import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/app_background.dart';
-import 'package:provider/provider.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() async {
@@ -18,7 +18,7 @@ void main() async {
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
 
-  final appRepository = Repository();
+  final Repository appRepository = Repository();
   await appRepository.open(path);
 
   runApp(MyApp(repository: appRepository));
@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider(repository: repository)),
+        ChangeNotifierProvider(create: (_) => AuthProvider(
+          repository: repository
+        )),
         ChangeNotifierProvider(
           create: (_) => DeviceProvider(repository: repository)
         ),
@@ -52,6 +54,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Cooling System',
+        debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return AppBackground(child: child!);
         },

@@ -4,12 +4,12 @@ import 'package:my_project/local/repository/local_repository.dart';
 
 class AuthProvider with ChangeNotifier {
   final Repository repository;
-  bool _isLoggin = false;
 
   AuthProvider({
     required this.repository,
   });
 
+  bool _isLoggin = false;
   bool get isLoggin => _isLoggin;
 
   Future<void> login(String email, String password) async {

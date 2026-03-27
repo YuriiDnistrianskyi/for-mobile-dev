@@ -35,7 +35,7 @@ const String createDeviceTable = '''
             publicName text not null,
             privatName text not null,
             password text not null,
-            objectId integer references object(id),
+            objectId integer references object(id)
           )
           ''';
 

@@ -8,12 +8,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:my_project/local/repository/local_repository.dart';
 import 'package:my_project/main.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'cooling_system_db');
+
+    final Repository appRepository = Repository();
+    await appRepository.open(path);
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(repository: appRepository));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
