@@ -61,7 +61,7 @@ class Repository implements ILocalRepository {
   @override
   Future<void> open(String path) async {
     db = await openDatabase(
-      path, 
+      path,
       version: 1, 
       onCreate: (Database db, int version) async {
         await db.execute(createUserTable);
@@ -81,27 +81,30 @@ class Repository implements ILocalRepository {
   }
 
   @override
-  Future<List<IModel>> get(IModel table) async {
-    final List<Map<String, Object?>> maps = await db.query(
-      table.getTableName()
-    );
-    final List<IModel> list = [];
-    for (final map in maps) {
-      list.add(table.fromMap(map));
-    }
+  Future<List<T>> get<T>(
+    String table, 
+    T Function(Map<String, dynamic>) fromMap
+  ) async {
+    final List<Map<String, Object?>> maps = await db.query(table);
+    final List<T> list = [];
+    maps.map(fromMap).toList();
     return list;
   }
 
   @override
-  Future<IModel?> getById(IModel table, int id) async {
+  Future<T?> getById<T>(
+    String table,
+    int id,
+    T Function(Map<String, dynamic>) fromMap  
+  ) async {
     final List<Map<String, Object?>> maps = await db.query(
-      table.getTableName(), 
+      table, 
       where: 'id = ?',
       whereArgs: [id],
     );
 
     if (maps.isNotEmpty) {
-      return table.fromMap(maps.first);
+      return fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }
