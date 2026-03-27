@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/object_page.dart';
 
 class ObjectItem extends StatefulWidget {
   const ObjectItem({required this.object, super.key});
 
-  final Map<String, dynamic> object;
+  final MyObject object;
 
   @override
   State<ObjectItem> createState() => _ObjectItemState();
@@ -17,7 +18,9 @@ class _ObjectItemState extends State<ObjectItem> {
   void _navigateToObjectPage() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => const ObjectPage()),
+      MaterialPageRoute<void>(
+        builder: (context) => ObjectPage(object: widget.object)
+      ),
     );
   }
 
@@ -32,7 +35,10 @@ class _ObjectItemState extends State<ObjectItem> {
         ),
         child: Column(
           children: [
-            Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              widget.object.publicName, 
+              style: const TextStyle(fontWeight: FontWeight.bold)
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(9),

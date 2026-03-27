@@ -22,4 +22,24 @@ class ObjectProvider extends ChangeNotifier {
     return objects;
   }
 
+  Future<void> createObject(
+    String publicName,
+    String privateName,
+    String password,
+    int userId,
+    double maxTemperature,
+    int defaultSpeedForDevices,
+  ) async {
+    final MyObject newObject = MyObject(
+      id: 1, 
+      publicName: publicName, 
+      privateName: privateName, 
+      password: password, 
+      userId: userId, 
+      maxTemperature: maxTemperature, 
+      defaultSpeedForDevices: defaultSpeedForDevices,
+    );
+    await repository.insert(newObject);
+  }
+
 }

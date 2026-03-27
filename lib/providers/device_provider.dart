@@ -23,7 +23,7 @@ class DeviceProvider extends ChangeNotifier {
     final Device newDevice = Device(
       id: 1,  //
       publicName: publicName, 
-      privatName: privatName, 
+      privateName: privatName, 
       password: password, 
       objectId: objectId
     );
@@ -40,7 +40,7 @@ class DeviceProvider extends ChangeNotifier {
     final Device newDevice = Device(
       id: id,  //
       publicName: publicName, 
-      privatName: privatName, 
+      privateName: privatName, 
       password: password, 
       objectId: objectId
     );

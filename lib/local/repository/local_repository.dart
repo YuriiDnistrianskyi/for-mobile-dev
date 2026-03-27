@@ -21,7 +21,7 @@ const String createObjectTable = '''
           create table object(
             id integer primary key autoincrement,
             publicName text not null,
-            privatName text not null,
+            privateName text not null,
             password text not null,
             userId integer references user(id),
             maxTemperature float,
@@ -33,7 +33,7 @@ const String createDeviceTable = '''
           create table device(
             id integer primary key autoincrement,
             publicName text not null,
-            privatName text not null,
+            privateName text not null,
             password text not null,
             objectId integer references object(id)
           )

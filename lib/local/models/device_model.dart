@@ -3,14 +3,14 @@ import 'package:my_project/local/models/i_model.dart';
 class Device extends IModel {
   final int id;
   final String publicName;
-  final String privatName;
+  final String privateName;
   final String password;
   final int objectId;
 
   Device({
     required this.id,
     required this.publicName,
-    required this.privatName,
+    required this.privateName,
     required this.password,
     required this.objectId,
   });
@@ -19,7 +19,7 @@ class Device extends IModel {
   factory Device.fromMap(Map<String, dynamic> map) => Device(
     id: map['id'] as int,
     publicName: map['publicName'] as String,
-    privatName: map['privatName'] as String,
+    privateName: map['privatName'] as String,
     password: map['password'] as String,
     objectId: map['objectId'] as int,
   );
@@ -31,8 +31,8 @@ class Device extends IModel {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
       'id': id,
-      'publicName': privatName,
-      'privateName': privatName,
+      'publicName': publicName,
+      'privateName': privateName,
       'password': password,
       'object_id': objectId,
     };
