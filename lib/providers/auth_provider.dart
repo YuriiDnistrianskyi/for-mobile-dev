@@ -12,13 +12,14 @@ class AuthProvider with ChangeNotifier {
   bool _isLoggin = false;
   bool get isLoggin => _isLoggin;
 
-  Future<void> login(String email, String password) async {
+  Future<int> login(String email, String password) async {
     final User? user = await repository.getUser(email);
     if (user == null || user.password != password) {
-      return;
+      return 0;
     }
     _isLoggin = true;
     notifyListeners();
+    return user.id;
   }
 
   void logout() {
