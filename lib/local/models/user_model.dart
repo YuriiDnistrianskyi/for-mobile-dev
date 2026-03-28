@@ -1,18 +1,18 @@
 import 'package:my_project/local/models/i_model.dart';
 
 class User extends IModel {
-  final int id;
+  final int? id;
   final String firstName;
   final String lastName;
   final String email;
   final String password;
 
   User({
-    required this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.password,
+    this.id,
   });
 
   @override
@@ -30,7 +30,6 @@ class User extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
-      'id': id,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,

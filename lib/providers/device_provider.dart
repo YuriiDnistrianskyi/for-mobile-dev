@@ -4,16 +4,18 @@ import 'package:my_project/local/repository/local_repository.dart';
 
 class DeviceProvider extends ChangeNotifier {
   final Repository repository;
+  List<Device> _devices = [];
+
+  List<Device> get devices => _devices;
 
   DeviceProvider({
     required this.repository,
   });
 
-  Future<List<Device>> getDevices(int objectId) async {
-    final List<Device> devices = await repository.getDevicesByObjectIs(
+  Future<void> getDevices(int objectId) async {
+    _devices = await repository.getDevicesByObjectIs(
       objectId
     );
-    return devices;
   }
 
   Future<void> createDevice(

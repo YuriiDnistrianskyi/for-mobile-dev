@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
@@ -17,20 +16,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<MyObject> _objects = [MyObject(id: 1, publicName: 'publicName', privateName: 'privateName', password: 'password', userId: 1, maxTemperature: 12.0, defaultSpeedForDevices: 12)];
-  
-  Future<void> init() async {
+  @override
+  void initState() {
+    super.initState();
     final userId = context.read<AuthProvider>().userId;
-    final objectProvider = context.read<ObjectProvider>();
-
-    // _objects = await objectProvider.getObjects(userId);
+    context.read<ObjectProvider>().getObjects(userId);
   }
 
   void _navigateToCreateObject() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(builder: (context) => const CreateObjectPage(
-        type: 'Create'
+        isCreate: true,
         )
       ),
     );
@@ -89,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.6,
             child: Expanded(
               child: GridView.builder(
-                itemCount: _objects.length,
+                itemCount: context.read<ObjectProvider>().objects.length,
                 padding: const EdgeInsets.all(8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -98,7 +95,9 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  return ObjectItem(object: _objects[index]);
+                  return ObjectItem(
+                    object: context.read<ObjectProvider>().objects[index]
+                  );
                 },
               ),
             ),

@@ -125,7 +125,7 @@ class Repository implements ILocalRepository {
   Future<List<MyObject>> getObjectsByUserId(int userId) async{
     final List<Map<String, Object?>> objects = await db.query(
       'object',
-      where: 'user_id = ?',
+      where: 'userId = ?',
       whereArgs: [userId]
     );
     final List<MyObject> result = objects.map(MyObject.fromMap).toList();
@@ -136,7 +136,7 @@ class Repository implements ILocalRepository {
   Future<List<Device>> getDevicesByObjectIs(int objectId) async {
     final List<Map<String, Object?>> devices = await db.query(
       'device',
-      where: 'object_id = ?',
+      where: 'objectId = ?',
       whereArgs: [objectId]
     );
     final List<Device> result = devices.map(Device.fromMap).toList();

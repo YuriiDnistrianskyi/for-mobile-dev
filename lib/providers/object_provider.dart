@@ -4,22 +4,24 @@ import 'package:my_project/local/repository/local_repository.dart';
 
 class ObjectProvider extends ChangeNotifier {
   final Repository repository;
+  List<MyObject> _objects = [];
+
+  List<MyObject> get objects => _objects;
 
   ObjectProvider({
     required this.repository,
   });
 
-  Future<MyObject?> getObject(int id) async {
+  Future<MyObject> getObject(int id) async {
     final MyObject? object = await repository.getById(
-      'object', id, 
+      'object', id,
       MyObject.fromMap,
     );
-    return object;
+    return object!;
   }
 
-  Future<List<MyObject>> getObjects(int userId) async {
-    final List<MyObject> objects = await repository.getObjectsByUserId(userId);
-    return objects;
+  Future<void> getObjects(int userId) async {
+    _objects = await repository.getObjectsByUserId(userId);
   }
 
   Future<void> createObject(
@@ -31,7 +33,6 @@ class ObjectProvider extends ChangeNotifier {
     int defaultSpeedForDevices,
   ) async {
     final MyObject newObject = MyObject(
-      id: 1, 
       publicName: publicName, 
       privateName: privateName, 
       password: password, 
@@ -40,6 +41,31 @@ class ObjectProvider extends ChangeNotifier {
       defaultSpeedForDevices: defaultSpeedForDevices,
     );
     await repository.insert(newObject);
+  }
+
+  Future<void> updateObject(
+    int id,
+    String publicName,
+    String privateName,
+    String password,
+    int userId,
+    double maxTemperature,
+    int defaultSpeedForDevices,
+  ) async {
+    final MyObject updateObject = MyObject(
+      id: id, 
+      publicName: publicName, 
+      privateName: privateName, 
+      password: password, 
+      userId: userId, 
+      maxTemperature: maxTemperature, 
+      defaultSpeedForDevices: defaultSpeedForDevices
+    );
+    await repository.update(updateObject, id);
+  }
+
+  Future<void> deleteObject(int id) async {
+    await repository.delete('object', id);
   }
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
@@ -8,11 +9,11 @@ import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class CreateObjectPage extends StatefulWidget {
-  final String type;
+  final bool isCreate;
   final int? id;
 
   const CreateObjectPage({
-    required this.type, 
+    required this.isCreate, 
     this.id,
     super.key
   });
@@ -30,6 +31,26 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _maxTemperatureComtroller =
       TextEditingController();
   final TextEditingController _defaulSpeedController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isCreate == false) {
+      final objectProvider = context.read<ObjectProvider>();
+      late MyObject currentObject;
+
+      objectProvider.getObject(widget.id as int).then((value) {
+        currentObject = value;
+      });
+
+      _publicNameController.text = currentObject.publicName;
+      _privateNameController.text = currentObject.privateName;
+      _maxTemperatureComtroller.text = currentObject.maxTemperature.toString();
+      _defaulSpeedController.text = currentObject.defaultSpeedForDevices
+        .toString();
+    }
+  }
 
   void _createObject() async {
     final objectProvider = context.read<ObjectProvider>();
@@ -53,7 +74,19 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     final objectProvider = context.read<ObjectProvider>();
     final authProvider = context.read<AuthProvider>();
 
-    
+    await objectProvider.updateObject(
+      widget.id as int, 
+      _publicNameController.text.trim(), 
+      _privateNameController.text.trim(), 
+      _passwordController.text.trim(), 
+      authProvider.userId, 
+      double.parse(_maxTemperatureComtroller.text.trim()), 
+      int.parse(_defaulSpeedController.text.trim()),
+    );
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
   }
 
   @override
@@ -63,7 +96,9 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: TitlePageText(text: '${widget.type} Object'),
+        title: TitlePageText(
+          text: '${widget.isCreate ? 'Create' : 'Edit'} Object'
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -122,8 +157,8 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                   ),
                   const SizedBox(height: 20),
                   ImportantButton(
-                    text: 'Create object', 
-                    func: widget.type == 'Create' ?
+                    text: '${widget.isCreate ? 'Create' : 'Edit'} object', 
+                    func: widget.isCreate ?
                       _createObject :
                       _updateObject
                     ),

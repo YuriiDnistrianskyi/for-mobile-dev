@@ -21,7 +21,6 @@ class UserProvider extends ChangeNotifier {
     String password
   ) async { 
     final User newUser = User(
-      id: 1,
       firstName: firstName,
       lastName: lastName,
       email: email,

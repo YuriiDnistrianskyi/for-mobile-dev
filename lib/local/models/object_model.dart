@@ -1,7 +1,7 @@
 import 'package:my_project/local/models/i_model.dart';
 
 class MyObject extends IModel {
-  final int id;
+  final int? id;
   final String publicName;
   final String privateName;
   final String password;
@@ -10,13 +10,13 @@ class MyObject extends IModel {
   final int defaultSpeedForDevices;
 
   MyObject({
-    required this.id,
     required this.publicName,
     required this.privateName,
     required this.password,
     required this.userId,
     required this.maxTemperature,
     required this.defaultSpeedForDevices,
+    this.id,
   });
 
   @override
@@ -36,7 +36,6 @@ class MyObject extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
-      'id': id,
       'publicName': publicName,
       'privateName': privateName,
       'password': password,

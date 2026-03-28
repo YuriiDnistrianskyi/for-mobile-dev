@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
+import 'package:my_project/pages/create_object_page.dart';
+import 'package:my_project/providers/device_provider.dart';
+import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/title_page_text.dart';
+import 'package:provider/provider.dart';
 
 
 class ObjectPage extends StatefulWidget {
@@ -18,15 +22,37 @@ class ObjectPage extends StatefulWidget {
 
 class _ObjectPageState extends State<ObjectPage> {
   final double currentTemperature = 45.65;
-  final List<int> deviceList = [1, 2, 3];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<DeviceProvider>().getDevices(widget.object.id!);
+  }
 
   void _navigateToCreateDevice() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(builder: (context) => CreateDevicePage(
-        objectId: widget.object.id)
+        objectId: widget.object.id!)
       ),
     );
+  }
+
+  void _navigateToUpdateObject() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => CreateObjectPage(
+          isCreate: false, 
+          id: widget.object.id
+        )
+      )
+    );
+  }
+
+  void _deleteObject() async {
+    final objectProvider = context.read<ObjectProvider>();
+    await objectProvider.deleteObject(widget.object.id!);
   }
 
   void _navigateToDdevice() {}
@@ -45,6 +71,16 @@ class _ObjectPageState extends State<ObjectPage> {
           },
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            onPressed: _deleteObject,
+            icon: const Icon(Icons.edit, color: Colors.white)
+          ),
+          IconButton(
+            onPressed: _navigateToUpdateObject,
+            icon: const Icon(Icons.delete, color: Colors.red),
+          ),
+        ]
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -92,13 +128,13 @@ class _ObjectPageState extends State<ObjectPage> {
                   height: 50,
                   child: CustomButton(
                     text: 'Edit object',
-                    func: _navigateToCreateDevice,
+                    func: _navigateToUpdateObject,
                   ),
                 ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: deviceList.length,
+                  itemCount: context.read<DeviceProvider>().devices.length,
                   itemBuilder: (context, index) {
                     return const Column(
                       children: [SizedBox(height: 20), DeviceItem()],

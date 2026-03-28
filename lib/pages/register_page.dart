@@ -8,7 +8,10 @@ import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final bool isRegister;
+  final int? id;
+
+  const RegisterPage({required this.isRegister, this.id, super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -36,6 +39,10 @@ class _RegisterPageState extends State<RegisterPage> {
     Navigator.pop(context);
   }
 
+  void _updateUser() async {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +57,9 @@ class _RegisterPageState extends State<RegisterPage> {
             Navigator.pop(context);
           },
         ),
-        title: const TitlePageText(text: 'Sign Up'),
+        title: TitlePageText(
+          text: widget.isRegister ? 'Sign Up' : 'Update User'
+        ),
       ),
       body: Center(
         child: Container(
@@ -89,7 +98,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _confirmPasswordController,
                   ),
                   const SizedBox(height: 20),
-                  ImportantButton(text: 'Sign up', func: _signUp),
+                  ImportantButton(
+                    text: 'Sign up', 
+                    func: widget.isRegister ? _signUp : _updateUser
+                  ),
                 ],
               ),
             ),

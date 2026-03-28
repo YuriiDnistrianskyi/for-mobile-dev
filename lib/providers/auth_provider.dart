@@ -20,8 +20,8 @@ class AuthProvider with ChangeNotifier {
     }
     _isLoggin = true;
     notifyListeners();
-    userId = user.id;
-    return user.id; //
+    userId = user.id!;
+    return user.id!; //
   }
 
   void logout() {
