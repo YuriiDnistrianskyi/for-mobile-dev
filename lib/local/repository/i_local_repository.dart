@@ -25,6 +25,12 @@ abstract class ILocalRepository {
     int id,
     T Function(Map<String, dynamic>) fromMap
   );
+  Future<T> getLastPoint<T> (
+    int id,
+    String columnId,
+    String table,
+    T Function(Map<String, dynamic>) fromMap
+  );
   Future<int> delete(String table, int id);
   Future<int> update(IModel obj, int id);
 

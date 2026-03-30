@@ -19,4 +19,13 @@ class TemperatureGraphProvider extends ChangeNotifier {
     return graph;
   }
 
+  Future<TemperatureGraphPoint?> getLastSpeedGraphPoint(int deviceId) async {
+    final TemperatureGraphPoint? lastPoint = await repository.getLastPoint(
+      deviceId, 
+      'objectId', 
+      'temperatureGraphPoint', 
+      TemperatureGraphPoint.fromMap,
+    );
+    return lastPoint;
+  }
 }

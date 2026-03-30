@@ -161,6 +161,24 @@ class Repository implements ILocalRepository {
   }
 
   @override
+  Future<T> getLastPoint<T> (
+    int id,
+    String columnId,
+    String table,
+    T Function(Map<String, dynamic>) fromMap
+  ) async {
+    final List<Map<String, Object?>> list = await db.query(
+      table,
+      where: '$columnId = ?',
+      whereArgs: [id],
+      orderBy: 'time DESC',
+      limit: 1,
+    );
+    final T point = fromMap(list.first);
+    return point;
+  }
+
+  @override
   Future<int> update(IModel obj, int id) async {
     return await db.update(
       obj.getTableName(), 

@@ -19,4 +19,13 @@ class SpeedGraphProvider extends ChangeNotifier {
     return graph;
   }
 
+  Future<SpeedGraphPoint?> getLastSpeedGraphPoint(int deviceId) async {
+    final SpeedGraphPoint? lastPoint = await repository.getLastPoint(
+      deviceId, 
+      'deviceId', 
+      'speedGraphPoint', 
+      SpeedGraphPoint.fromMap,
+    );
+    return lastPoint;
+  }
 }
