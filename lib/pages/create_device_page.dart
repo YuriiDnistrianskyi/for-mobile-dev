@@ -79,11 +79,12 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           widget.objectId,
         );
       } else {
+        final Device currentDevice = context.read<DeviceProvider>().device!;
         await deviceProvider.updateDevice(
           widget.deviceId as int,
           _publicNameController.text.trim(),
-          _privateNameController.text.trim(),
-          _passwordController.text.trim(),
+          currentDevice.privateName,
+          currentDevice.password,
           widget.objectId,
         );
       }

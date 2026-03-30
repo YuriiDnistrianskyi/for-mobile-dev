@@ -49,27 +49,28 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     final authProvider = context.read<AuthProvider>();
 
     if (_formKey.currentState!.validate()) {
-      final privateName = _privateNameController.text.trim();
-      final bool objectExists = await objectProvider.objectExists(privateName);
-
-      if (!mounted) return;
-
-      if (objectExists) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('This private name is already used')),
-        );
-        return;
-      }
-
-      if (_passwordController.text.trim() !=
-          _confirmPasswordController.text.trim()) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
-        return;
-      }
-
       if (widget.isCreate) {
+        final privateName = _privateNameController.text.trim();
+        final bool objectExists = await objectProvider.objectExists(
+          privateName,
+        );
+
+        if (!mounted) return;
+
+        if (objectExists) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('This private name is already used')),
+          );
+          return;
+        }
+
+        if (_passwordController.text.trim() !=
+            _confirmPasswordController.text.trim()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Passwords do not match')),
+          );
+          return;
+        }
         await objectProvider.createObject(
           _publicNameController.text,
           _privateNameController.text,
@@ -79,11 +80,12 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           int.parse(_defaulSpeedController.text),
         );
       } else {
+        final MyObject currentObject = context.read<ObjectProvider>().object!;
         await objectProvider.updateObject(
           widget.id as int,
           _publicNameController.text.trim(),
-          _privateNameController.text.trim(),
-          _passwordController.text.trim(),
+          currentObject.privateName,
+          currentObject.password,
           authProvider.userId,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text.trim()),
