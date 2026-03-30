@@ -11,7 +11,8 @@ class DeviceProvider extends ChangeNotifier {
   DeviceProvider({required this.repository});
 
   Future<void> getDevices(int objectId) async {
-    _devices = await repository.getDevicesByObjectIs(objectId);
+    _devices = await repository.getDevicesByObjectId(objectId);
+    notifyListeners();
   }
 
   Future<void> createDevice(
@@ -28,6 +29,7 @@ class DeviceProvider extends ChangeNotifier {
       objectId: objectId,
     );
     await repository.insert(newDevice);
+    await getDevices(objectId);
   }
 
   Future<void> updateDevice(
@@ -45,9 +47,11 @@ class DeviceProvider extends ChangeNotifier {
       objectId: objectId,
     );
     await repository.update(newDevice, id);
+    await getDevices(objectId);
   }
 
   Future<void> deleteDevice(int id) async {
     await repository.delete('device', id);
+    await getDevices(id);
   }
 }

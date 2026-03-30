@@ -23,6 +23,7 @@ class ObjectProvider extends ChangeNotifier {
 
   Future<void> getObjects(int userId) async {
     _objects = await repository.getObjectsByUserId(userId);
+    notifyListeners();
   }
 
   Future<void> createObject(
@@ -42,6 +43,7 @@ class ObjectProvider extends ChangeNotifier {
       defaultSpeedForDevices: defaultSpeedForDevices,
     );
     await repository.insert(newObject);
+    await getObjects(userId);
   }
 
   Future<void> updateObject(
@@ -63,10 +65,12 @@ class ObjectProvider extends ChangeNotifier {
       defaultSpeedForDevices: defaultSpeedForDevices
     );
     await repository.update(updateObject, id);
+    await getObjects(userId);
   }
 
   Future<void> deleteObject(int id) async {
     await repository.delete('object', id);
+    // await getObjects(id);
   }
 
 }

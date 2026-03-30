@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
@@ -72,6 +73,8 @@ class _ObjectPageState extends State<ObjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Device> devices = context.watch<DeviceProvider>().devices;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -140,7 +143,7 @@ class _ObjectPageState extends State<ObjectPage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: context.read<DeviceProvider>().devices.length,
+                  itemCount: devices.length,
                   itemBuilder: (context, index) {
                     return const Column(
                       children: [SizedBox(height: 20), DeviceItem()],

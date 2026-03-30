@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/setting_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
@@ -15,18 +16,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final String name = 'My name';
-  final String email = 'my_email@gmail.com';
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserProvider>().getUser(context.read<AuthProvider>().userId);
+  }
 
   void _edit() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
         builder: (context) => RegisterPage(
-          isRegister: false, 
+          isRegister: false,
           id: context.read<AuthProvider>().userId,
-        )
-      )
+        ),
+      ),
     );
   }
 
@@ -78,13 +82,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              name,
+                              '${context.read<UserProvider>().user!.firstName} // ${context.read<UserProvider>().user!.lastName}',
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text(email, style: const TextStyle(fontSize: 15)),
+                            Text(
+                              context.read<UserProvider>().user!.email, 
+                              style: const TextStyle(fontSize: 15)),
                           ],
                         ),
                       ),

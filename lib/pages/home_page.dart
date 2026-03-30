@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
@@ -35,6 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<MyObject> objects = context.watch<ObjectProvider>().objects;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -86,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.6,
             child: Expanded(
               child: GridView.builder(
-                itemCount: context.read<ObjectProvider>().objects.length,
+                itemCount: objects.length,
                 padding: const EdgeInsets.all(8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -96,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 itemBuilder: (context, index) {
                   return ObjectItem(
-                    object: context.read<ObjectProvider>().objects[index]
+                    object: objects[index]
                   );
                 },
               ),

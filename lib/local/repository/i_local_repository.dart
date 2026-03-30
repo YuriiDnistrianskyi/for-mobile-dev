@@ -18,7 +18,7 @@ abstract class ILocalRepository {
   );
   Future<User?> getUser(String email);
   Future<List<MyObject>> getObjectsByUserId(int userId);
-  Future<List<Device>> getDevicesByObjectIs(int objectId);
+  Future<List<Device>> getDevicesByObjectId(int objectId);
   Future<List<T>> getGraph<T> (
     String table, 
     String columnId,

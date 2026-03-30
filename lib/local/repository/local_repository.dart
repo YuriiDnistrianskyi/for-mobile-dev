@@ -133,7 +133,7 @@ class Repository implements ILocalRepository {
   }
 
   @override
-  Future<List<Device>> getDevicesByObjectIs(int objectId) async {
+  Future<List<Device>> getDevicesByObjectId(int objectId) async {
     final List<Map<String, Object?>> devices = await db.query(
       'device',
       where: 'objectId = ?',

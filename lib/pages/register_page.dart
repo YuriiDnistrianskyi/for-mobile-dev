@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/pages/home_page.dart';
+import 'package:my_project/pages/profile_page.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
@@ -29,28 +29,36 @@ class _RegisterPageState extends State<RegisterPage> {
   void _action() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    widget.isRegister ?
-    await userProvider.createUser(
-      _firstNameController.text,
-      _lastNameController.text,
-      _emailController.text, 
-      _passwordController.text,
-    ) 
-    :
-    await userProvider.updateUser(
-      widget.id!,
-      _firstNameController.text,
-      _lastNameController.text,
-      _emailController.text, 
-      _passwordController.text,
-    );
-
+    widget.isRegister
+        ? await userProvider.createUser(
+            _firstNameController.text,
+            _lastNameController.text,
+            _emailController.text,
+            _passwordController.text,
+          )
+        : await userProvider.updateUser(
+            widget.id!,
+            _firstNameController.text,
+            _lastNameController.text,
+            _emailController.text,
+            _passwordController.text,
+          );
 
     if (!mounted) return;
 
-    Navigator.pop(context);
-  }
+    widget.isRegister
+        ? Navigator.pop(context)
+        : Navigator.pushReplacement(
+            context,
+            MaterialPageRoute<void>(builder: (context) => const ProfilePage()),
+          );
 
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(widget.isRegister ? 'User created' : 'User updated'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +71,17 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
-            widget.isRegister ?
-            Navigator.pop(context) :
-            Navigator.push(
-              context,
-              MaterialPageRoute<void>(
-                builder: (context) => const HomePage()
-              )
-            );
+            widget.isRegister
+                ? Navigator.pop(context)
+                : Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => const ProfilePage(),
+                    ),
+                  );
           },
         ),
-        title: TitlePageText(
-          text: widget.isRegister ? 'Sign Up' : 'User'
-        ),
+        title: TitlePageText(text: widget.isRegister ? 'Sign Up' : 'User'),
       ),
       body: Center(
         child: Container(
@@ -121,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-          )
+          ),
         ),
       ),
     );
