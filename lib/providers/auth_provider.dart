@@ -4,7 +4,8 @@ import 'package:my_project/local/repository/local_repository.dart';
 
 class AuthProvider with ChangeNotifier {
   final Repository repository;
-  late int userId;
+  late int _userId;
+  int get userId => _userId;
 
   AuthProvider({
     required this.repository,
@@ -20,7 +21,7 @@ class AuthProvider with ChangeNotifier {
     }
     _isLoggin = true;
     notifyListeners();
-    userId = user.id!;
+    _userId = user.id!;
     return user.id!; //
   }
 

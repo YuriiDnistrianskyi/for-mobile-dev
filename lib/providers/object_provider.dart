@@ -14,7 +14,8 @@ class ObjectProvider extends ChangeNotifier {
 
   Future<MyObject> getObject(int id) async {
     final MyObject? object = await repository.getById(
-      'object', id,
+      'object', 
+      id,
       MyObject.fromMap,
     );
     return object!;
