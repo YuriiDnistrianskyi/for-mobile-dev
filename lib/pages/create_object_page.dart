@@ -12,11 +12,7 @@ class CreateObjectPage extends StatefulWidget {
   final bool isCreate;
   final int? id;
 
-  const CreateObjectPage({
-    required this.isCreate, 
-    this.id,
-    super.key
-  });
+  const CreateObjectPage({required this.isCreate, this.id, super.key});
 
   @override
   State<CreateObjectPage> createState() => _CreateObjectPageState();
@@ -40,49 +36,42 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
       final objectProvider = context.read<ObjectProvider>();
       late MyObject currentObject;
 
-      objectProvider.getObject(widget.id as int).then((value) {
-        currentObject = value;
+      objectProvider.getObject(widget.id!).then((value) {
+        setState(() {
+          currentObject = value;
+        });
       });
 
       _publicNameController.text = currentObject.publicName;
       _privateNameController.text = currentObject.privateName;
       _maxTemperatureComtroller.text = currentObject.maxTemperature.toString();
       _defaulSpeedController.text = currentObject.defaultSpeedForDevices
-        .toString();
+          .toString();
     }
   }
 
-  void _createObject() async {
+  void _action() async {
     final objectProvider = context.read<ObjectProvider>();
     final authProvider = context.read<AuthProvider>();
 
-    await objectProvider.createObject(
-      _publicNameController.text, 
-      _privateNameController.text, 
-      _passwordController.text, 
-      authProvider.userId, 
-      double.parse(_maxTemperatureComtroller.text.trim()), 
-      int.parse(_defaulSpeedController.text),
-    );
-
-    if (!mounted) return;
-
-    Navigator.pop(context);
-  }
-
-  void _updateObject() async {
-    final objectProvider = context.read<ObjectProvider>();
-    final authProvider = context.read<AuthProvider>();
-
-    await objectProvider.updateObject(
-      widget.id as int, 
-      _publicNameController.text.trim(), 
-      _privateNameController.text.trim(), 
-      _passwordController.text.trim(), 
-      authProvider.userId, 
-      double.parse(_maxTemperatureComtroller.text.trim()), 
-      int.parse(_defaulSpeedController.text.trim()),
-    );
+    widget.isCreate
+        ? await objectProvider.createObject(
+            _publicNameController.text,
+            _privateNameController.text,
+            _passwordController.text,
+            authProvider.userId,
+            double.parse(_maxTemperatureComtroller.text.trim()),
+            int.parse(_defaulSpeedController.text),
+          )
+        : await objectProvider.updateObject(
+            widget.id as int,
+            _publicNameController.text.trim(),
+            _privateNameController.text.trim(),
+            _passwordController.text.trim(),
+            authProvider.userId,
+            double.parse(_maxTemperatureComtroller.text.trim()),
+            int.parse(_defaulSpeedController.text.trim()),
+          );
 
     if (!mounted) return;
 
@@ -97,7 +86,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: TitlePageText(
-          text: '${widget.isCreate ? 'Create' : 'Edit'} Object'
+          text: '${widget.isCreate ? 'Create' : 'Edit'} Object',
         ),
         leading: IconButton(
           onPressed: () {
@@ -136,7 +125,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                     icon: const Icon(Icons.thermostat),
                     controller: _maxTemperatureComtroller,
                     keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true
+                      decimal: true,
                     ),
                   ),
                   CustomField(
@@ -157,11 +146,9 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                   ),
                   const SizedBox(height: 20),
                   ImportantButton(
-                    text: '${widget.isCreate ? 'Create' : 'Edit'} object', 
-                    func: widget.isCreate ?
-                      _createObject :
-                      _updateObject
-                    ),
+                    text: '${widget.isCreate ? 'Create' : 'Edit'} object',
+                    func: _action,
+                  ),
                 ],
               ),
             ),

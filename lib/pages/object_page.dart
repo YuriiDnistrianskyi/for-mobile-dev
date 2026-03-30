@@ -33,7 +33,9 @@ class _ObjectPageState extends State<ObjectPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(builder: (context) => CreateDevicePage(
-        objectId: widget.object.id!)
+        isCreate: true,
+        objectId: widget.object.id!
+        )
       ),
     );
   }
@@ -53,6 +55,17 @@ class _ObjectPageState extends State<ObjectPage> {
   void _deleteObject() async {
     final objectProvider = context.read<ObjectProvider>();
     await objectProvider.deleteObject(widget.object.id!);
+
+    if(!mounted) return;
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Object ${widget.object.publicName} deleted'))
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Wrong email or password'))
+      );
   }
 
   void _navigateToDdevice() {}
@@ -73,11 +86,11 @@ class _ObjectPageState extends State<ObjectPage> {
         ),
         actions: [
           IconButton(
-            onPressed: _deleteObject,
+            onPressed: _navigateToUpdateObject,
             icon: const Icon(Icons.edit, color: Colors.white)
           ),
           IconButton(
-            onPressed: _navigateToUpdateObject,
+            onPressed: _deleteObject,
             icon: const Icon(Icons.delete, color: Colors.red),
           ),
         ]
@@ -124,13 +137,6 @@ class _ObjectPageState extends State<ObjectPage> {
                 const SizedBox(height: 20),
                 const GraphBox(text: 'Temparature graph'),
                 const SizedBox(height: 20),
-                SizedBox(
-                  height: 50,
-                  child: CustomButton(
-                    text: 'Edit object',
-                    func: _navigateToUpdateObject,
-                  ),
-                ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

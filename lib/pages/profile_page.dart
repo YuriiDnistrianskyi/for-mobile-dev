@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/login_page.dart';
+import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/setting_field.dart';
@@ -17,7 +18,17 @@ class _ProfilePageState extends State<ProfilePage> {
   final String name = 'My name';
   final String email = 'my_email@gmail.com';
 
-  void _edit() {}
+  void _edit() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => RegisterPage(
+          isRegister: false, 
+          id: context.read<AuthProvider>().userId,
+        )
+      )
+    );
+  }
 
   void _logOut() {
     Provider.of<AuthProvider>(context, listen: false).logout();
