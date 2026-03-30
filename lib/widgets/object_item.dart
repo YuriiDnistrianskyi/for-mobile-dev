@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/object_page.dart';
+import 'package:my_project/providers/temperature_graph_provider.dart';
+import 'package:provider/provider.dart';
 
 class ObjectItem extends StatefulWidget {
   const ObjectItem({required this.object, super.key});
@@ -12,7 +14,13 @@ class ObjectItem extends StatefulWidget {
 }
 
 class _ObjectItemState extends State<ObjectItem> {
-  final double temperature = 12.32;
+  @override
+  void initState() {
+    super.initState();
+    context.read<TemperatureGraphProvider>().getLastTemperatureGraphPoint(
+      widget.object.id!
+    );
+  }
 
   void _navigateToObjectPage() {
     Navigator.push(
@@ -25,6 +33,11 @@ class _ObjectItemState extends State<ObjectItem> {
 
   @override
   Widget build(BuildContext context) {
+    final double temperature = context
+        .watch<TemperatureGraphProvider>()
+        .getLastPoint(widget.object.id!)!
+        .value;
+
     return GestureDetector(
       onTap: _navigateToObjectPage,
       child: DecoratedBox(
