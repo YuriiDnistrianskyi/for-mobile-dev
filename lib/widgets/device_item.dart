@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/local/models/device_model.dart';
+import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
+import 'package:provider/provider.dart';
 
 class DeviceItem extends StatefulWidget {
   final Device device;
@@ -12,12 +14,13 @@ class DeviceItem extends StatefulWidget {
 }
 
 class _DeviceItemState extends State<DeviceItem> {
-  final String power = '76';
-
   void _navigateToDevice() {}
 
   @override
   Widget build(BuildContext cotext) {
+    final int? power = context.watch<SpeedGraphProvider>()
+        .getLastPoint(widget.device.id!)?.value;
+
     return GestureDetector(
       onTap: _navigateToDevice,
       child: DecoratedBox(

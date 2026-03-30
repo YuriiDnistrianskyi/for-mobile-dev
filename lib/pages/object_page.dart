@@ -5,6 +5,7 @@ import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
+import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
@@ -22,8 +23,6 @@ class ObjectPage extends StatefulWidget {
 }
 
 class _ObjectPageState extends State<ObjectPage> {
-  final double currentTemperature = 45.65;
-
   @override
   void initState() {
     super.initState();
@@ -74,6 +73,9 @@ class _ObjectPageState extends State<ObjectPage> {
   @override
   Widget build(BuildContext context) {
     final List<Device> devices = context.watch<DeviceProvider>().devices;
+    final double currentTemperature = context
+        .watch<TemperatureGraphProvider>()
+        .getLastPoint(widget.object.id!)!.value;
 
     return Scaffold(
       backgroundColor: Colors.transparent,

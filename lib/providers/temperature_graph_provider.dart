@@ -43,7 +43,11 @@ class TemperatureGraphProvider extends ChangeNotifier {
   }
 
   TemperatureGraphPoint? getLastPoint(int objectId) {
-    return _lastPoints[objectId];
+    return _lastPoints[objectId] ?? TemperatureGraphPoint(
+      objectId: objectId,
+      time: DateTime.now(),
+      value: 24,
+    );
   }
 
   Future<void> getTemperatureGraph(int objectId) async {

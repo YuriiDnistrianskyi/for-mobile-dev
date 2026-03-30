@@ -13,17 +13,21 @@ class SpeedGraphProvider extends ChangeNotifier {
 
   List<SpeedGraphPoint> getGraph(int deviceId) {
     return _graphs[deviceId] ?? [
-      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 110), 
-      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 120),
-      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 120),
-      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 130),
-      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 150),
+      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 70), 
+      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 75),
+      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 80),
+      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 76),
+      SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 95),
       ];
       // для тесту щоб був графік
   }
 
   SpeedGraphPoint? getLastPoint(int deviceId) {
-    return _lastPoints[deviceId];
+    return _lastPoints[deviceId] ?? SpeedGraphPoint(
+      deviceId: deviceId,
+      time: DateTime.now(),
+      value: 95,
+    );
   }
  
   Future<void> getSpeedGraph(int deviceId) async {
