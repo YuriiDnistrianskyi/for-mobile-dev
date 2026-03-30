@@ -43,7 +43,19 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _delete() {}
+  void _delete() async {
+    context.read<UserProvider>().deleteUser(
+      context.read<AuthProvider>().userId,
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
+    );
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Account deleted')));
+  }
 
   @override
   Widget build(BuildContext context) {

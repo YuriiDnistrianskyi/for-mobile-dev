@@ -12,14 +12,13 @@ class ObjectItem extends StatefulWidget {
 }
 
 class _ObjectItemState extends State<ObjectItem> {
-  final String name = 'Object 1';
   final double temperature = 12.32;
 
   void _navigateToObjectPage() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => ObjectPage(object: widget.object)
+        builder: (context) => ObjectPage(objectId: widget.object.id!),
       ),
     );
   }
@@ -36,8 +35,8 @@ class _ObjectItemState extends State<ObjectItem> {
         child: Column(
           children: [
             Text(
-              widget.object.publicName, 
-              style: const TextStyle(fontWeight: FontWeight.bold)
+              widget.object.publicName,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Expanded(
               child: Padding(

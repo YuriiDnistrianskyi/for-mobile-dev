@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/object_model.dart';
+// import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
@@ -14,9 +15,9 @@ import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class ObjectPage extends StatefulWidget {
-  final MyObject object;
+  final int objectId;
 
-  const ObjectPage({required this.object, super.key});
+  const ObjectPage({required this.objectId, super.key});
 
   @override
   State<ObjectPage> createState() => _ObjectPageState();
@@ -26,7 +27,8 @@ class _ObjectPageState extends State<ObjectPage> {
   @override
   void initState() {
     super.initState();
-    context.read<DeviceProvider>().getDevices(widget.object.id!);
+    context.read<ObjectProvider>().getObject(widget.objectId);
+    context.read<DeviceProvider>().getDevices(widget.objectId);
   }
 
   void _navigateToCreateDevice() {
@@ -34,7 +36,7 @@ class _ObjectPageState extends State<ObjectPage> {
       context,
       MaterialPageRoute<void>(
         builder: (context) =>
-            CreateDevicePage(isCreate: true, objectId: widget.object.id!),
+            CreateDevicePage(isCreate: true, objectId: widget.objectId),
       ),
     );
   }
@@ -44,7 +46,7 @@ class _ObjectPageState extends State<ObjectPage> {
       context,
       MaterialPageRoute<void>(
         builder: (context) =>
-            CreateObjectPage(isCreate: false, id: widget.object.id),
+            CreateObjectPage(isCreate: false, id: widget.objectId),
       ),
     );
   }
@@ -52,16 +54,16 @@ class _ObjectPageState extends State<ObjectPage> {
   void _deleteObject() async {
     final objectProvider = context.read<ObjectProvider>();
     await objectProvider.deleteObject(
-      widget.object.id!, 
+      widget.objectId,
       context.read<AuthProvider>().userId,
     );
 
     if (!mounted) return;
 
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Object ${widget.object.publicName} deleted')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Object deleted')));
 
     ScaffoldMessenger.of(
       context,
@@ -70,10 +72,11 @@ class _ObjectPageState extends State<ObjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    final MyObject object = context.watch<ObjectProvider>().object!;
     final List<Device> devices = context.watch<DeviceProvider>().devices;
     final double currentTemperature = context
         .watch<TemperatureGraphProvider>()
-        .getLastPoint(widget.object.id!)!
+        .getLastPoint(widget.objectId)!
         .value;
 
     return Scaffold(
@@ -81,7 +84,7 @@ class _ObjectPageState extends State<ObjectPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: TitlePageText(text: widget.object.publicName),
+        title: TitlePageText(text: object.publicName),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -139,7 +142,7 @@ class _ObjectPageState extends State<ObjectPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GraphBox(type: 'temperature', id: widget.object.id!),
+                GraphBox(type: 'temperature', id: widget.objectId),
                 const SizedBox(height: 20),
                 ListView.builder(
                   shrinkWrap: true,
