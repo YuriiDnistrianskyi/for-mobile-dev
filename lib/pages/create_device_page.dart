@@ -7,9 +7,17 @@ import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class CreateDevicePage extends StatefulWidget {
+  final bool isCreate;
   final int objectId;
+  final int? deviceId;
 
-  const CreateDevicePage({required this.objectId, super.key});
+
+  const CreateDevicePage({
+    required this.isCreate,
+    required this.objectId, 
+    this.deviceId,
+    super.key
+  });
 
   @override
   State<CreateDevicePage> createState() => _CreateDevicePageState();
@@ -22,10 +30,19 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
   final TextEditingController _confirmPasswordController = 
       TextEditingController();
 
-  void _createDevice() async {
+  void _action() async {
     final deviceProvider = context.read<DeviceProvider>();
 
-    await deviceProvider.createDevice(
+    widget.isCreate 
+    ? await deviceProvider.createDevice(
+      _publicNameController.text.trim(), 
+      _privateNameController.text.trim(), 
+      _passwordController.text.trim(), 
+      widget.objectId,
+    )
+    :
+    await deviceProvider.updateDevice(
+      widget.deviceId as int,
       _publicNameController.text.trim(), 
       _privateNameController.text.trim(), 
       _passwordController.text.trim(), 
@@ -44,7 +61,9 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        title: const TitlePageText(text: 'Create device'),
+        title: TitlePageText(
+          text: '${widget.isCreate ? 'Create' : 'Etid'} device'
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -88,7 +107,10 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                     controller: _confirmPasswordController,
                   ),
                   const SizedBox(height: 20),
-                  ImportantButton(text: 'Create device', func: _createDevice),
+                  ImportantButton(
+                    text: '${widget.isCreate ? 'Create' : 'Etid'} device', 
+                    func: _action,
+                  ),
                 ],
               ),
             ),
