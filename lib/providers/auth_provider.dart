@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/repository/local_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
   final Repository repository;
@@ -20,13 +21,27 @@ class AuthProvider with ChangeNotifier {
       return 0;
     }
     _isLoggin = true;
-    notifyListeners();
     _userId = user.id!;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('userId', user.id!);
+    notifyListeners();
+
     return user.id!; //
   }
 
-  void logout() {
+  Future<void> autoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('userId');
+    if (userId == null) return;
+    _isLoggin = true;
+    _userId = userId;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
     _isLoggin = false;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
     notifyListeners();
   }
 }

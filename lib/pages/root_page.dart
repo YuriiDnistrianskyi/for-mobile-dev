@@ -10,6 +10,7 @@ class RootPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    auth.autoLogin();
 
     return auth.isLoggin ? const HomePage() : const LoginPage();
   }
