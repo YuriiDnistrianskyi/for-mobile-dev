@@ -43,9 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _delete() {
-
-  }
+  void _delete() {}
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +94,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             Text(
-                              user.email, 
-                              style: const TextStyle(fontSize: 15)),
+                              user.email,
+                              style: const TextStyle(fontSize: 15),
+                            ),
                           ],
                         ),
                       ),

@@ -70,9 +70,9 @@ class ObjectProvider extends ChangeNotifier {
     await getObjects(userId);
   }
 
-  Future<void> deleteObject(int id) async {
+  Future<void> deleteObject(int id, int userId) async {
     await repository.delete('object', id);
-    // await getObjects(id);
+    await getObjects(userId);
   }
 
 }

@@ -22,22 +22,19 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     final auth = context.read<AuthProvider>();
 
-    await auth.login(
-      _emailController.text,
-      _passwordController.text,
-    );
+    await auth.login(_emailController.text, _passwordController.text);
 
     if (!mounted) return;
 
     if (auth.isLoggin) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(builder: (context) => const HomePage())
+        MaterialPageRoute<void>(builder: (context) => const HomePage()),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Wrong email or password'))
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Wrong email or password')));
     }
   }
 

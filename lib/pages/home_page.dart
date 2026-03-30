@@ -27,9 +27,8 @@ class _HomePageState extends State<HomePage> {
   void _navigateToCreateObject() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => const CreateObjectPage(
-        isCreate: true,
-        )
+      MaterialPageRoute<void>(
+        builder: (context) => const CreateObjectPage(isCreate: true),
       ),
     );
   }
@@ -98,9 +97,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  return ObjectItem(
-                    object: objects[index]
-                  );
+                  return ObjectItem(object: objects[index]);
                 },
               ),
             ),

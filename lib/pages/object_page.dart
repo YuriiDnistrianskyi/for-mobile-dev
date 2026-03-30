@@ -3,6 +3,7 @@ import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
+import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
@@ -11,7 +12,6 @@ import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
-
 
 class ObjectPage extends StatefulWidget {
   final MyObject object;
@@ -32,10 +32,9 @@ class _ObjectPageState extends State<ObjectPage> {
   void _navigateToCreateDevice() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => CreateDevicePage(
-        isCreate: true,
-        objectId: widget.object.id!
-        )
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            CreateDevicePage(isCreate: true, objectId: widget.object.id!),
       ),
     );
   }
@@ -44,38 +43,38 @@ class _ObjectPageState extends State<ObjectPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => CreateObjectPage(
-          isCreate: false, 
-          id: widget.object.id
-        )
-      )
+        builder: (context) =>
+            CreateObjectPage(isCreate: false, id: widget.object.id),
+      ),
     );
   }
 
   void _deleteObject() async {
     final objectProvider = context.read<ObjectProvider>();
-    await objectProvider.deleteObject(widget.object.id!);
+    await objectProvider.deleteObject(
+      widget.object.id!, 
+      context.read<AuthProvider>().userId,
+    );
 
-    if(!mounted) return;
+    if (!mounted) return;
 
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Object ${widget.object.publicName} deleted'))
+      SnackBar(content: Text('Object ${widget.object.publicName} deleted')),
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Wrong email or password'))
-      );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Wrong email or password')));
   }
-
-  void _navigateToDdevice() {}
 
   @override
   Widget build(BuildContext context) {
     final List<Device> devices = context.watch<DeviceProvider>().devices;
     final double currentTemperature = context
         .watch<TemperatureGraphProvider>()
-        .getLastPoint(widget.object.id!)!.value;
+        .getLastPoint(widget.object.id!)!
+        .value;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -92,13 +91,13 @@ class _ObjectPageState extends State<ObjectPage> {
         actions: [
           IconButton(
             onPressed: _navigateToUpdateObject,
-            icon: const Icon(Icons.edit, color: Colors.white)
+            icon: const Icon(Icons.edit, color: Colors.white),
           ),
           IconButton(
             onPressed: _deleteObject,
             icon: const Icon(Icons.delete, color: Colors.red),
           ),
-        ]
+        ],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -149,8 +148,8 @@ class _ObjectPageState extends State<ObjectPage> {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        const SizedBox(height: 20), 
-                        DeviceItem(device: devices[index])
+                        const SizedBox(height: 20),
+                        DeviceItem(device: devices[index]),
                       ],
                     );
                   },
@@ -162,7 +161,7 @@ class _ObjectPageState extends State<ObjectPage> {
                     func: _navigateToCreateDevice,
                   ),
                 ),
-                const SizedBox(height: 70)
+                const SizedBox(height: 70),
               ],
             ),
           ),

@@ -91,9 +91,9 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
               onPressed: () {
                 context.read<DeviceProvider>().deleteDevice(widget.deviceId!);
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Device deleted'))
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Device deleted')));
               },
               icon: const Icon(Icons.delete, color: Colors.red),
             ),

@@ -11,8 +11,6 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
 
-    return auth.isLoggin ?
-      const HomePage() :
-      const LoginPage();
+    return auth.isLoggin ? const HomePage() : const LoginPage();
   }
 }
