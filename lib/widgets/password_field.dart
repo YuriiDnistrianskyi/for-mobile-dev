@@ -30,7 +30,7 @@ class _PasswordFieldState extends State<PasswordField> {
       return 'Passord is required';
     }
     if (value.length < 8) {
-      return 'PAssword must be at least 8 characters';
+      return 'Password must be at least 8 characters';
     }
     return null;
   }
