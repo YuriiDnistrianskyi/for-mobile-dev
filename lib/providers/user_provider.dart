@@ -4,7 +4,7 @@ import 'package:my_project/local/repository/local_repository.dart';
 
 class UserProvider extends ChangeNotifier {
   final Repository repository;
-  late User? _user;
+  User? _user;
 
   User? get user => _user;
 
@@ -14,6 +14,7 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> getUser(int id) async {
     _user = await repository.getById<User>('user', id, User.fromMap);
+    notifyListeners();
   }
 
   Future<void> createUser(

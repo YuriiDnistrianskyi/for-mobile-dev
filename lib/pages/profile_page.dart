@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
@@ -42,8 +43,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void _delete() {
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    final User user = context.watch<UserProvider>().user!;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -82,14 +89,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '${context.read<UserProvider>().user!.firstName} // ${context.read<UserProvider>().user!.lastName}',
+                              '${user.firstName}  ${user.lastName}',
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              context.read<UserProvider>().user!.email, 
+                              user.email, 
                               style: const TextStyle(fontSize: 15)),
                           ],
                         ),
@@ -113,6 +120,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     text: 'Log Out',
                     icon: const Icon(Icons.logout),
                     func: _logOut,
+                  ),
+                  const SizedBox(height: 20),
+                  SettingField(
+                    text: 'Delete Account',
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    func: _delete,
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/user_model.dart';
 import 'package:my_project/pages/profile_page.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
@@ -26,22 +27,38 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isRegister == false) {
+      final User currentUser = context.read<UserProvider>().user!;
+
+      _firstNameController.text = currentUser.firstName;
+      _lastNameController.text = currentUser.lastName;
+      _emailController.text = currentUser.email;
+    }
+  }
+
   void _action() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final User user = context.read<UserProvider>().user!;
 
     widget.isRegister
         ? await userProvider.createUser(
-            _firstNameController.text,
-            _lastNameController.text,
-            _emailController.text,
-            _passwordController.text,
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim(),
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
           )
         : await userProvider.updateUser(
             widget.id!,
-            _firstNameController.text,
-            _lastNameController.text,
-            _emailController.text,
-            _passwordController.text,
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim(),
+            _emailController.text.trim(),
+             _passwordController.text.trim() == ''
+                ? user.password
+                : _passwordController.text.trim(),
           );
 
     if (!mounted) return;
