@@ -23,7 +23,7 @@ class AuthProvider with ChangeNotifier {
     _isLoggin = true;
     _userId = user.id!;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('userId', user.id!);
+    await prefs.setInt('_userId', user.id!);
     notifyListeners();
 
     return user.id!; //
@@ -31,7 +31,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> autoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getInt('userId');
+    final userId = prefs.getInt('_userId');
     if (userId == null) return;
     _isLoggin = true;
     _userId = userId;
@@ -41,7 +41,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> logout() async {
     _isLoggin = false;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('userId');
+    await prefs.remove('_userId');
     notifyListeners();
   }
 }

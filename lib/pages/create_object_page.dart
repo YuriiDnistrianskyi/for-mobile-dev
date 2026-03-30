@@ -69,24 +69,26 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
         return;
       }
 
-      widget.isCreate
-          ? await objectProvider.createObject(
-              _publicNameController.text,
-              _privateNameController.text,
-              _passwordController.text,
-              authProvider.userId,
-              double.parse(_maxTemperatureComtroller.text.trim()),
-              int.parse(_defaulSpeedController.text),
-            )
-          : await objectProvider.updateObject(
-              widget.id as int,
-              _publicNameController.text.trim(),
-              _privateNameController.text.trim(),
-              _passwordController.text.trim(),
-              authProvider.userId,
-              double.parse(_maxTemperatureComtroller.text.trim()),
-              int.parse(_defaulSpeedController.text.trim()),
-            );
+      if (widget.isCreate) {
+        await objectProvider.createObject(
+          _publicNameController.text,
+          _privateNameController.text,
+          _passwordController.text,
+          authProvider.userId,
+          double.parse(_maxTemperatureComtroller.text.trim()),
+          int.parse(_defaulSpeedController.text),
+        );
+      } else {
+        await objectProvider.updateObject(
+          widget.id as int,
+          _publicNameController.text.trim(),
+          _privateNameController.text.trim(),
+          _passwordController.text.trim(),
+          authProvider.userId,
+          double.parse(_maxTemperatureComtroller.text.trim()),
+          int.parse(_defaulSpeedController.text.trim()),
+        );
+      }
 
       if (!mounted) return;
 
@@ -132,12 +134,13 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                       controller: _publicNameController,
                       keyboardType: TextInputType.text,
                     ),
-                    CustomField(
-                      text: 'Private Name',
-                      icon: const Icon(Icons.shield),
-                      controller: _privateNameController,
-                      keyboardType: TextInputType.text,
-                    ),
+                    if (widget.isCreate)
+                      CustomField(
+                        text: 'Private Name',
+                        icon: const Icon(Icons.shield),
+                        controller: _privateNameController,
+                        keyboardType: TextInputType.text,
+                      ),
                     CustomField(
                       text: 'Max Temperature',
                       icon: const Icon(Icons.thermostat),

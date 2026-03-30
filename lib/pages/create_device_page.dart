@@ -49,40 +49,44 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
     if (_formKey.currentState!.validate()) {
       final deviceProvider = context.read<DeviceProvider>();
 
-      final privateName = _privateNameController.text.trim();
-      final bool objectExists = await deviceProvider.deviceExists(privateName);
-
-      if (!mounted) return;
-
-      if (objectExists) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('This private name is already used')),
+      if (widget.isCreate) {
+        final privateName = _privateNameController.text.trim();
+        final bool objectExists = await deviceProvider.deviceExists(
+          privateName,
         );
-        return;
-      }
 
-      if (_passwordController.text.trim() !=
-          _confirmPasswordController.text.trim()) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
-        return;
-      }
+        if (!mounted) return;
 
-      widget.isCreate
-          ? await deviceProvider.createDevice(
-              _publicNameController.text.trim(),
-              _privateNameController.text.trim(),
-              _passwordController.text.trim(),
-              widget.objectId,
-            )
-          : await deviceProvider.updateDevice(
-              widget.deviceId as int,
-              _publicNameController.text.trim(),
-              _privateNameController.text.trim(),
-              _passwordController.text.trim(),
-              widget.objectId,
-            );
+        if (objectExists) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('This private name is already used')),
+          );
+          return;
+        }
+
+        if (_passwordController.text.trim() !=
+            _confirmPasswordController.text.trim()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Passwords do not match')),
+          );
+          return;
+        }
+
+        await deviceProvider.createDevice(
+          _publicNameController.text.trim(),
+          _privateNameController.text.trim(),
+          _passwordController.text.trim(),
+          widget.objectId,
+        );
+      } else {
+        await deviceProvider.updateDevice(
+          widget.deviceId as int,
+          _publicNameController.text.trim(),
+          _privateNameController.text.trim(),
+          _passwordController.text.trim(),
+          widget.objectId,
+        );
+      }
 
       if (!mounted) return;
 
@@ -141,12 +145,13 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                       controller: _publicNameController,
                       keyboardType: TextInputType.text,
                     ),
-                    CustomField(
-                      text: 'Private Name',
-                      icon: const Icon(Icons.shield),
-                      controller: _privateNameController,
-                      keyboardType: TextInputType.text,
-                    ),
+                    if (widget.isCreate)
+                      CustomField(
+                        text: 'Private Name',
+                        icon: const Icon(Icons.shield),
+                        controller: _privateNameController,
+                        keyboardType: TextInputType.text,
+                      ),
                     if (widget.isCreate) ...[
                       PasswordField(
                         text: 'Password',
@@ -167,7 +172,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
                   ],
                 ),
               ),
-            )
+            ),
           ),
         ),
       ),
