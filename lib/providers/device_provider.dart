@@ -23,6 +23,13 @@ class DeviceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> deviceExists(String privateName) async {
+    final bool deviceExists = await repository.modelExists(
+      'device', privateName
+    );
+    return deviceExists;
+  }
+
   Future<void> createDevice(
     String publicName,
     String privatName,

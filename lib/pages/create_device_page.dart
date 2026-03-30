@@ -29,6 +29,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -39,26 +40,48 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
   }
 
   void _action() async {
-    final deviceProvider = context.read<DeviceProvider>();
+    if (_formKey.currentState!.validate()) {
+      final deviceProvider = context.read<DeviceProvider>();
 
-    widget.isCreate
-        ? await deviceProvider.createDevice(
-            _publicNameController.text.trim(),
-            _privateNameController.text.trim(),
-            _passwordController.text.trim(),
-            widget.objectId,
-          )
-        : await deviceProvider.updateDevice(
-            widget.deviceId as int,
-            _publicNameController.text.trim(),
-            _privateNameController.text.trim(),
-            _passwordController.text.trim(),
-            widget.objectId,
-          );
+      final privateName = _privateNameController.text.trim();
+      final bool objectExists = await deviceProvider.deviceExists(privateName);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    Navigator.pop(context);
+      if (objectExists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This private name is already used')),
+        );
+        return;
+      }
+
+      if (_passwordController.text.trim() !=
+          _confirmPasswordController.text.trim()) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+        return;
+      }
+
+      widget.isCreate
+          ? await deviceProvider.createDevice(
+              _publicNameController.text.trim(),
+              _privateNameController.text.trim(),
+              _passwordController.text.trim(),
+              widget.objectId,
+            )
+          : await deviceProvider.updateDevice(
+              widget.deviceId as int,
+              _publicNameController.text.trim(),
+              _privateNameController.text.trim(),
+              _passwordController.text.trim(),
+              widget.objectId,
+            );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -107,43 +130,46 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomField(
-                    text: 'Public Name',
-                    icon: const Icon(Icons.devices_rounded),
-                    controller: _publicNameController,
-                    keyboardType: TextInputType.text,
-                  ),
-                  CustomField(
-                    text: 'Private Name',
-                    icon: const Icon(Icons.shield),
-                    controller: _privateNameController,
-                    keyboardType: TextInputType.text,
-                  ),
-                  if (widget.isCreate) ...[
-                    PasswordField(
-                      text: 'Password',
-                      icon: const Icon(Icons.lock),
-                      controller: _passwordController,
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomField(
+                      text: 'Public Name',
+                      icon: const Icon(Icons.devices_rounded),
+                      controller: _publicNameController,
+                      keyboardType: TextInputType.text,
                     ),
-                    PasswordField(
-                      text: 'Confirm Password',
-                      icon: const Icon(Icons.lock_reset),
-                      controller: _confirmPasswordController,
+                    CustomField(
+                      text: 'Private Name',
+                      icon: const Icon(Icons.shield),
+                      controller: _privateNameController,
+                      keyboardType: TextInputType.text,
+                    ),
+                    if (widget.isCreate) ...[
+                      PasswordField(
+                        text: 'Password',
+                        icon: const Icon(Icons.lock),
+                        controller: _passwordController,
+                      ),
+                      PasswordField(
+                        text: 'Confirm Password',
+                        icon: const Icon(Icons.lock_reset),
+                        controller: _confirmPasswordController,
+                      ),
+                    ],
+                    const SizedBox(height: 20),
+                    ImportantButton(
+                      text: '${widget.isCreate ? 'Create' : 'Etid'} device',
+                      func: _action,
                     ),
                   ],
-                  const SizedBox(height: 20),
-                  ImportantButton(
-                    text: '${widget.isCreate ? 'Create' : 'Etid'} device',
-                    func: _action,
-                  ),
-                ],
+                ),
               ),
-            ),
+            )
           ),
         ),
       ),
