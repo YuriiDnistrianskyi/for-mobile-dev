@@ -73,7 +73,7 @@ class _DeviceItemState extends State<DeviceItem> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const GraphBox(text: 'Speed graph'),
+                GraphBox(type: 'speed', id: widget.device.id!),
               ],
             ),
           ),

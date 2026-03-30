@@ -1,40 +1,26 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-// Поки нехай так, щоб просто якийсь графік був, потім це перенеситься
-class GraphPoint {
-  final DateTime time;
-  final double value;
-
-  GraphPoint({required this.time, required this.value});
-}
-
-final List<GraphPoint> data = [
-  GraphPoint(time: DateTime.parse('2026-03-11T10:00:00'), value: 20.1),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:01:00'), value: 24.1),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:02:00'), value: 26.3),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:03:00'), value: 30.4),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:04:00'), value: 34.5),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:05:00'), value: 57.2),
-  GraphPoint(time: DateTime.parse('2026-03-11T10:06:00'), value: 38.2),
-];
-//
+import 'package:my_project/providers/speed_graph_provider.dart';
+import 'package:my_project/providers/temperature_graph_provider.dart';
+import 'package:provider/provider.dart';
 
 class GraphBox extends StatefulWidget {
-  const GraphBox({required this.text, super.key});
+  const GraphBox({required this.type, required this.id, super.key});
 
-  final String text;
+  final String type;
+  final int id;
 
   @override
   State<GraphBox> createState() => _GraphBoxState();
 }
 
 class _GraphBoxState extends State<GraphBox> {
-  List<FlSpot> _buildSpots(List<GraphPoint> data) {
+  List<FlSpot> _buildSpots(List<dynamic> data) {
     final List<FlSpot> spots = [];
 
     for (int i = 0; i < data.length; i++) {
-      spots.add(FlSpot(i.toDouble(), data[i].value));
+      final value = data[i].value as num;
+      spots.add(FlSpot(i.toDouble(), value.toDouble()));
     }
 
     return spots;
@@ -42,6 +28,14 @@ class _GraphBoxState extends State<GraphBox> {
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> data = [];
+
+    if (widget.type == 'speed') {
+      data = context.watch<SpeedGraphProvider>().getGraph(widget.id);
+    } else {
+      data = context.watch<TemperatureGraphProvider>().getGraph(widget.id);
+    }
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -51,7 +45,7 @@ class _GraphBoxState extends State<GraphBox> {
         child: Column(
           children: [
             Text(
-              widget.text,
+              widget.type == 'speed' ? 'Speed graph' : 'Temperature graph',
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
