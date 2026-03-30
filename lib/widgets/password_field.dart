@@ -25,6 +25,16 @@ class _PasswordFieldState extends State<PasswordField> {
     });
   }
 
+  String? _validation(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Passord is required';
+    }
+    if (value.length < 8) {
+      return 'PAssword must be at least 8 characters';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,11 +42,11 @@ class _PasswordFieldState extends State<PasswordField> {
         const SizedBox(height: 20),
         SizedBox(
           width: 250,
-          height: 50,
           child: TextFormField(
             controller: widget.controller,
             obscureText: _isHidden,
             keyboardType: TextInputType.visiblePassword,
+            validator: _validation,
             decoration: InputDecoration(
               labelText: 'Enter ${widget.text}',
               icon: widget.icon,

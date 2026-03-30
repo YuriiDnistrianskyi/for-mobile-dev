@@ -53,23 +53,25 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               width: 300,
-              height: 220,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              child: Column(
-                children: [
-                  EmailField(controller: _emailController),
-                  PasswordField(
-                    text: 'Password',
-                    icon: const Icon(Icons.lock),
-                    controller: _passwordController,
-                  ),
-                  const SizedBox(height: 20),
-                  ImportantButton(text: 'Login', func: _login),
-                ],
-              ),
+              child: Padding(
+                padding: const EdgeInsetsGeometry.all(15),
+                child: Column(
+                  children: [
+                    EmailField(controller: _emailController),
+                    PasswordField(
+                      text: 'Password',
+                      icon: const Icon(Icons.lock),
+                      controller: _passwordController,
+                    ),
+                    const SizedBox(height: 20),
+                    ImportantButton(text: 'Login', func: _login),
+                  ],
+                ),
+              )
             ),
             TextButton(
               child: const Text(

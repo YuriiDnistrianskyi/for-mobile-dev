@@ -19,6 +19,13 @@ class CustomField extends StatefulWidget {
 }
 
 class _CustomFieldState extends State<CustomField> {
+  String? _validation(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'First name is required';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,10 +33,11 @@ class _CustomFieldState extends State<CustomField> {
         const SizedBox(height: 20),
         SizedBox(
           width: 250,
-          height: 50,
-          child: TextField(
+          // height: 50,
+          child: TextFormField(
             controller: widget.controller,
             keyboardType: widget.keyboardType,
+            validator: _validation,
             decoration: InputDecoration(
               labelText: 'Enter ${widget.text}',
               icon: widget.icon,

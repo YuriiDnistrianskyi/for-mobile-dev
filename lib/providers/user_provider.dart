@@ -17,6 +17,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> userExists(String email) async {
+    final User? user = await repository.getUser(email);
+    return user != null;
+  }
+
   Future<void> createUser(
     String firstName,
     String lastName,
