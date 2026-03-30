@@ -19,7 +19,7 @@ class SpeedGraphProvider extends ChangeNotifier {
       SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 76),
       SpeedGraphPoint(deviceId: deviceId, time: DateTime.now(), value: 95),
       ];
-      // для тесту щоб був графік
+      // для тесту щоб був графік, так то []
   }
 
   SpeedGraphPoint? getLastPoint(int deviceId) {

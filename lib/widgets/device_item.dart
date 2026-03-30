@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/local/models/device_model.dart';
+import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,18 @@ class DeviceItem extends StatefulWidget {
 }
 
 class _DeviceItemState extends State<DeviceItem> {
-  void _navigateToDevice() {}
+  void _navigateToDevice() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => CreateDevicePage(
+          isCreate: false, 
+          objectId: widget.device.objectId,
+          deviceId: widget.device.id,
+          )
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext cotext) {

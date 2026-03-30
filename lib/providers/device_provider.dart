@@ -5,15 +5,21 @@ import 'package:my_project/local/repository/local_repository.dart';
 class DeviceProvider extends ChangeNotifier {
   final Repository repository;
   List<Device> _devices = [];
-
   List<Device> get devices => _devices;
+  
+  Device? _device;
+  Device? get device => _device;
 
   DeviceProvider({required this.repository});
 
   Future<void> getDevices(int objectId) async {
     _devices = await repository.getDevicesByObjectId(objectId);
-    print('-------------------------------------------');
-    print(_devices.length);
+    notifyListeners();
+  }
+
+  Future<void> getDevice(int deviceId) async {
+    _device = await repository
+      .getById('device', deviceId, Device.fromMap);
     notifyListeners();
   }
 

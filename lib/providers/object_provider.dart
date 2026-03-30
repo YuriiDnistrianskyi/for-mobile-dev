@@ -6,11 +6,11 @@ class ObjectProvider extends ChangeNotifier {
   final Repository repository;
   List<MyObject> _objects = [];
 
-  List<MyObject> get objects => _objects;
-
   ObjectProvider({
     required this.repository,
   });
+
+  List<MyObject> get objects => _objects;
 
   Future<MyObject> getObject(int id) async {
     final MyObject? object = await repository.getById(
