@@ -42,33 +42,34 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _action() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final User user = context.read<UserProvider>().user!;
-
-    widget.isRegister
-        ? await userProvider.createUser(
-            _firstNameController.text.trim(),
-            _lastNameController.text.trim(),
-            _emailController.text.trim(),
-            _passwordController.text.trim(),
-          )
-        : await userProvider.updateUser(
-            widget.id!,
-            _firstNameController.text.trim(),
-            _lastNameController.text.trim(),
-            _emailController.text.trim(),
-            _passwordController.text.trim() == ''
-                ? user.password
-                : _passwordController.text.trim(),
-          );
+    if (widget.isRegister) {
+      await userProvider.createUser(
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+    } else {
+      final User user = context.read<UserProvider>().user!;
+      await userProvider.updateUser(
+        widget.id!,
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim() == ''
+            ? user.password
+            : _passwordController.text.trim(),
+      );
+    }
 
     if (!mounted) return;
-
     widget.isRegister
         ? Navigator.pop(context)
-        : Navigator.pushReplacement(
-            context,
-            MaterialPageRoute<void>(builder: (context) => const ProfilePage()),
-          );
+        : Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(
+            builder: (context) => const ProfilePage()
+          )
+        );
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

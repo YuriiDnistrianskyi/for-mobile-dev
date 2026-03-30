@@ -47,10 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
     context.read<UserProvider>().deleteUser(
       context.read<AuthProvider>().userId,
     );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
-    );
+    
+    _logOut();
 
     ScaffoldMessenger.of(
       context,
