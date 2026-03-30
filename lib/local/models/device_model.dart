@@ -19,7 +19,7 @@ class Device extends IModel {
   factory Device.fromMap(Map<String, dynamic> map) => Device(
     id: map['id'] as int,
     publicName: map['publicName'] as String,
-    privateName: map['privatName'] as String,
+    privateName: map['privateName'] as String,
     password: map['password'] as String,
     objectId: map['objectId'] as int,
   );

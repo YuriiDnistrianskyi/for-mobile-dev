@@ -145,8 +145,11 @@ class _ObjectPageState extends State<ObjectPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: devices.length,
                   itemBuilder: (context, index) {
-                    return const Column(
-                      children: [SizedBox(height: 20), DeviceItem()],
+                    return Column(
+                      children: [
+                        const SizedBox(height: 20), 
+                        DeviceItem(device: devices[index])
+                      ],
                     );
                   },
                 ),

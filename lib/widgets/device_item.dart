@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/local/models/device_model.dart';
 import 'package:my_project/widgets/graph_box.dart';
 
 class DeviceItem extends StatefulWidget {
-  const DeviceItem({super.key});
+  final Device device;
+
+  const DeviceItem({required this.device, super.key});
 
   @override
   State<DeviceItem> createState() => _DeviceItemState();
 }
 
 class _DeviceItemState extends State<DeviceItem> {
-  final String deviceName = 'Device 1';
   final String power = '76';
 
   void _navigateToDevice() {}
@@ -29,7 +31,7 @@ class _DeviceItemState extends State<DeviceItem> {
             child: Column(
               children: [
                 Text(
-                  deviceName,
+                  widget.device.publicName,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,

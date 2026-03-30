@@ -12,6 +12,8 @@ class DeviceProvider extends ChangeNotifier {
 
   Future<void> getDevices(int objectId) async {
     _devices = await repository.getDevicesByObjectId(objectId);
+    print('-------------------------------------------');
+    print(_devices.length);
     notifyListeners();
   }
 
@@ -22,7 +24,6 @@ class DeviceProvider extends ChangeNotifier {
     int objectId,
   ) async {
     final Device newDevice = Device(
-      id: 1, //
       publicName: publicName,
       privateName: privatName,
       password: password,
