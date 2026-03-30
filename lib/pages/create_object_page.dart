@@ -27,6 +27,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _maxTemperatureComtroller =
       TextEditingController();
   final TextEditingController _defaulSpeedController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -41,28 +42,50 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     final objectProvider = context.read<ObjectProvider>();
     final authProvider = context.read<AuthProvider>();
 
-    widget.isCreate
-        ? await objectProvider.createObject(
-            _publicNameController.text,
-            _privateNameController.text,
-            _passwordController.text,
-            authProvider.userId,
-            double.parse(_maxTemperatureComtroller.text.trim()),
-            int.parse(_defaulSpeedController.text),
-          )
-        : await objectProvider.updateObject(
-            widget.id as int,
-            _publicNameController.text.trim(),
-            _privateNameController.text.trim(),
-            _passwordController.text.trim(),
-            authProvider.userId,
-            double.parse(_maxTemperatureComtroller.text.trim()),
-            int.parse(_defaulSpeedController.text.trim()),
-          );
+    if (_formKey.currentState!.validate()) {
+      final privateName = _privateNameController.text.trim();
+      final bool objectExists = await objectProvider.objectExists(privateName);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    Navigator.pop(context);
+      if (objectExists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This private name is already used')),
+        );
+        return;
+      }
+
+      if (_passwordController.text.trim() !=
+          _confirmPasswordController.text.trim()) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+        return;
+      }
+
+      widget.isCreate
+          ? await objectProvider.createObject(
+              _publicNameController.text,
+              _privateNameController.text,
+              _passwordController.text,
+              authProvider.userId,
+              double.parse(_maxTemperatureComtroller.text.trim()),
+              int.parse(_defaulSpeedController.text),
+            )
+          : await objectProvider.updateObject(
+              widget.id as int,
+              _publicNameController.text.trim(),
+              _privateNameController.text.trim(),
+              _passwordController.text.trim(),
+              authProvider.userId,
+              double.parse(_maxTemperatureComtroller.text.trim()),
+              int.parse(_defaulSpeedController.text.trim()),
+            );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -99,55 +122,58 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomField(
-                    text: 'Public Name',
-                    icon: const Icon(Icons.devices_rounded),
-                    controller: _publicNameController,
-                    keyboardType: TextInputType.text,
-                  ),
-                  CustomField(
-                    text: 'Private Name',
-                    icon: const Icon(Icons.shield),
-                    controller: _privateNameController,
-                    keyboardType: TextInputType.text,
-                  ),
-                  CustomField(
-                    text: 'Max Temperature',
-                    icon: const Icon(Icons.thermostat),
-                    controller: _maxTemperatureComtroller,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomField(
+                      text: 'Public Name',
+                      icon: const Icon(Icons.devices_rounded),
+                      controller: _publicNameController,
+                      keyboardType: TextInputType.text,
                     ),
-                  ),
-                  CustomField(
-                    text: 'Defaul Speed for Devices',
-                    icon: const Icon(Icons.speed),
-                    controller: _defaulSpeedController,
-                    keyboardType: TextInputType.number,
-                  ),
-                  if (widget.isCreate) ...[
-                    PasswordField(
-                      text: 'Password',
-                      icon: const Icon(Icons.lock),
-                      controller: _passwordController,
+                    CustomField(
+                      text: 'Private Name',
+                      icon: const Icon(Icons.shield),
+                      controller: _privateNameController,
+                      keyboardType: TextInputType.text,
                     ),
-                    PasswordField(
-                      text: 'Confirm Password',
-                      icon: const Icon(Icons.lock_reset),
-                      controller: _confirmPasswordController,
+                    CustomField(
+                      text: 'Max Temperature',
+                      icon: const Icon(Icons.thermostat),
+                      controller: _maxTemperatureComtroller,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                    ),
+                    CustomField(
+                      text: 'Defaul Speed for Devices',
+                      icon: const Icon(Icons.speed),
+                      controller: _defaulSpeedController,
+                      keyboardType: TextInputType.number,
+                    ),
+                    if (widget.isCreate) ...[
+                      PasswordField(
+                        text: 'Password',
+                        icon: const Icon(Icons.lock),
+                        controller: _passwordController,
+                      ),
+                      PasswordField(
+                        text: 'Confirm Password',
+                        icon: const Icon(Icons.lock_reset),
+                        controller: _confirmPasswordController,
+                      ),
+                    ],
+                    const SizedBox(height: 20),
+                    ImportantButton(
+                      text: '${widget.isCreate ? 'Create' : 'Edit'} object',
+                      func: _action,
                     ),
                   ],
-                  const SizedBox(height: 20),
-                  ImportantButton(
-                    text: '${widget.isCreate ? 'Create' : 'Edit'} object',
-                    func: _action,
-                  ),
-                ],
+                ),
               ),
             ),
           ),

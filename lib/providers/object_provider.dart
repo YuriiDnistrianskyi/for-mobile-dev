@@ -28,6 +28,13 @@ class ObjectProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> objectExists(String privateName) async {
+    final bool objectExists = await repository.modelExists(
+      'object', privateName
+    );
+    return objectExists;
+  }
+
   Future<void> createObject(
     String publicName,
     String privateName,

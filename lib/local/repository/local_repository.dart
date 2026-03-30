@@ -179,6 +179,16 @@ class Repository implements ILocalRepository {
   }
 
   @override
+  Future<bool> modelExists(String table, String privateName) async {
+    final List<Map<String, Object?>> objects = await db.query(
+      table,
+      where: 'privateName = ?',
+      whereArgs: [privateName]
+    );
+    return objects.isNotEmpty;
+  }
+
+  @override
   Future<int> update(IModel obj, int id) async {
     return await db.update(
       obj.getTableName(), 

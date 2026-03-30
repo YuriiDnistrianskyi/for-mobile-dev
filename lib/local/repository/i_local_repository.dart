@@ -31,6 +31,7 @@ abstract class ILocalRepository {
     String table,
     T Function(Map<String, dynamic>) fromMap
   );
+  Future<bool> modelExists(String table, String privateName);
   Future<int> delete(String table, int id);
   Future<int> update(IModel obj, int id);
 
