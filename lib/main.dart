@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/repository/local_repository.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
@@ -7,6 +6,7 @@ import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
+import 'package:my_project/repository/local_repository.dart';
 import 'package:my_project/widgets/app_background.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
