@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
@@ -25,23 +26,31 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  void _signUp() async {
+  void _action() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    widget.isRegister ?
     await userProvider.createUser(
+      _firstNameController.text,
+      _lastNameController.text,
+      _emailController.text, 
+      _passwordController.text,
+    ) 
+    :
+    await userProvider.updateUser(
+      widget.id!,
       _firstNameController.text,
       _lastNameController.text,
       _emailController.text, 
       _passwordController.text,
     );
 
+
     if (!mounted) return;
 
     Navigator.pop(context);
   }
 
-  void _updateUser() async {
-    
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +63,18 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
-            Navigator.pop(context);
+            widget.isRegister ?
+            Navigator.pop(context) :
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => const HomePage()
+              )
+            );
           },
         ),
         title: TitlePageText(
-          text: widget.isRegister ? 'Sign Up' : 'Update User'
+          text: widget.isRegister ? 'Sign Up' : 'User'
         ),
       ),
       body: Center(
@@ -99,8 +115,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 20),
                   ImportantButton(
-                    text: 'Sign up', 
-                    func: widget.isRegister ? _signUp : _updateUser
+                    text: widget.isRegister ? 'Sign up' : 'Edit',
+                    func: _action,
                   ),
                 ],
               ),
