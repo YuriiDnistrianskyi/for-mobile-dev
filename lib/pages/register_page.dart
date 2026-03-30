@@ -51,13 +51,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (!mounted) return;
 
-      if (userExists) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('User already exists')));
-        return;
-      }
-
       if (_passwordController.text.trim() !=
           _confirmPasswordController.text.trim()) {
         ScaffoldMessenger.of(
@@ -67,6 +60,12 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
       if (widget.isRegister) {
+        if (userExists) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('User already exists')));
+          return;
+        }
         await userProvider.createUser(
           _firstNameController.text.trim(),
           _lastNameController.text.trim(),
@@ -80,10 +79,8 @@ class _RegisterPageState extends State<RegisterPage> {
           widget.id!,
           _firstNameController.text.trim(),
           _lastNameController.text.trim(),
-          _emailController.text.trim(),
-          _passwordController.text.trim() == ''
-              ? user.password
-              : _passwordController.text.trim(),
+          user.email,
+          user.password,
         );
       }
 
@@ -153,17 +150,19 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _lastNameController,
                       keyboardType: TextInputType.name,
                     ),
-                    EmailField(controller: _emailController),
-                    PasswordField(
-                      text: 'Password',
-                      icon: const Icon(Icons.lock),
-                      controller: _passwordController,
-                    ),
-                    PasswordField(
-                      text: 'Confirm Password',
-                      icon: const Icon(Icons.lock_reset),
-                      controller: _confirmPasswordController,
-                    ),
+                    if (widget.isRegister) ...[
+                      EmailField(controller: _emailController),
+                      PasswordField(
+                        text: 'Password',
+                        icon: const Icon(Icons.lock),
+                        controller: _passwordController,
+                      ),
+                      PasswordField(
+                        text: 'Confirm Password',
+                        icon: const Icon(Icons.lock_reset),
+                        controller: _confirmPasswordController,
+                      ),
+                    ],
                     const SizedBox(height: 20),
                     ImportantButton(
                       text: widget.isRegister ? 'Sign up' : 'Edit',

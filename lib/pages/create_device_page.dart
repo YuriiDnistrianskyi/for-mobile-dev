@@ -34,8 +34,14 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
   @override
   void initState() {
     super.initState();
+
     if (!widget.isCreate) {
       context.read<DeviceProvider>().getDevice(widget.deviceId!);
+      final Device device = context.read<DeviceProvider>().device!;
+
+      _publicNameController.text = device.publicName;
+      _privateNameController.text = device.privateName;
+      _passwordController.text = device.password;
     }
   }
 
@@ -86,14 +92,6 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isCreate) {
-      final Device device = context.watch<DeviceProvider>().device!;
-
-      _publicNameController.text = device.publicName;
-      _privateNameController.text = device.privateName;
-      _passwordController.text = device.password;
-    }
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(

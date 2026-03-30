@@ -35,6 +35,12 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
     if (!widget.isCreate) {
       context.read<ObjectProvider>().getObject(widget.id!);
+      final MyObject object = context.read<ObjectProvider>().object!;
+
+      _publicNameController.text = object.publicName;
+      _privateNameController.text = object.privateName;
+      _maxTemperatureComtroller.text = object.maxTemperature.toString();
+      _defaulSpeedController.text = object.defaultSpeedForDevices.toString();
     }
   }
 
@@ -90,15 +96,6 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isCreate) {
-      final MyObject object = context.watch<ObjectProvider>().object!;
-
-      _publicNameController.text = object.publicName;
-      _privateNameController.text = object.privateName;
-      _maxTemperatureComtroller.text = object.maxTemperature.toString();
-      _defaulSpeedController.text = object.defaultSpeedForDevices.toString();
-    }
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
