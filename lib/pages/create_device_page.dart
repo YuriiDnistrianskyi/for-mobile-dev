@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/device_model.dart';
+import 'package:my_project/models/device_model.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/important_button.dart';

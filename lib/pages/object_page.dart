@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/device_model.dart';
-import 'package:my_project/local/models/object_model.dart';
+import 'package:my_project/models/device_model.dart';
+import 'package:my_project/models/object_model.dart';
 // import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';

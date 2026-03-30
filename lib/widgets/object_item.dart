@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/object_model.dart';
+import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/object_page.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:provider/provider.dart';

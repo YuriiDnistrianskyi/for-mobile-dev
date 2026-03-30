@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/user_model.dart';
+import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';

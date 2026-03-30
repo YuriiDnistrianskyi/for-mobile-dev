@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/user_model.dart';
-import 'package:my_project/local/repository/local_repository.dart';
+import 'package:my_project/models/user_model.dart';
+import 'package:my_project/repository/local_repository.dart';
 
 class AuthProvider with ChangeNotifier {
   final Repository repository;

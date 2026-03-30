@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/object_model.dart';
+import 'package:my_project/models/object_model.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';

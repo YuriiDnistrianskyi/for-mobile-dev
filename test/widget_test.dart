@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:my_project/local/repository/local_repository.dart';
+import 'package:my_project/repository/local_repository.dart';
 import 'package:my_project/main.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

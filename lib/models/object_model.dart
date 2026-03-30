@@ -1,4 +1,4 @@
-import 'package:my_project/local/models/i_model.dart';
+import 'package:my_project/models/i_model.dart';
 
 class MyObject extends IModel {
   final int? id;

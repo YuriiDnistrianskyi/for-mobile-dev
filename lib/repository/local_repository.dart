@@ -1,9 +1,9 @@
-import 'package:my_project/local/models/device_model.dart';
-import 'package:my_project/local/models/i_model.dart';
-import 'package:my_project/local/models/object_model.dart';
+import 'package:my_project/models/device_model.dart';
+import 'package:my_project/models/i_model.dart';
+import 'package:my_project/models/object_model.dart';
 // import 'package:my_project/local_server/models/temperature_graph_point_model.dart';
-import 'package:my_project/local/models/user_model.dart';
-import 'package:my_project/local/repository/i_local_repository.dart';
+import 'package:my_project/models/user_model.dart';
+import 'package:my_project/repository/i_local_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
 

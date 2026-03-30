@@ -1,7 +1,7 @@
-import 'package:my_project/local/models/device_model.dart';
-import 'package:my_project/local/models/i_model.dart';
-import 'package:my_project/local/models/object_model.dart';
-import 'package:my_project/local/models/user_model.dart';
+import 'package:my_project/models/device_model.dart';
+import 'package:my_project/models/i_model.dart';
+import 'package:my_project/models/object_model.dart';
+import 'package:my_project/models/user_model.dart';
 
 abstract class ILocalRepository {
   Future<void> open(String path);

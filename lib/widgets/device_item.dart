@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/local/models/device_model.dart';
+import 'package:my_project/models/device_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
