@@ -32,21 +32,8 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   void initState() {
     super.initState();
 
-    if (widget.isCreate == false) {
-      final objectProvider = context.read<ObjectProvider>();
-      late MyObject currentObject;
-
-      objectProvider.getObject(widget.id!).then((value) {
-        setState(() {
-          currentObject = value;
-        });
-      });
-
-      _publicNameController.text = currentObject.publicName;
-      _privateNameController.text = currentObject.privateName;
-      _maxTemperatureComtroller.text = currentObject.maxTemperature.toString();
-      _defaulSpeedController.text = currentObject.defaultSpeedForDevices
-          .toString();
+    if (!widget.isCreate) {
+      context.read<ObjectProvider>().getObject(widget.id!);
     }
   }
 
@@ -80,6 +67,15 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.isCreate) {
+      final MyObject object = context.watch<ObjectProvider>().object!;
+
+      _publicNameController.text = object.publicName;
+      _privateNameController.text = object.privateName;
+      _maxTemperatureComtroller.text = object.maxTemperature.toString();
+      _defaulSpeedController.text = object.defaultSpeedForDevices.toString();
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -134,16 +130,18 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
                     controller: _defaulSpeedController,
                     keyboardType: TextInputType.number,
                   ),
-                  PasswordField(
-                    text: 'Password',
-                    icon: const Icon(Icons.lock),
-                    controller: _passwordController,
-                  ),
-                  PasswordField(
-                    text: 'Confirm Password',
-                    icon: const Icon(Icons.lock_reset),
-                    controller: _confirmPasswordController,
-                  ),
+                  if (widget.isCreate) ...[
+                    PasswordField(
+                      text: 'Password',
+                      icon: const Icon(Icons.lock),
+                      controller: _passwordController,
+                    ),
+                    PasswordField(
+                      text: 'Confirm Password',
+                      icon: const Icon(Icons.lock_reset),
+                      controller: _confirmPasswordController,
+                    ),
+                  ],
                   const SizedBox(height: 20),
                   ImportantButton(
                     text: '${widget.isCreate ? 'Create' : 'Edit'} object',

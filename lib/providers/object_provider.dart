@@ -5,24 +5,26 @@ import 'package:my_project/local/repository/local_repository.dart';
 class ObjectProvider extends ChangeNotifier {
   final Repository repository;
   List<MyObject> _objects = [];
+  List<MyObject> get objects => _objects;
+
+  MyObject? _object;
+  MyObject? get object => _object;
 
   ObjectProvider({
     required this.repository,
   });
 
-  List<MyObject> get objects => _objects;
+  Future<void> getObjects(int userId) async {
+    _objects = await repository.getObjectsByUserId(userId);
+    notifyListeners();
+  }
 
-  Future<MyObject> getObject(int id) async {
-    final MyObject? object = await repository.getById(
+  Future<void> getObject(int id) async {
+    _object = await repository.getById(
       'object', 
       id,
       MyObject.fromMap,
     );
-    return object!;
-  }
-
-  Future<void> getObjects(int userId) async {
-    _objects = await repository.getObjectsByUserId(userId);
     notifyListeners();
   }
 
