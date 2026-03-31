@@ -64,8 +64,8 @@ class DeviceProvider extends ChangeNotifier {
     await getDevices(objectId);
   }
 
-  Future<void> deleteDevice(int id) async {
+  Future<void> deleteDevice(int id, int objectId) async {
     await repository.delete('device', id);
-    await getDevices(id);
+    await getDevices(objectId);
   }
 }

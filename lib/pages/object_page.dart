@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/object_model.dart';
-// import 'package:my_project/local/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
@@ -39,6 +38,8 @@ class _ObjectPageState extends State<ObjectPage> {
             CreateDevicePage(isCreate: true, objectId: widget.objectId),
       ),
     );
+
+    context.read<DeviceProvider>().getDevices(widget.objectId);
   }
 
   void _navigateToUpdateObject() {
@@ -49,6 +50,8 @@ class _ObjectPageState extends State<ObjectPage> {
             CreateObjectPage(isCreate: false, id: widget.objectId),
       ),
     );
+
+    context.read<ObjectProvider>().getObject(widget.objectId);
   }
 
   void _deleteObject() async {

@@ -115,7 +115,10 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           if (!widget.isCreate)
             IconButton(
               onPressed: () {
-                context.read<DeviceProvider>().deleteDevice(widget.deviceId!);
+                context.read<DeviceProvider>().deleteDevice(
+                  widget.deviceId!, 
+                  widget.objectId
+                );
                 Navigator.pop(context);
                 ScaffoldMessenger.of(
                   context,
