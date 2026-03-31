@@ -19,12 +19,23 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {
-    Provider.of<AuthProvider>(context, listen: false).login();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute<void>(builder: (context) => const HomePage()),
-    );
+  void _login() async {
+    final auth = context.read<AuthProvider>();
+
+    await auth.login(_emailController.text, _passwordController.text);
+
+    if (!mounted) return;
+
+    if (auth.isLoggin) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(builder: (context) => const HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Wrong email or password')));
+    }
   }
 
   @override
@@ -42,23 +53,25 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               width: 300,
-              height: 220,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              child: Column(
-                children: [
-                  EmailField(controller: _emailController),
-                  PasswordField(
-                    text: 'Password',
-                    icon: const Icon(Icons.lock),
-                    controller: _passwordController,
-                  ),
-                  const SizedBox(height: 20),
-                  ImportantButton(text: 'Login', func: _login),
-                ],
-              ),
+              child: Padding(
+                padding: const EdgeInsetsGeometry.all(15),
+                child: Column(
+                  children: [
+                    EmailField(controller: _emailController),
+                    PasswordField(
+                      text: 'Password',
+                      icon: const Icon(Icons.lock),
+                      controller: _passwordController,
+                    ),
+                    const SizedBox(height: 20),
+                    ImportantButton(text: 'Login', func: _login),
+                  ],
+                ),
+              )
             ),
             TextButton(
               child: const Text(
@@ -69,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => const RegisterPage(),
+                    builder: (context) => const RegisterPage(isRegister: true),
                   ),
                 );
               },

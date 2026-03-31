@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
+import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
 import 'package:my_project/widgets/title_page_text.dart';
-
-class ObjectData {
-  int id = 0;
-}
-
-final List<Map<String, dynamic>> _objects = [
-  {'id': 1},
-  {'id': 2},
-  {'id': 3},
-];
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,15 +17,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    final userId = context.read<AuthProvider>().userId;
+    context.read<ObjectProvider>().getObjects(userId);
+  }
+
   void _navigateToCreateObject() {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (context) => const CreateObjectPage()),
+      MaterialPageRoute<void>(
+        builder: (context) => const CreateObjectPage(isCreate: true),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<MyObject> objects = context.watch<ObjectProvider>().objects;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -83,7 +88,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.6,
             child: Expanded(
               child: GridView.builder(
-                itemCount: _objects.length,
+                itemCount: objects.length,
                 padding: const EdgeInsets.all(8),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -92,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  return ObjectItem(object: _objects[index]);
+                  return ObjectItem(object: objects[index]);
                 },
               ),
             ),

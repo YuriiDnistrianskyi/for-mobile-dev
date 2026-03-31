@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/models/device_model.dart';
+import 'package:my_project/pages/create_device_page.dart';
+import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
+import 'package:provider/provider.dart';
 
 class DeviceItem extends StatefulWidget {
-  const DeviceItem({super.key});
+  final Device device;
+
+  const DeviceItem({required this.device, super.key});
 
   @override
   State<DeviceItem> createState() => _DeviceItemState();
 }
 
 class _DeviceItemState extends State<DeviceItem> {
-  final String deviceName = 'Device 1';
-  final String power = '76';
-
-  void _navigateToDevice() {}
+  void _navigateToDevice() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => CreateDevicePage(
+          isCreate: false, 
+          objectId: widget.device.objectId,
+          deviceId: widget.device.id,
+          )
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext cotext) {
+    final int? power = context.watch<SpeedGraphProvider>()
+        .getLastPoint(widget.device.id!)?.value;
+
     return GestureDetector(
       onTap: _navigateToDevice,
       child: DecoratedBox(
@@ -29,7 +46,7 @@ class _DeviceItemState extends State<DeviceItem> {
             child: Column(
               children: [
                 Text(
-                  deviceName,
+                  widget.device.publicName,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
@@ -71,7 +88,7 @@ class _DeviceItemState extends State<DeviceItem> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const GraphBox(text: 'Speed graph'),
+                GraphBox(type: 'speed', id: widget.device.id!),
               ],
             ),
           ),
