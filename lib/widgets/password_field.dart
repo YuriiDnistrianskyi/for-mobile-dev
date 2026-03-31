@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/core/banned_passwords.dart';
 
 class PasswordField extends StatefulWidget {
   const PasswordField({
@@ -31,6 +32,9 @@ class _PasswordFieldState extends State<PasswordField> {
     }
     if (value.length < 8) {
       return 'Password must be at least 8 characters';
+    }
+    if (bannedPasswords.contains(value.toLowerCase())) {
+      return 'Password is banned';
     }
     return null;
   }
