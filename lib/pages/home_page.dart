@@ -3,6 +3,7 @@ import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
+import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List<MyObject> objects = context.watch<ObjectProvider>().objects;
+    final wifiStatus = context.watch<WiFiProvider>().isConnected;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -83,6 +85,20 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 20),
+          if (!wifiStatus)
+          const SizedBox(
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(10),
+                child: Text(
+                'Disconnected',
+                style: TextStyle(
+                  color: Color.fromARGB(221, 77, 77, 77),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                )
+              )
+            )
+          ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.95,
             height: MediaQuery.of(context).size.height * 0.6,

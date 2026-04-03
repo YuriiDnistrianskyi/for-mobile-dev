@@ -6,6 +6,7 @@ import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
+import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/local_repository.dart';
 import 'package:my_project/widgets/app_background.dart';
 import 'package:path/path.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => UserProvider(repository: repository)
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>WiFiProvider()
         ),
       ],
       child: MaterialApp(
