@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/profile_page.dart';
 import 'package:my_project/providers/user_provider.dart';
+import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
@@ -44,6 +45,14 @@ class _RegisterPageState extends State<RegisterPage> {
   void _action() async {
     if (_formKey.currentState!.validate()) {
       final userProvider = context.read<UserProvider>();
+      final wifiStatus = context.read<WiFiProvider>().isConnected;
+
+      if (!wifiStatus) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('No internet connection')));
+        return;
+      }
 
       final bool userExists = await userProvider.userExists(
         _emailController.text.trim(),

@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!wifiStatus) {
       ScaffoldMessenger.of(
         context
-      ).showSnackBar(const SnackBar(content: Text('No wifi connection')));
+      ).showSnackBar(const SnackBar(content: Text('No internet connection')));
       return;
     }
 
