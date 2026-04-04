@@ -13,6 +13,8 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
+  bool _lastWiFiStatus = true;
+
   @override
   void initState() {
     super.initState();
@@ -30,20 +32,34 @@ class _RootPageState extends State<RootPage> {
 
     if (!mounted) return;
     if (!wifiProvider.isConnected && authProvider.isLoggin) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No internet connection'))
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('No internet connection')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    // final wifiProvider = context.watch<WiFiProvider>();
 
-    return Stack(
-      children: [
-        if (auth.isLoggin) const HomePage() else const LoginPage(),
-      ]
+    return Consumer<WiFiProvider>(
+      builder: (context, wifiProveder, child) {
+        if (wifiProveder.isConnected != _lastWiFiStatus) {
+          _lastWiFiStatus = wifiProveder.isConnected;
+          final msg = _lastWiFiStatus
+              ? 'Internet is connected'
+              : 'Internet is disable';
+
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(msg)));
+          });
+        }
+        return auth.isLoggin ? child! : const LoginPage();
+      },
+      child: const HomePage(),
     );
   }
 }
