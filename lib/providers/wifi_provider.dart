@@ -5,6 +5,8 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 class WiFiProvider extends ChangeNotifier {
   bool _isConnected = false;
   bool get isConnected => _isConnected;
+  bool _isInit = false;
+  bool get isInit => _isInit;
 
   StreamSubscription<InternetStatus>? _subscription;
   
@@ -12,16 +14,28 @@ class WiFiProvider extends ChangeNotifier {
     _init();
   }
 
-  void _init() {
+  Future<void> _init() async {
+    try {
+      _isConnected = await InternetConnection().hasInternetAccess;
+    } catch (e) {
+      _isConnected = false;
+    }
+    _isInit = true;
+    notifyListeners();
+
     _subscription = InternetConnection().onStatusChange.listen((
       InternetStatus status,
     ) {
+      bool newConnection = false;
       if (status == InternetStatus.connected) {
-        _isConnected = true;
+        newConnection = true;
       } else {
-        _isConnected = false;
+        newConnection = false;
       }
-      notifyListeners();
+      if (newConnection != _isConnected) {
+        _isConnected = newConnection;
+        notifyListeners();
+      }
     }
     );
   }

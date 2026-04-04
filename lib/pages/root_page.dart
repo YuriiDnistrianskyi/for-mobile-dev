@@ -20,12 +20,18 @@ class _RootPageState extends State<RootPage> {
   }
 
   Future<void> _initRootPage() async {
-    final auth = context.read<AuthProvider>();
-    await auth.autoLogin();
+    final authProvider = context.read<AuthProvider>();
+    final wifiProvider = context.read<WiFiProvider>();
+    await authProvider.autoLogin();
+
+    while (!wifiProvider.isInit) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+
     if (!mounted) return;
-    if (!context.read<WiFiProvider>().isConnected && auth.isLoggin) {
+    if (!wifiProvider.isConnected && authProvider.isLoggin) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not conneted'))
+        const SnackBar(content: Text('No internet connection'))
       );
     }
   }
@@ -34,6 +40,10 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
 
-    return auth.isLoggin ? const HomePage() : const LoginPage();
+    return Stack(
+      children: [
+        if (auth.isLoggin) const HomePage() else const LoginPage(),
+      ]
+    );
   }
 }

@@ -7,11 +7,11 @@ import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
-import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/title_page_text.dart';
+import 'package:my_project/widgets/wifi_status.dart';
 import 'package:provider/provider.dart';
 
 class ObjectPage extends StatefulWidget {
@@ -82,7 +82,6 @@ class _ObjectPageState extends State<ObjectPage> {
         .watch<TemperatureGraphProvider>()
         .getLastPoint(widget.objectId)!
         .value;
-    final wifiStatus = context.watch<WiFiProvider>().isConnected;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -146,21 +145,7 @@ class _ObjectPageState extends State<ObjectPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                if (!wifiStatus)
-                const SizedBox(
-                  child: Padding(
-                    padding: EdgeInsetsGeometry.all(10),
-                    child: Text(
-                      'Disconnected',
-                      style: TextStyle(
-                        color: Color.fromARGB(221, 77, 77, 77),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )
-                    )
-                  )
-                ),
+                const WiFiStatus(),
                 GraphBox(type: 'temperature', id: widget.objectId),
                 const SizedBox(height: 20),
                 ListView.builder(
