@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
@@ -8,6 +9,7 @@ import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/widgets/app_background.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -22,26 +24,37 @@ void main() async {
   final Repository appRepository = Repository();
   await appRepository.open(path);
 
-  runApp(MyApp(repository: appRepository));
+  final manager = MqttManager(
+    host: 'broker.hivemq.com',
+    clientName: 'flutter_name',
+    port: 1883,
+  );
+  final service = MqttService(manager: manager);
+  await service.init();
+
+  runApp(MyApp(repository: appRepository, service: service,));
 }
 
 class MyApp extends StatelessWidget {
   final Repository repository;
+  final MqttService service;
 
-  const MyApp({required this.repository, super.key});
+  const MyApp({required this.repository, required this.service, super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider(
-          repository: repository
-        )),
         ChangeNotifierProvider(
-          create: (_) => DeviceProvider(repository: repository)
+          create: (_) => AuthProvider(repository: repository)
         ),
         ChangeNotifierProvider(
-          create: (_) => ObjectProvider(repository: repository)
+          create: (_) => 
+          DeviceProvider(repository: repository, mqttService: service)
+        ),
+        ChangeNotifierProvider(
+          create: (_) => 
+          ObjectProvider(repository: repository, mqttService: service)
         ),
         ChangeNotifierProvider(
           create: (_) => SpeedGraphProvider(repository: repository)
@@ -53,7 +66,7 @@ class MyApp extends StatelessWidget {
           create: (_) => UserProvider(repository: repository)
         ),
         ChangeNotifierProvider(
-          create: (_) =>WiFiProvider()
+          create: (_) => WiFiProvider()
         ),
       ],
       child: MaterialApp(

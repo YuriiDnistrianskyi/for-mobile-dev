@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 
 class ObjectProvider extends ChangeNotifier {
   final Repository repository;
+  final MqttService mqttService;
   List<MyObject> _objects = [];
   List<MyObject> get objects => _objects;
 
@@ -12,10 +14,16 @@ class ObjectProvider extends ChangeNotifier {
 
   ObjectProvider({
     required this.repository,
+    required this.mqttService,
   });
 
   Future<void> getObjects(int userId) async {
     _objects = await repository.getObjectsByUserId(userId);
+
+    for (var obj in _objects) {
+      await mqttService.newSubcription('object', obj.privateName);
+    }
+
     notifyListeners();
   }
 
