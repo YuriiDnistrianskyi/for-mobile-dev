@@ -31,7 +31,7 @@ void main() {
       clientName: 'flutter_client',
       port: 1883,
     );
-    final service = MqttService(manager: manager);
+    final service = MqttService(manager: manager, repository: appRepository);
     await service.init();
 
     // Build our app and trigger a frame.

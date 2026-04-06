@@ -29,7 +29,7 @@ void main() async {
     clientName: 'flutter_name',
     port: 1883,
   );
-  final service = MqttService(manager: manager);
+  final service = MqttService(manager: manager, repository: appRepository);
   await service.init();
 
   runApp(MyApp(repository: appRepository, service: service,));
@@ -60,7 +60,11 @@ class MyApp extends StatelessWidget {
           create: (_) => SpeedGraphProvider(repository: repository)
         ),
         ChangeNotifierProvider(
-          create: (_) => TemperatureGraphProvider(repository: repository)
+          create: (_) {
+            final provider = TemperatureGraphProvider(repository: repository);
+            provider.listen(service);
+            return provider;
+          }
         ),
         ChangeNotifierProvider(
           create: (_) => UserProvider(repository: repository)

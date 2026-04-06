@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/temperature_graph_point_model.dart';
 import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 
 class TemperatureGraphProvider extends ChangeNotifier {
   final Repository repository;
@@ -10,50 +11,36 @@ class TemperatureGraphProvider extends ChangeNotifier {
   TemperatureGraphProvider({required this.repository});
 
   List<TemperatureGraphPoint> getGraph(int objectId) {
-    return _graphs[objectId] ??
-        [
-          TemperatureGraphPoint(
-            objectId: objectId,
-            time: DateTime.now(),
-            value: 20,
-          ),
-          TemperatureGraphPoint(
-            objectId: objectId,
-            time: DateTime.now(),
-            value: 22,
-          ),
-          TemperatureGraphPoint(
-            objectId: objectId,
-            time: DateTime.now(),
-            value: 21,
-          ),
-          TemperatureGraphPoint(
-            objectId: objectId,
-            time: DateTime.now(),
-            value: 23,
-          ),
-          TemperatureGraphPoint(
-            objectId: objectId,
-            time: DateTime.now(),
-            value: 24,
-          ),
-        ];
-      // для тесту щоб був графік
-
+    return _graphs[objectId] ?? [];
   }
 
   TemperatureGraphPoint? getLastPoint(int objectId) {
-    return _lastPoints[objectId] ?? TemperatureGraphPoint(
-      objectId: objectId,
-      time: DateTime.now(),
-      value: 24,
-    );
+    return _lastPoints[objectId];
+  }
+
+  void listen(MqttService service) {
+    service.manager.stream.listen((message) async {
+      final topic = message['topic'] as String;
+      final payload = message['payload'];
+
+      if (topic.split('/')[0] == 'object') {
+        final object = await repository.getObjectByPrivateName(topic.split('/')[1]);
+
+        if (object != null) {
+          await createTemperaturePoint(
+            object.id!, double.parse(payload as String)
+          );
+          await getLastTemperatureGraphPoint(object.id!);
+          await getTemperatureGraph(object.id!);
+        }
+      }
+    });
   }
 
   Future<void> getTemperatureGraph(int objectId) async {
     final List<TemperatureGraphPoint> graph = await repository.getGraph(
-      'speedGraphPoint',
-      'object_id',
+      'temperatureGraphPoint',
+      'objectId',
       objectId,
       TemperatureGraphPoint.fromMap,
     );
@@ -69,6 +56,16 @@ class TemperatureGraphProvider extends ChangeNotifier {
       TemperatureGraphPoint.fromMap,
     );
     _lastPoints[objectId] = lastPoint;
+    notifyListeners();
+  }
+
+  Future<void> createTemperaturePoint(int objectId, double value) async {
+    final TemperatureGraphPoint point = TemperatureGraphPoint(
+      objectId: objectId, 
+      time: DateTime.now().microsecondsSinceEpoch, 
+      value: value
+    );
+    await repository.insert(point);
     notifyListeners();
   }
 }

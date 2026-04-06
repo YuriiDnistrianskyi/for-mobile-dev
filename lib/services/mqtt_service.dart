@@ -1,28 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_project/core/mqtt_manager.dart';
+// import 'package:my_project/models/speed_graph_point_model.dart';
+// import 'package:my_project/models/temperature_graph_point_model.dart';
+import 'package:my_project/repository/local_repository.dart';
 
 class MqttService extends ChangeNotifier {
   final MqttManager manager;
+  final Repository repository;
 
-  StreamSubscription<dynamic>? _subscription;
+  // StreamSubscription<dynamic>? _subscription;
 
   MqttService({
     required this.manager,
+    required this.repository,
   });
 
   Future<void> init() async {
     await manager.connect();
-
-    _subscription = manager.stream.listen((manager) {
-      final topic = manager['topic'];
-      final payload = manager['payload'];
-
-      print(topic);
-      print(payload);
-
-      notifyListeners(); //
-    });
+    // _subscription = manager.stream.listen((manager) async {
+    //   notifyListeners(); //
+    // });
   }
 
   Future<void> newSubcription(String type, String privateName) async {
@@ -41,7 +39,7 @@ class MqttService extends ChangeNotifier {
 
   @override
   void dispose() {
-    _subscription!.cancel();
+    // _subscription!.cancel();
     manager.dispose();
     super.dispose();
   }

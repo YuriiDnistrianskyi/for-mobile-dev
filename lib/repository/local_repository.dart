@@ -1,7 +1,6 @@
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/i_model.dart';
 import 'package:my_project/models/object_model.dart';
-// import 'package:my_project/local_server/models/temperature_graph_point_model.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/repository/i_local_repository.dart';
 import 'package:sqflite/sqflite.dart';
@@ -122,7 +121,7 @@ class Repository implements ILocalRepository {
   }
 
   @override
-  Future<List<MyObject>> getObjectsByUserId(int userId) async{
+  Future<List<MyObject>> getObjectsByUserId(int userId) async {
     final List<Map<String, Object?>> objects = await db.query(
       'object',
       where: 'userId = ?',
@@ -130,6 +129,32 @@ class Repository implements ILocalRepository {
     );
     final List<MyObject> result = objects.map(MyObject.fromMap).toList();
     return result;
+  }
+
+  @override
+  Future<MyObject?> getObjectByPrivateName(String privateName) async {
+    final List<Map<String, dynamic>> objects = await db.query(
+      'object',
+      where: 'privateName = ?',
+      whereArgs: [privateName],
+    );
+    if (objects.isNotEmpty) {
+      return MyObject.fromMap(objects.first);
+    }
+    return null;
+  }
+
+  @override
+  Future<Device?> getDeviceByPrivateName(String privateName) async {
+    final List<Map<String, dynamic>> objects = await db.query(
+      'device',
+      where: 'privateName = ?',
+      whereArgs: [privateName],
+    );
+    if (objects.isNotEmpty) {
+      return Device.fromMap(objects.first);
+    }
+    return null;
   }
 
   @override

@@ -18,6 +18,8 @@ abstract class ILocalRepository {
   );
   Future<User?> getUser(String email);
   Future<List<MyObject>> getObjectsByUserId(int userId);
+  Future<MyObject?> getObjectByPrivateName(String privateName);
+  Future<Device?> getDeviceByPrivateName(String privateName);
   Future<List<Device>> getDevicesByObjectId(int objectId);
   Future<List<T>> getGraph<T> (
     String table, 
