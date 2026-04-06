@@ -69,7 +69,7 @@ class SpeedGraphProvider extends ChangeNotifier {
       value: value
     );
     await repository.insert(point);
-    // await repository.trimTable('speedGraphPoint', 'deviceId', deviceId);
+    await repository.trimTable('speedGraphPoint', 'deviceId', deviceId);
     notifyListeners();
   }
 }

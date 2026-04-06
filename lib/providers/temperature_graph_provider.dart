@@ -74,7 +74,7 @@ class TemperatureGraphProvider extends ChangeNotifier {
       value: value,
     );
     await repository.insert(point);
-    // await repository.trimTable('temperatureGraphPoint', 'objectId', objectId);
+    await repository.trimTable('temperatureGraphPoint', 'objectId', objectId);
     notifyListeners();
   }
 }
