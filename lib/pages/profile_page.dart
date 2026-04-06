@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
+import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
+import 'package:my_project/units/dialog.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/setting_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
@@ -27,19 +29,29 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => RegisterPage(
-          isRegister: false,
-          id: context.read<AuthProvider>().userId,
+        builder: (context) => RootPage(
+          page: RegisterPage(
+            isRegister: false,
+            id: context.read<AuthProvider>().userId,
+          ),
         ),
       ),
     );
   }
 
-  void _logOut() {
+  void _logOut() async {
+    final confirm = await showConfirmDialog(context, 'logout');
+
+    if (!mounted) return;
+
+    if (!confirm!) return;
+
     Provider.of<AuthProvider>(context, listen: false).logout();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
+      MaterialPageRoute<void>(
+        builder: (context) => const RootPage(page: LoginPage()),
+      ),
     );
   }
 
@@ -47,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     context.read<UserProvider>().deleteUser(
       context.read<AuthProvider>().userId,
     );
-    
+
     _logOut();
 
     ScaffoldMessenger.of(
