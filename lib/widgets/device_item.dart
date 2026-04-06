@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
+import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:provider/provider.dart';
@@ -19,19 +20,23 @@ class _DeviceItemState extends State<DeviceItem> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => CreateDevicePage(
-          isCreate: false, 
-          objectId: widget.device.objectId,
-          deviceId: widget.device.id,
-          )
-      )
+        builder: (context) => RootPage(
+          page: CreateDevicePage(
+            isCreate: false,
+            objectId: widget.device.objectId,
+            deviceId: widget.device.id,
+          ),
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext cotext) {
-    final int? power = context.watch<SpeedGraphProvider>()
-        .getLastPoint(widget.device.id!)?.value;
+    final int? power = context
+        .watch<SpeedGraphProvider>()
+        .getLastPoint(widget.device.id!)
+        ?.value;
 
     return GestureDetector(
       onTap: _navigateToDevice,

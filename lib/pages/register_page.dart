@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/profile_page.dart';
+import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/custom_field.dart';
@@ -98,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ? Navigator.pop(context)
           : Navigator.of(context).pushReplacement(
               MaterialPageRoute<void>(
-                builder: (context) => const ProfilePage(),
+                builder: (context) => const RootPage(page: ProfilePage()),
               ),
             );
 

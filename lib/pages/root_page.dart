@@ -6,7 +6,9 @@ import 'package:my_project/providers/wifi_provider.dart';
 import 'package:provider/provider.dart';
 
 class RootPage extends StatefulWidget {
-  const RootPage({super.key});
+  const RootPage({super.key, this.page});
+
+  final Widget? page;
 
   @override
   State<RootPage> createState() => _RootPageState();
@@ -14,6 +16,7 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   bool _lastWiFiStatus = true;
+  bool _init = false;
 
   @override
   void initState() {
@@ -30,22 +33,20 @@ class _RootPageState extends State<RootPage> {
       await Future<void>.delayed(const Duration(milliseconds: 100));
     }
 
-    if (!mounted) return;
-    if (!wifiProvider.isConnected && authProvider.isLoggin) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('No internet connection')));
+    if (mounted) {
+      _lastWiFiStatus = wifiProvider.isConnected;
+      _init = true;
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    // final wifiProvider = context.watch<WiFiProvider>();
 
     return Consumer<WiFiProvider>(
       builder: (context, wifiProveder, child) {
-        if (wifiProveder.isConnected != _lastWiFiStatus) {
+        if (_init && wifiProveder.isConnected != _lastWiFiStatus) {
           _lastWiFiStatus = wifiProveder.isConnected;
           final msg = _lastWiFiStatus
               ? 'Internet is connected'
@@ -57,7 +58,11 @@ class _RootPageState extends State<RootPage> {
             ).showSnackBar(SnackBar(content: Text(msg)));
           });
         }
-        return auth.isLoggin ? child! : const LoginPage();
+
+        final currentPage = 
+            widget.page ?? (auth.isLoggin ? child! : const LoginPage());
+      
+        return currentPage;
       },
       child: const HomePage(),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/profile_page.dart';
+import 'package:my_project/pages/root_page.dart';
 
 class CustomNavigationBar extends StatefulWidget {
   const CustomNavigationBar({required this.currentPage, super.key});
@@ -27,7 +28,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     if (widget.currentPage != 'home') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(builder: (context) => const HomePage()),
+        MaterialPageRoute<void>(
+          builder: (context) => const RootPage(page: HomePage())
+        ),
       );
     }
   }
@@ -36,7 +39,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     if (widget.currentPage != 'profile') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(builder: (context) => const ProfilePage()),
+        MaterialPageRoute<void>(
+          builder: (context) => const RootPage(page: ProfilePage())
+        ),
       );
     }
   }
