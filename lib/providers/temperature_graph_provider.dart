@@ -15,7 +15,12 @@ class TemperatureGraphProvider extends ChangeNotifier {
   }
 
   TemperatureGraphPoint? getLastPoint(int objectId) {
-    return _lastPoints[objectId];
+    return _lastPoints[objectId] ??
+        TemperatureGraphPoint(
+          objectId: objectId,
+          time: DateTime.now().millisecondsSinceEpoch,
+          value: 0,
+        );
   }
 
   void listen(MqttService service) {
@@ -24,11 +29,14 @@ class TemperatureGraphProvider extends ChangeNotifier {
       final payload = message['payload'];
 
       if (topic.split('/')[0] == 'object') {
-        final object = await repository.getObjectByPrivateName(topic.split('/')[1]);
+        final object = await repository.getObjectByPrivateName(
+          topic.split('/')[1],
+        );
 
         if (object != null) {
           await createTemperaturePoint(
-            object.id!, double.parse(payload as String)
+            object.id!,
+            double.parse(payload as String),
           );
           await getLastTemperatureGraphPoint(object.id!);
           await getTemperatureGraph(object.id!);
@@ -61,11 +69,12 @@ class TemperatureGraphProvider extends ChangeNotifier {
 
   Future<void> createTemperaturePoint(int objectId, double value) async {
     final TemperatureGraphPoint point = TemperatureGraphPoint(
-      objectId: objectId, 
-      time: DateTime.now().microsecondsSinceEpoch, 
-      value: value
+      objectId: objectId,
+      time: DateTime.now().millisecondsSinceEpoch,
+      value: value,
     );
     await repository.insert(point);
+    // await repository.trimTable('temperatureGraphPoint', 'objectId', objectId);
     notifyListeners();
   }
 }

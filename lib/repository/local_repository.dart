@@ -40,6 +40,7 @@ const String createDeviceTable = '''
 
 const String createTemperatureGraphPointTable = '''
           create table temperatureGraphPoint(
+            id integer primary key autoincrement,
             objectId integer references object(id),
             time datetime not null,
             value float not null
@@ -48,6 +49,7 @@ const String createTemperatureGraphPointTable = '''
 
 const String createSpeedGraphPointTable = '''
           create table speedGraphPoint(
+            id integer primary key autoincrement,
             deviceId integer references device(id),
             time datetime not null,
             value float not null
@@ -201,6 +203,20 @@ class Repository implements ILocalRepository {
     );
     final T point = fromMap(list.first);
     return point;
+  }
+
+  @override
+  Future<void> trimTable(String table, String column, int byId) async {
+    await db.rawDelete('''
+    DELETE FROM $table
+    WHERE id NOT IN (
+      SELECT id FROM $table
+      WHERE $column = ?
+      ORDER BY time DESC
+      LIMIT 100
+    )
+    AND $column = ?
+    ''', [byId, byId]);
   }
 
   @override
