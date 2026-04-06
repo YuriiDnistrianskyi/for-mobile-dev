@@ -9,8 +9,6 @@ class MqttService extends ChangeNotifier {
   final MqttManager manager;
   final Repository repository;
 
-  // StreamSubscription<dynamic>? _subscription;
-
   MqttService({
     required this.manager,
     required this.repository,
@@ -18,9 +16,6 @@ class MqttService extends ChangeNotifier {
 
   Future<void> init() async {
     await manager.connect();
-    // _subscription = manager.stream.listen((manager) async {
-    //   notifyListeners(); //
-    // });
   }
 
   Future<void> newSubcription(String type, String privateName) async {
@@ -37,9 +32,12 @@ class MqttService extends ChangeNotifier {
     await manager.removeSubscribe('$type/$privateName/$end');
   }
 
+  Future<void> publishMessage(String topic, String message) async {
+    await manager.publishMessage(topic, message);
+  }
+
   @override
   void dispose() {
-    // _subscription!.cancel();
     manager.dispose();
     super.dispose();
   }

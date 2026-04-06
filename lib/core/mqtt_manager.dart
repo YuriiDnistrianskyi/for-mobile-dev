@@ -56,6 +56,15 @@ class MqttManager {
     currentSubscribes.remove(topic);
   }
 
+  Future<void> publishMessage(String topic, String message) async {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(message);
+
+    if (builder.payload == null) return;
+
+    _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
+  }
+
   void dispose() {
     _client.disconnect();
   }

@@ -61,6 +61,7 @@ class ObjectProvider extends ChangeNotifier {
     );
     await repository.insert(newObject);
     await getObjects(userId);
+    await mqttService.publishMessage('creation/object/new', 'Create object $publicName');
   }
 
   Future<void> updateObject(
