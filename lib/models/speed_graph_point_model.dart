@@ -2,7 +2,7 @@ import 'package:my_project/models/i_model.dart';
 
 class SpeedGraphPoint extends IModel {
   final int deviceId;
-  final DateTime time;
+  final int time;
   final int value;
 
   SpeedGraphPoint({
@@ -15,7 +15,7 @@ class SpeedGraphPoint extends IModel {
   factory SpeedGraphPoint.fromMap(Map<String, dynamic> map) =>
       SpeedGraphPoint(
         deviceId: map['daviceId'] as int,
-        time: map['time'] as DateTime,
+        time: map['time'] as int,
         value: map['value'] as int,
       );
 

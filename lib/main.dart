@@ -57,7 +57,11 @@ class MyApp extends StatelessWidget {
           ObjectProvider(repository: repository, mqttService: service)
         ),
         ChangeNotifierProvider(
-          create: (_) => SpeedGraphProvider(repository: repository)
+          create: (_) {
+            final provider = SpeedGraphProvider(repository: repository);
+            provider.listen(service);
+            return provider;
+          }
         ),
         ChangeNotifierProvider(
           create: (_) {
