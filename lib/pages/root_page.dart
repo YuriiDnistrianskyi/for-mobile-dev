@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
-// import 'package:my_project/providers/wifi_provider.dart';
+import 'package:my_project/providers/wifi_provider.dart';
+import 'package:my_project/services/notification_service.dart';
 import 'package:provider/provider.dart';
 
 class RootPage extends StatefulWidget {
@@ -24,14 +25,14 @@ class _RootPageState extends State<RootPage> {
 
   Future<void> _initRootPage() async {
     final authProvider = context.read<AuthProvider>();
-    // final wifiProvider = context.read<WiFiProvider>();
-    await authProvider.autoLogin();
+    final wifiProvider = context.read<WiFiProvider>();
 
-    // if (mounted) {
-    //   _lastWiFiStatus = wifiProvider.isConnected;
-    //   _init = true;
-    //   setState(() {});
-    // }
+    await authProvider.autoLogin();
+    await wifiProvider.init();
+
+    if (!wifiProvider.isConnected && authProvider.isLoggin) {
+      NotificationService.show('No internet connection');
+    }
   }
 
   @override

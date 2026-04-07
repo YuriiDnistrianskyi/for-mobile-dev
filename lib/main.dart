@@ -31,7 +31,7 @@ void main() async {
     port: 1883,
   );
   final service = MqttService(manager: manager, repository: appRepository);
-  await service.init();
+  service.init();
 
   runApp(MyApp(repository: appRepository, service: service,));
 }
@@ -75,7 +75,10 @@ class MyApp extends StatelessWidget {
           create: (_) => UserProvider(repository: repository)
         ),
         ChangeNotifierProvider(
-          create: (_) => WiFiProvider()
+          create: (_) {
+            final provider = WiFiProvider();
+            return provider;
+          }
         ),
       ],
       child: MaterialApp(

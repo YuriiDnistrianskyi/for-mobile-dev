@@ -22,29 +22,33 @@ class MqttManager {
   });
 
   Future<void> connect() async {
-    _client = MqttServerClient.withPort(host, clientName, port);
-    _client.keepAlivePeriod = 60;
+    try {
+      _client = MqttServerClient.withPort(host, clientName, port);
+      _client.keepAlivePeriod = 60;
 
-    _client.autoReconnect = true;
-    _client.resubscribeOnAutoReconnect = true;
+      _client.autoReconnect = true;
+      _client.resubscribeOnAutoReconnect = true;
 
-    await _client.connect();
+      await _client.connect();
 
-    _client.updates!.listen((events) {
-      for (var event in events) {
-        final msg = event.payload as MqttPublishMessage;
-        final payload = MqttPublishPayload.bytesToStringAsString(
-          msg.payload.message,
-        );
+      _client.updates!.listen((events) {
+        for (var event in events) {
+          final msg = event.payload as MqttPublishMessage;
+          final payload = MqttPublishPayload.bytesToStringAsString(
+            msg.payload.message,
+          );
 
-        final topic = event.topic;
+          final topic = event.topic;
 
-        _controller.add({
-          'topic': topic,
-          'payload': payload,
-        });
-      }
-    });
+          _controller.add({
+            'topic': topic,
+            'payload': payload,
+          });
+        }
+      });
+    } catch (ex) {
+      rethrow;
+    }
   }
 
   Future<void> newSubscribe(String topic) async {

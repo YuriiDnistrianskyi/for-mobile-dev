@@ -12,10 +12,10 @@ class WiFiProvider extends ChangeNotifier {
   StreamSubscription<InternetStatus>? _subscription;
   
   WiFiProvider() {
-    _init();
+    // _init();
   }
 
-  Future<void> _init() async {
+  Future<void> init() async {
     try {
       _isConnected = await InternetConnection().hasInternetAccess;
     } catch (e) {
@@ -36,7 +36,7 @@ class WiFiProvider extends ChangeNotifier {
       if (newConnection != _isConnected) {
         _isConnected = newConnection;
         NotificationService.show(
-          _isConnected ? 'Internet connected': 'Internet desable'
+          _isConnected ? 'Internet connected': 'Internet disable'
         );
         notifyListeners();
       }

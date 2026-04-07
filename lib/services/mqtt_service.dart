@@ -14,8 +14,16 @@ class MqttService {
   });
 
   Future<void> init() async {
-    await manager.connect();
-    _isConnected = true;
+    while (true) {
+      try {
+        await manager.connect();
+        _isConnected = true;
+        break;
+      } catch (ex) {
+        _isConnected = false;
+        await Future<void>.delayed(const Duration(seconds: 5));
+      }
+    }
   }
 
   Future<void> newSubcription(String type, String privateName) async {
