@@ -60,7 +60,13 @@ class _ProfilePageState extends State<ProfilePage> {
       context.read<AuthProvider>().userId,
     );
 
-    _logOut();
+    Provider.of<AuthProvider>(context, listen: false).logout();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => const RootPage(page: LoginPage()),
+      ),
+    );
 
     ScaffoldMessenger.of(
       context,

@@ -71,10 +71,6 @@ class _ObjectPageState extends State<ObjectPage> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Object deleted')));
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Wrong email or password')));
   }
 
   @override

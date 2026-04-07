@@ -67,5 +67,6 @@ class MqttManager {
 
   void dispose() {
     _client.disconnect();
+    currentSubscribes.clear();
   }
 }

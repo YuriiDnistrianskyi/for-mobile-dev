@@ -87,7 +87,9 @@ class ObjectProvider extends ChangeNotifier {
   }
 
   Future<void> deleteObject(int id, int userId) async {
+    final object = await repository.getById('object', id, MyObject.fromMap);
     await repository.delete('object', id);
+    await mqttService.removeSubscription('object', object!.privateName);
     await getObjects(userId);
   }
 
