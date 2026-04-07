@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:my_project/core/mqtt_manager.dart';
-// import 'package:my_project/models/speed_graph_point_model.dart';
-// import 'package:my_project/models/temperature_graph_point_model.dart';
 import 'package:my_project/repository/local_repository.dart';
 
-class MqttService extends ChangeNotifier {
+class MqttService {
   final MqttManager manager;
   final Repository repository;
+
+  bool _isConnected = false;
 
   MqttService({
     required this.manager,
@@ -16,9 +15,11 @@ class MqttService extends ChangeNotifier {
 
   Future<void> init() async {
     await manager.connect();
+    _isConnected = true;
   }
 
   Future<void> newSubcription(String type, String privateName) async {
+    if (!_isConnected) return;
     final end = type == 'object'
         ? 'temperature'
         : 'power';
@@ -26,6 +27,7 @@ class MqttService extends ChangeNotifier {
   }
 
   Future<void> removeSubscription(String type, String privateName) async {
+    if (!_isConnected) return;
     final end = type == 'object'
         ? 'temperature'
         : 'power';
@@ -33,12 +35,7 @@ class MqttService extends ChangeNotifier {
   }
 
   Future<void> publishMessage(String topic, String message) async {
+    if (!_isConnected) return;
     await manager.publishMessage(topic, message);
-  }
-
-  @override
-  void dispose() {
-    manager.dispose();
-    super.dispose();
   }
 }

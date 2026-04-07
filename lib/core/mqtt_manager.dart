@@ -25,6 +25,9 @@ class MqttManager {
     _client = MqttServerClient.withPort(host, clientName, port);
     _client.keepAlivePeriod = 60;
 
+    _client.autoReconnect = true;
+    _client.resubscribeOnAutoReconnect = true;
+
     await _client.connect();
 
     _client.updates!.listen((events) {
@@ -68,5 +71,6 @@ class MqttManager {
   void dispose() {
     _client.disconnect();
     currentSubscribes.clear();
+    _controller.close();
   }
 }
