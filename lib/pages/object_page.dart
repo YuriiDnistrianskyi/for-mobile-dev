@@ -3,7 +3,6 @@ import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
-import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
@@ -36,9 +35,8 @@ class _ObjectPageState extends State<ObjectPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => RootPage(
-          page: CreateDevicePage(isCreate: true, objectId: widget.objectId),
-        ),
+        builder: (context) => 
+            CreateDevicePage(isCreate: true, objectId: widget.objectId),
       ),
     );
 
@@ -49,9 +47,8 @@ class _ObjectPageState extends State<ObjectPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => RootPage(
-          page: CreateObjectPage(isCreate: false, id: widget.objectId),
-        ),
+        builder: (context) => 
+            CreateObjectPage(isCreate: false, id: widget.objectId),
       ),
     );
 

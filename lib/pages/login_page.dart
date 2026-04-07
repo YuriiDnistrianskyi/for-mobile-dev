@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/register_page.dart';
-import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/email_field.dart';
@@ -40,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(
-          builder: (context) => const RootPage(page: HomePage()),
+          builder: (context) => const HomePage(),
         ),
       );
     } else {
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) =>
-                        const RootPage(page: RegisterPage(isRegister: true)),
+                        const RegisterPage(isRegister: true),
                   ),
                 );
               },

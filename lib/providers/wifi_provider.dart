@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:my_project/services/notification_service.dart';
 
 class WiFiProvider extends ChangeNotifier {
   bool _isConnected = false;
@@ -34,6 +35,9 @@ class WiFiProvider extends ChangeNotifier {
       }
       if (newConnection != _isConnected) {
         _isConnected = newConnection;
+        NotificationService.show(
+          _isConnected ? 'Internet connected': 'Internet desable'
+        );
         notifyListeners();
       }
     }

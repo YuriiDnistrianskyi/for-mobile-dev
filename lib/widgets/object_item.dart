@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/object_page.dart';
-import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -27,8 +26,7 @@ class _ObjectItemState extends State<ObjectItem> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => 
-            RootPage(page: ObjectPage(objectId: widget.object.id!)),
+        builder: (context) => ObjectPage(objectId: widget.object.id!),
       ),
     );
   }

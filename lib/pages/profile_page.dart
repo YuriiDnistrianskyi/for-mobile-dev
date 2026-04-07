@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
-import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/units/dialog.dart';
@@ -29,11 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => RootPage(
-          page: RegisterPage(
-            isRegister: false,
-            id: context.read<AuthProvider>().userId,
-          ),
+        builder: (context) => RegisterPage(
+          isRegister: false,
+          id: context.read<AuthProvider>().userId,
         ),
       ),
     );
@@ -49,9 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Provider.of<AuthProvider>(context, listen: false).logout();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const RootPage(page: LoginPage()),
-      ),
+      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
     );
   }
 
@@ -64,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => const RootPage(page: LoginPage()),
+        builder: (context) => const LoginPage(),
       ),
     );
 

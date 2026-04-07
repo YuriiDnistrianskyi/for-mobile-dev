@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
-import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
@@ -31,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute<void>(
         builder: (context) =>
-            const RootPage(page: CreateObjectPage(isCreate: true)),
+            const CreateObjectPage(isCreate: true),
       ),
     );
   }

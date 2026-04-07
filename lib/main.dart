@@ -10,6 +10,7 @@ import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/local_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
+import 'package:my_project/services/notification_service.dart';
 import 'package:my_project/widgets/app_background.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Cooling System',
         debugShowCheckedModeBanner: false,
+        scaffoldMessengerKey: NotificationService.messengerKey,
         builder: (context, child) {
           return AppBackground(child: child!);
         },
