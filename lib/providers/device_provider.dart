@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/device_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
 class DeviceProvider extends ChangeNotifier {
-  final Repository repository;
+  final DeviceRepository repository;
   final MqttService mqttService;
   List<Device> _devices = [];
   List<Device> get devices => _devices;

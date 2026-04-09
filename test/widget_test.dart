@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_project/core/mqtt_manager.dart';
 
 import 'package:my_project/main.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/general_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,19 +23,18 @@ void main() {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'cooling_system_db');
 
-    final Repository appRepository = Repository();
-    await appRepository.open(path);
+    final db = await GeneralRepository.open(path);
 
     final manager = MqttManager(
       host: 'broker.hivemq.com',
       clientName: 'flutter_client',
       port: 1883,
     );
-    final service = MqttService(manager: manager, repository: appRepository);
+    final service = MqttService(manager: manager);
     await service.init();
 
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(repository: appRepository, service: service));
+    await tester.pumpWidget(MyApp(db: db, service: service));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

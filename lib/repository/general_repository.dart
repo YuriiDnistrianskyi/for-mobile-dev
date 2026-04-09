@@ -1,10 +1,6 @@
-import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/i_model.dart';
-import 'package:my_project/models/object_model.dart';
-import 'package:my_project/models/user_model.dart';
 import 'package:my_project/repository/i_local_repository.dart';
 import 'package:sqflite/sqflite.dart';
-
 
 const String createUserTable = '''
           create table user(
@@ -56,14 +52,13 @@ const String createSpeedGraphPointTable = '''
           )
           ''';
 
-class Repository implements ILocalRepository {
-  late Database db;
+class GeneralRepository extends ILocalRepository {
+  final Database db;
 
-  @override
-  Future<void> open(String path) async {
-    db = await openDatabase(
+  static Future<Database> open(String path) async {
+    final db = await openDatabase(
       path,
-      version: 1, 
+      version: 1,
       onCreate: (Database db, int version) async {
         await db.execute(createUserTable);
         await db.execute(createObjectTable);
@@ -72,7 +67,14 @@ class Repository implements ILocalRepository {
         await db.execute(createSpeedGraphPointTable);
       }
     );
+
+    return db;
   }
+
+  GeneralRepository({
+    required this.db,
+  });
+
 
   @override
   Future<IModel> insert(IModel obj) async {
@@ -107,116 +109,6 @@ class Repository implements ILocalRepository {
       return fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
-  }
-
-  @override
-  Future<User?> getUser(String email) async {
-    final List<Map<String, Object?>> maps = await db.query(
-      'user',
-      where: 'email = ?',
-      whereArgs: [email]
-    );
-    if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
-    }
-    return null;
-  }
-
-  @override
-  Future<List<MyObject>> getObjectsByUserId(int userId) async {
-    final List<Map<String, Object?>> objects = await db.query(
-      'object',
-      where: 'userId = ?',
-      whereArgs: [userId]
-    );
-    final List<MyObject> result = objects.map(MyObject.fromMap).toList();
-    return result;
-  }
-
-  @override
-  Future<MyObject?> getObjectByPrivateName(String privateName) async {
-    final List<Map<String, dynamic>> objects = await db.query(
-      'object',
-      where: 'privateName = ?',
-      whereArgs: [privateName],
-    );
-    if (objects.isNotEmpty) {
-      return MyObject.fromMap(objects.first);
-    }
-    return null;
-  }
-
-  @override
-  Future<Device?> getDeviceByPrivateName(String privateName) async {
-    final List<Map<String, dynamic>> objects = await db.query(
-      'device',
-      where: 'privateName = ?',
-      whereArgs: [privateName],
-    );
-    if (objects.isNotEmpty) {
-      return Device.fromMap(objects.first);
-    }
-    return null;
-  }
-
-  @override
-  Future<List<Device>> getDevicesByObjectId(int objectId) async {
-    final List<Map<String, Object?>> devices = await db.query(
-      'device',
-      where: 'objectId = ?',
-      whereArgs: [objectId]
-    );
-    final List<Device> result = devices.map(Device.fromMap).toList();
-    return result;
-  }
-
-  @override
-  Future<List<T>> getGraph<T> (
-    String table,
-    String columnId,
-    int id,
-    T Function(Map<String, dynamic>) fromMap
-  ) async {
-    final List<Map<String, Object?>> graph = await db.query(
-      table,
-      where: '$columnId = ?',
-      whereArgs: [id],
-      limit: 50
-    );
-    final List<T> result = graph.map(fromMap).toList();
-    return result;
-  }
-
-  @override
-  Future<T> getLastPoint<T> (
-    int id,
-    String columnId,
-    String table,
-    T Function(Map<String, dynamic>) fromMap
-  ) async {
-    final List<Map<String, Object?>> list = await db.query(
-      table,
-      where: '$columnId = ?',
-      whereArgs: [id],
-      orderBy: 'time DESC',
-      limit: 1,
-    );
-    final T point = fromMap(list.first);
-    return point;
-  }
-
-  @override
-  Future<void> trimTable(String table, String column, int byId) async {
-    await db.rawDelete('''
-    DELETE FROM $table
-    WHERE id NOT IN (
-      SELECT id FROM $table
-      WHERE $column = ?
-      ORDER BY time DESC
-      LIMIT 100
-    )
-    AND $column = ?
-    ''', [byId, byId]);
   }
 
   @override

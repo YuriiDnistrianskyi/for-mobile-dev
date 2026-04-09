@@ -8,7 +8,11 @@ import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/device_repository.dart';
+import 'package:my_project/repository/general_repository.dart';
+import 'package:my_project/repository/graph_repository.dart';
+import 'package:my_project/repository/object_repository.dart';
+import 'package:my_project/repository/user_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/services/notification_service.dart';
 import 'package:my_project/widgets/app_background.dart';
@@ -22,57 +26,76 @@ void main() async {
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
 
-  final Repository appRepository = Repository();
-  await appRepository.open(path);
+  final db = await GeneralRepository.open(path);
 
   final manager = MqttManager(
     host: 'broker.hivemq.com',
     clientName: 'flutter_name',
     port: 1883,
   );
-  final service = MqttService(manager: manager, repository: appRepository);
+  final service = MqttService(manager: manager);
   service.init();
 
-  runApp(MyApp(repository: appRepository, service: service,));
+  runApp(MyApp(db: db, service: service,));
 }
 
 class MyApp extends StatelessWidget {
-  final Repository repository;
+  final Database db;
   final MqttService service;
 
-  const MyApp({required this.repository, required this.service, super.key});
+  const MyApp({required this.db, required this.service, super.key});
+
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<DeviceRepository>(
+          create: (_) => DeviceRepository(db: db)
+        ),
+        Provider<ObjectRepository>(
+          create: (_) => ObjectRepository(db: db)
+        ),
+
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(repository: repository)
+          create: (_) => AuthProvider(repository: UserRepository(db: db))
         ),
         ChangeNotifierProvider(
-          create: (_) => 
-          DeviceProvider(repository: repository, mqttService: service)
+          create: (context) => 
+          DeviceProvider(
+            repository: context.read<DeviceRepository>(), 
+            mqttService: service,
+          )
         ),
         ChangeNotifierProvider(
-          create: (_) => 
-          ObjectProvider(repository: repository, mqttService: service)
+          create: (context) => 
+          ObjectProvider(
+            repository: context.read<ObjectRepository>(), 
+            mqttService: service,
+          )
         ),
         ChangeNotifierProvider(
-          create: (_) {
-            final provider = SpeedGraphProvider(repository: repository);
+          create: (context) {
+            final provider = SpeedGraphProvider(
+              repository: GraphRepository(db: db),
+              deviceRepository: context.read<DeviceRepository>(),
+            );
             provider.listen(service);
             return provider;
           }
         ),
         ChangeNotifierProvider(
-          create: (_) {
-            final provider = TemperatureGraphProvider(repository: repository);
+          create: (context) {
+            final provider = TemperatureGraphProvider(
+              repository: GraphRepository(db: db), 
+              objectRepository: context.read<ObjectRepository>(),
+            );
             provider.listen(service);
             return provider;
           }
         ),
         ChangeNotifierProvider(
-          create: (_) => UserProvider(repository: repository)
+          create: (_) => UserProvider(repository: UserRepository(db: db))
         ),
         ChangeNotifierProvider(
           create: (_) {

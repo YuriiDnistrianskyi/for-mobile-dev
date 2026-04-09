@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
-  final Repository repository;
+  final UserRepository repository;
   late int _userId;
   int get userId => _userId;
 

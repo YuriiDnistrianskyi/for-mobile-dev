@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/object_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
 class ObjectProvider extends ChangeNotifier {
-  final Repository repository;
+  final ObjectRepository repository;
   final MqttService mqttService;
   List<MyObject> _objects = [];
   List<MyObject> get objects => _objects;

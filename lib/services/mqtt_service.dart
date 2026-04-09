@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'package:my_project/core/mqtt_manager.dart';
-import 'package:my_project/repository/local_repository.dart';
 
 class MqttService {
   final MqttManager manager;
-  final Repository repository;
 
   bool _isConnected = false;
 
   MqttService({
     required this.manager,
-    required this.repository,
   });
 
   Future<void> init() async {

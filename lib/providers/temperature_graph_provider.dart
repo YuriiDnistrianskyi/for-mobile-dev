@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/temperature_graph_point_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/graph_repository.dart';
+import 'package:my_project/repository/object_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
 class TemperatureGraphProvider extends ChangeNotifier {
-  final Repository repository;
+  final GraphRepository repository;
+  final ObjectRepository objectRepository;
   final Map<int, List<TemperatureGraphPoint>> _graphs = {};
   final Map<int, TemperatureGraphPoint?> _lastPoints = {};
 
-  TemperatureGraphProvider({required this.repository});
+  TemperatureGraphProvider({
+    required this.repository,
+    required this.objectRepository,  
+  });
 
   List<TemperatureGraphPoint> getGraph(int objectId) {
     return _graphs[objectId] ?? [];
@@ -29,7 +34,7 @@ class TemperatureGraphProvider extends ChangeNotifier {
       final payload = message['payload'];
 
       if (topic.split('/')[0] == 'object') {
-        final object = await repository.getObjectByPrivateName(
+        final object = await objectRepository.getObjectByPrivateName(
           topic.split('/')[1],
         );
 

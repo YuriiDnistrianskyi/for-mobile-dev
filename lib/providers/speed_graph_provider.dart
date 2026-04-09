@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/speed_graph_point_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/device_repository.dart';
+import 'package:my_project/repository/graph_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
 class SpeedGraphProvider extends ChangeNotifier {
-  final Repository repository;
+  final GraphRepository repository;
+  final DeviceRepository deviceRepository;
   final Map<int, List<SpeedGraphPoint>> _graphs = {};
   final Map<int, SpeedGraphPoint?> _lastPoints = {};
 
-  SpeedGraphProvider({required this.repository});
+  SpeedGraphProvider({
+    required this.repository, 
+    required this.deviceRepository
+  });
 
   void listen(MqttService service) {
     service.manager.stream.listen((message) async {
@@ -16,7 +21,7 @@ class SpeedGraphProvider extends ChangeNotifier {
       final payload = message['payload'];
 
       if (topic.split('/')[0] == 'object') {
-        final device = await repository.getDeviceByPrivateName(
+        final device = await deviceRepository.getDeviceByPrivateName(
           topic.split('/')[1],
         );
 
