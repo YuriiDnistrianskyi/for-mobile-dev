@@ -18,7 +18,7 @@ class UserRepository extends GeneralRepository {
       );
       return data as Map<String, dynamic>;
     } catch (e) {
-      throw Exception('Login -: $e');
+      throw Exception('Login failed: $e');
     }
   }
  

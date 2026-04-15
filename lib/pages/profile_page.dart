@@ -70,7 +70,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = context.watch<UserProvider>().user!;
+    final User? user = context.watch<UserProvider>().user;
+
+    if (user == null) {
+      return const Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: CircularProgressIndicator(color: Colors.green),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.transparent,

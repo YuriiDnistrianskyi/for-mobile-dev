@@ -4,14 +4,14 @@ class Device extends IModel {
   final int? id;
   final String publicName;
   final String privateName;
-  final String password;
+  final String? password;
   final int objectId;
 
   Device({
     required this.publicName,
     required this.privateName,
-    required this.password,
     required this.objectId,
+    this.password,
     this.id,
   });
 
@@ -20,7 +20,6 @@ class Device extends IModel {
     id: map['id'] as int,
     publicName: map['publicName'] as String,
     privateName: map['privateName'] as String,
-    password: map['password'] as String,
     objectId: map['objectId'] as int,
   );
 
@@ -32,7 +31,6 @@ class Device extends IModel {
     final Map<String, dynamic> data = {
       'publicName': publicName,
       'privateName': privateName,
-      'password': password,
       'objectId': objectId,
     };
     return data;

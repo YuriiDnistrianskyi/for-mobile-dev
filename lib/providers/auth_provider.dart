@@ -11,12 +11,6 @@ class AuthProvider with ChangeNotifier {
 
   final TokenStore tokenStore;
 
-  // late String? _accessToken;
-  // String? get accessToken => _accessToken;
-
-  // late String? _refreshToken;
-  // String? get refreshToken => _refreshToken;
-
   AuthProvider({required this.repository, required this.tokenStore});
 
   bool _isLoggin = false;

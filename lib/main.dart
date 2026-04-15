@@ -28,7 +28,6 @@ void main() async {
 
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
-  await deleteDatabase(path);
 
   final db = await GeneralRepository.open(path);
 

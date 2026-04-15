@@ -41,7 +41,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
 
       _publicNameController.text = device.publicName;
       _privateNameController.text = device.privateName;
-      _passwordController.text = device.password;
+      // _passwordController.text = device.password!;
     }
   }
 
@@ -84,7 +84,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           widget.deviceId as int,
           _publicNameController.text.trim(),
           currentDevice.privateName,
-          currentDevice.password,
+          currentDevice.password ?? '123456789',
           widget.objectId,
         );
       }

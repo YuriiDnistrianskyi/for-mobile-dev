@@ -6,7 +6,7 @@ class ObjectRepository extends GeneralRepository {
 
   Future<List<MyObject>> getObjectsByUserId(int userId) async {
     try {
-      final data = await api.get('object/user/$userId');
+      final data = await api.get('object/user/$userId/');
 
       final list = (data as List)
           .map((e) => MyObject.fromMap(e as Map<String, dynamic>))

@@ -85,7 +85,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           widget.id as int,
           _publicNameController.text.trim(),
           currentObject.privateName,
-          currentObject.password,
+          currentObject.password ?? '123456789',
           authProvider.userId!,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text.trim()),

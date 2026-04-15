@@ -4,7 +4,7 @@ class MyObject extends IModel {
   final int? id;
   final String publicName;
   final String privateName;
-  final String password;
+  final String? password;
   final int userId;
   final double maxTemperature;
   final int defaultSpeedForDevices;
@@ -12,10 +12,10 @@ class MyObject extends IModel {
   MyObject({
     required this.publicName,
     required this.privateName,
-    required this.password,
     required this.userId,
     required this.maxTemperature,
     required this.defaultSpeedForDevices,
+    this.password,
     this.id,
   });
 
