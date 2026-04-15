@@ -75,7 +75,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           _publicNameController.text,
           _privateNameController.text,
           _passwordController.text,
-          authProvider.userId,
+          authProvider.userId!,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text),
         );
@@ -86,7 +86,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           _publicNameController.text.trim(),
           currentObject.privateName,
           currentObject.password,
-          authProvider.userId,
+          authProvider.userId!,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text.trim()),
         );

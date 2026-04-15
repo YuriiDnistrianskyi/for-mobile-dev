@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/core/mqtt_manager.dart';
+import 'package:my_project/core/token_store.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
@@ -26,6 +28,7 @@ void main() async {
 
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
+  await deleteDatabase(path);
 
   final db = await GeneralRepository.open(path);
 
@@ -37,18 +40,30 @@ void main() async {
   final service = MqttService(manager: manager);
   service.init();
 
-  runApp(MyApp(db: db, service: service, api: ApiService()));
+  final TokenStore tokenStore = TokenStore();
+  final ApiClient client = ApiClient(tokenStore: tokenStore);
+
+  runApp(
+    MyApp(
+      db: db, 
+      service: service, 
+      api: ApiService(dio: client.dio), 
+      tokenStore: tokenStore
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
   final Database db;
   final MqttService service;
   final ApiService api;
+  final TokenStore tokenStore;
 
   const MyApp({
     required this.db,
     required this.service,
     required this.api,
+    required this.tokenStore,
     super.key,
   });
 
@@ -66,6 +81,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(
             repository: UserRepository(db: db, api: api),
+            tokenStore: tokenStore,
           ),
         ),
         ChangeNotifierProvider(

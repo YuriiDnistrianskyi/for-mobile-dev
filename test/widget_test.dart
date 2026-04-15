@@ -7,9 +7,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/api/api_service.dart';
 
 import 'package:my_project/core/mqtt_manager.dart';
+import 'package:my_project/core/token_store.dart';
 
 import 'package:my_project/main.dart';
 import 'package:my_project/repository/general_repository.dart';
@@ -34,8 +36,16 @@ void main() {
     final service = MqttService(manager: manager);
     await service.init();
 
+    final TokenStore tokenStore = TokenStore();
+    final ApiClient client = ApiClient(tokenStore: tokenStore);
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(db: db, service: service, api: ApiService()));
+    await tester.pumpWidget(MyApp(
+      db: db, 
+      service: service, 
+      api: ApiService(dio: client.dio), 
+      tokenStore: tokenStore
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

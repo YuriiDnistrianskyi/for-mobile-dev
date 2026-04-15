@@ -59,7 +59,7 @@ class _ObjectPageState extends State<ObjectPage> {
     final objectProvider = context.read<ObjectProvider>();
     await objectProvider.deleteObject(
       widget.objectId,
-      context.read<AuthProvider>().userId,
+      context.read<AuthProvider>().userId!,
     );
 
     if (!mounted) return;

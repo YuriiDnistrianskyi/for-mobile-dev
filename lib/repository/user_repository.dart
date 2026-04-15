@@ -8,6 +8,20 @@ class UserRepository extends GeneralRepository {
     required super.api,
   });
 
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    try {
+      final data = await api.post('/auth/login', 
+        {
+          'email': email,
+          'password': password,
+        }
+      );
+      return data as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception('Login -: $e');
+    }
+  }
+ 
   Future<User?> getUser(String email) async {
     final List<Map<String, Object?>> maps = await db.query(
       'user',

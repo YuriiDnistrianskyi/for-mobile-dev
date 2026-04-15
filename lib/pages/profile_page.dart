@@ -21,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<UserProvider>().getUser(context.read<AuthProvider>().userId);
+    context.read<UserProvider>().getUser(context.read<AuthProvider>().userId!);
   }
 
   void _edit() {
@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _delete() async {
     context.read<UserProvider>().deleteUser(
-      context.read<AuthProvider>().userId,
+      context.read<AuthProvider>().userId!,
     );
 
     Provider.of<AuthProvider>(context, listen: false).logout();

@@ -78,7 +78,7 @@ class GeneralRepository extends ILocalRepository {
   @override
   Future<void> insert(IModel obj) async {
     final table = obj.getTableName();
-    await api.post(table, obj.toMap());
+    await api.post('/$table/', obj.toMap());
   }
 
   @override
@@ -98,7 +98,7 @@ class GeneralRepository extends ILocalRepository {
     T Function(Map<String, dynamic>) fromMap,
   ) async {
     try {
-      final data = await api.get(table);
+      final data = await api.get('/$table/');
       final list = (data['list'] as List)
           .map((e) => fromMap(e as Map<String, dynamic>))
           .toList();
@@ -122,7 +122,7 @@ class GeneralRepository extends ILocalRepository {
     T Function(Map<String, dynamic>) fromMap,
   ) async {
     try {
-      final data = await api.get('$table/$id');
+      final data = await api.get('/$table/$id');
       final obj = (data['obj'] as List)
           .map((e) => fromMap(e as Map<String, dynamic>))
           .first;
@@ -146,7 +146,7 @@ class GeneralRepository extends ILocalRepository {
 
   @override
   Future<bool> modelExists(String table, String privateName) async {
-    final data = await api.get('$table/privateName/$privateName');
+    final data = await api.get('/$table/exists/$privateName');
     final isExists = data['exists'] as bool;
     return isExists;
   }
@@ -154,13 +154,13 @@ class GeneralRepository extends ILocalRepository {
   @override
   Future<int> update(IModel obj, int id) async {
     final table = obj.getTableName();
-    final data = await api.patch('$table/$id', obj.toMap());
+    final data = await api.patch('/$table/$id', obj.toMap());
     return (data as Map)['id'] as int;
   }
 
   @override
   Future<int> delete(String table, int id) async {
-    await api.delete('$table/$id');
+    await api.delete('/$table/$id');
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 
