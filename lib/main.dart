@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
@@ -36,14 +37,20 @@ void main() async {
   final service = MqttService(manager: manager);
   service.init();
 
-  runApp(MyApp(db: db, service: service,));
+  runApp(MyApp(db: db, service: service, api: ApiService()));
 }
 
 class MyApp extends StatelessWidget {
   final Database db;
   final MqttService service;
+  final ApiService api;
 
-  const MyApp({required this.db, required this.service, super.key});
+  const MyApp({
+    required this.db, 
+    required this.service, 
+    required this.api, 
+    super.key
+  });
 
 
   @override
@@ -51,7 +58,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<DeviceRepository>(
-          create: (_) => DeviceRepository(db: db)
+          create: (_) => DeviceRepository(db: db, api: api)
         ),
         Provider<ObjectRepository>(
           create: (_) => ObjectRepository(db: db)

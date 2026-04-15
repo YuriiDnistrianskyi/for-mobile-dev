@@ -1,28 +1,54 @@
+import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/repository/general_repository.dart';
 
 class DeviceRepository extends GeneralRepository {
-  DeviceRepository({required super.db});
+  final ApiService api;
+  DeviceRepository({required super.db, required this.api});
 
   Future<Device?> getDeviceByPrivateName(String privateName) async {
-    final List<Map<String, dynamic>> objects = await db.query(
+    try {
+      final data = await api.get('device/$privateName');
+
+      final device = Device.fromMap(data as Map<String, dynamic>);
+
+      await insert(device);
+
+      return device;
+    } catch (e) {
+      final List<Map<String, dynamic>> objects = await db.query(
       'device',
       where: 'privateName = ?',
       whereArgs: [privateName],
-    );
-    if (objects.isNotEmpty) {
-      return Device.fromMap(objects.first);
+      );
+      if (objects.isNotEmpty) {
+        return Device.fromMap(objects.first);
+      }
+      return null;
     }
-    return null;
   }
 
   Future<List<Device>> getDevicesByObjectId(int objectId) async {
-    final List<Map<String, Object?>> devices = await db.query(
-      'device',
-      where: 'objectId = ?',
-      whereArgs: [objectId]
-    );
-    final List<Device> result = devices.map(Device.fromMap).toList();
-    return result;
+    try {
+      final data = await api.get('device/object/$objectId');
+
+      final devices = (data as List)
+          .map((e) => Device.fromMap(e as Map<String, dynamic>))
+          .toList();
+
+      for (var d in devices) {
+        await insert(d);
+      }
+
+      return devices;
+    } catch (e) {
+      final List<Map<String, Object?>> devices = await db.query(
+        'device',
+        where: 'objectId = ?',
+        whereArgs: [objectId],
+      );
+      final List<Device> result = devices.map(Device.fromMap).toList();
+      return result;
+    }
   }
 }
