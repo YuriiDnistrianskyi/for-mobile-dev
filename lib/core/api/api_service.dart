@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:my_project/core/api/api_client.dart';
 
 
-class ApiSeervice {
+class ApiService {
   final Dio _dio = ApiClient().dio;
 
   Future<dynamic> get(String path) async {

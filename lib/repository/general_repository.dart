@@ -79,7 +79,10 @@ class GeneralRepository extends ILocalRepository {
   @override
   Future<IModel> insert(IModel obj) async {
     final String table = obj.getTableName(); 
-    await db.insert(table, obj.toMap());
+    await db.insert(
+      table, obj.toMap(), 
+      conflictAlgorithm: ConflictAlgorithm.replace
+    );
     return obj;
   }
 
