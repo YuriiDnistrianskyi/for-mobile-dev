@@ -78,7 +78,10 @@ class TemperatureGraphProvider extends ChangeNotifier {
       time: DateTime.now().millisecondsSinceEpoch,
       value: value,
     );
-    await repository.insert(point);
+    await repository.insert<TemperatureGraphPoint>(
+      point,
+      TemperatureGraphPoint.fromMap,
+    );
     await repository.trimTable('temperatureGraphPoint', 'objectId', objectId);
     notifyListeners();
   }

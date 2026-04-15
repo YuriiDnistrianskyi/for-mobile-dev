@@ -76,9 +76,14 @@ class GeneralRepository extends ILocalRepository {
   GeneralRepository({required this.db, required this.api});
 
   @override
-  Future<void> insert(IModel obj) async {
+  Future<void> insert<T>(
+    IModel obj, 
+    T Function(Map<String, dynamic>) fromMap,
+  ) async {
     final table = obj.getTableName();
-    await api.post('/$table/', obj.toMap());
+    final data = await api.post('/$table/', obj.toMap());
+    final newObj = fromMap(data['obj'] as Map<String, dynamic>);
+    await insertInDb(newObj as IModel);
   }
 
   @override
@@ -104,6 +109,9 @@ class GeneralRepository extends ILocalRepository {
           .toList();
 
       for (var i in list) {
+        print('-----------------------------');
+        print("INSERT ID: ${(i as IModel).toMap()['id']}");
+        print('-----------------------------');
         await insertInDb(i as IModel);
       }
 
@@ -123,16 +131,12 @@ class GeneralRepository extends ILocalRepository {
   ) async {
     try {
       final data = await api.get('/$table/$id');
-      print(data['obj']);
       final obj = fromMap(data['obj'] as Map<String, dynamic>);
 
       await insertInDb(obj as IModel);
 
       return obj;
     } catch (e) {
-      print('-----------------------------');
-      print(e);
-      print('-----------------------------');
       final List<Map<String, Object?>> maps = await db.query(
         table,
         where: 'id = ?',

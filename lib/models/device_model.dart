@@ -17,10 +17,10 @@ class Device extends IModel {
 
   @override
   factory Device.fromMap(Map<String, dynamic> map) => Device(
-    id: map['id'] as int,
+    id: int.parse(map['id'].toString()),
     publicName: map['publicName'] as String,
     privateName: map['privateName'] as String,
-    objectId: map['objectId'] as int,
+    objectId: int.parse(map['objectId'].toString()),
   );
 
   @override
@@ -29,6 +29,7 @@ class Device extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'id': id,
       'publicName': publicName,
       'privateName': privateName,
       'objectId': objectId,

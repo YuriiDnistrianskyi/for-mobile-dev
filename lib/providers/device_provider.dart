@@ -47,7 +47,7 @@ class DeviceProvider extends ChangeNotifier {
       password: password,
       objectId: objectId,
     );
-    await repository.insert(newDevice);
+    await repository.insert<Device>(newDevice, Device.fromMap);
     await getDevices(objectId);
   }
 

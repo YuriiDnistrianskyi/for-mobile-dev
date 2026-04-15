@@ -2,7 +2,10 @@ import 'package:my_project/models/i_model.dart';
 
 abstract class ILocalRepository {
 
-  Future<void> insert(IModel obj);
+  Future<void> insert<T>(
+    IModel obj, 
+    T Function(Map<String, dynamic>) fromMap,
+  );
   Future<IModel> insertInDb(IModel obj);
   Future<List<T>> get<T>(
     String table,

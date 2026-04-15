@@ -73,7 +73,7 @@ class SpeedGraphProvider extends ChangeNotifier {
       time: DateTime.now().millisecondsSinceEpoch, 
       value: value
     );
-    await repository.insert(point);
+    await repository.insert<SpeedGraphPoint>(point, SpeedGraphPoint.fromMap);
     await repository.trimTable('speedGraphPoint', 'deviceId', deviceId);
     notifyListeners();
   }

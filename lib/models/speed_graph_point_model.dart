@@ -28,6 +28,7 @@ class SpeedGraphPoint extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'id': id,
       'deviceId': deviceId,
       'time': time,
       'value': value,

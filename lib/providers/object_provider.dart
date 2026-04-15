@@ -59,7 +59,7 @@ class ObjectProvider extends ChangeNotifier {
       maxTemperature: maxTemperature, 
       defaultSpeedForDevices: defaultSpeedForDevices,
     );
-    await repository.insert(newObject);
+    await repository.insert<MyObject>(newObject, MyObject.fromMap);
     await getObjects(userId);
     await mqttService.publishMessage('creation/object/new', 'Create object $publicName');
   }

@@ -39,7 +39,7 @@ class UserProvider extends ChangeNotifier {
       password: password
     );
 
-    await repository.insert(newUser);
+    await repository.insert<User>(newUser, User.fromMap);
   }
 
   Future<void> updateUser(
