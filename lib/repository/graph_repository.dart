@@ -1,7 +1,7 @@
 import 'package:my_project/repository/general_repository.dart';
 
 class GraphRepository extends GeneralRepository {
-  GraphRepository({required super.db});
+  GraphRepository({required super.db, required super.api});
 
   Future<List<T>> getGraph<T> (
     String table,

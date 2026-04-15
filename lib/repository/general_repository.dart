@@ -1,3 +1,4 @@
+import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/models/i_model.dart';
 import 'package:my_project/repository/i_local_repository.dart';
 import 'package:sqflite/sqflite.dart';
@@ -54,6 +55,7 @@ const String createSpeedGraphPointTable = '''
 
 class GeneralRepository extends ILocalRepository {
   final Database db;
+  final ApiService api;
 
   static Future<Database> open(String path) async {
     final db = await openDatabase(
@@ -65,53 +67,81 @@ class GeneralRepository extends ILocalRepository {
         await db.execute(createDeviceTable);
         await db.execute(createTemperatureGraphPointTable);
         await db.execute(createSpeedGraphPointTable);
-      }
+      },
     );
 
     return db;
   }
 
-  GeneralRepository({
-    required this.db,
-  });
-
+  GeneralRepository({required this.db, required this.api});
 
   @override
-  Future<IModel> insert(IModel obj) async {
-    final String table = obj.getTableName(); 
+  Future<void> insert(IModel obj) async {
+    final table = obj.getTableName();
+    await api.post(table, obj.toMap());
+  }
+
+  @override
+  Future<IModel> insertInDb(IModel obj) async {
+    final String table = obj.getTableName();
     await db.insert(
-      table, obj.toMap(), 
-      conflictAlgorithm: ConflictAlgorithm.replace
+      table,
+      obj.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return obj;
   }
 
   @override
   Future<List<T>> get<T>(
-    String table, 
-    T Function(Map<String, dynamic>) fromMap
+    String table,
+    T Function(Map<String, dynamic>) fromMap,
   ) async {
-    final List<Map<String, Object?>> maps = await db.query(table);
-    final List<T> list = maps.map(fromMap).toList();
-    return list;
+    try {
+      final data = await api.get(table);
+      final list = (data as List)
+          .map((e) => fromMap(e as Map<String, dynamic>))
+          .toList();
+
+      for (var i in list) {
+        await insertInDb(i as IModel);
+      }
+
+      return list;
+    } catch (e) {
+      final List<Map<String, Object?>> maps = await db.query(table);
+      final List<T> list = maps.map(fromMap).toList();
+      return list;
+    }
   }
 
   @override
   Future<T?> getById<T>(
     String table,
     int id,
-    T Function(Map<String, dynamic>) fromMap  
+    T Function(Map<String, dynamic>) fromMap,
   ) async {
-    final List<Map<String, Object?>> maps = await db.query(
-      table, 
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    try {
+      final data = await api.get('$table/$id');
+      final obj = (data as List)
+          .map((e) => fromMap(e as Map<String, dynamic>))
+          .first;
 
-    if (maps.isNotEmpty) {
-      return fromMap(maps.first as Map<String, dynamic>);
+      await insertInDb(obj as IModel);
+
+      return obj;
+    } catch (e) {
+      final List<Map<String, Object?>> maps = await db.query(
+        table,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      if (maps.isNotEmpty) {
+        return fromMap(maps.first as Map<String, dynamic>);
+      }
+      return null;
     }
-    return null;
   }
 
   @override
@@ -119,23 +149,21 @@ class GeneralRepository extends ILocalRepository {
     final List<Map<String, Object?>> objects = await db.query(
       table,
       where: 'privateName = ?',
-      whereArgs: [privateName]
+      whereArgs: [privateName],
     );
     return objects.isNotEmpty;
   }
 
   @override
   Future<int> update(IModel obj, int id) async {
-    return await db.update(
-      obj.getTableName(), 
-      obj.toMap(), where: 
-      'id = ?', 
-      whereArgs: [id],
-      );
+    final table = obj.getTableName();
+    final data = await api.patch('$table/$id', obj.toMap());
+    return (data as Map)['id'] as int;
   }
 
   @override
   Future<int> delete(String table, int id) async {
+    await api.delete('$table/$id');
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 

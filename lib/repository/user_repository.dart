@@ -5,6 +5,7 @@ import 'package:my_project/repository/general_repository.dart';
 class UserRepository extends GeneralRepository {
   UserRepository({
     required super.db,
+    required super.api,
   });
 
   Future<User?> getUser(String email) async {

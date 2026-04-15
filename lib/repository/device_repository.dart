@@ -1,10 +1,9 @@
-import 'package:my_project/core/api/api_service.dart';
+// import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/repository/general_repository.dart';
 
 class DeviceRepository extends GeneralRepository {
-  final ApiService api;
-  DeviceRepository({required super.db, required this.api});
+  DeviceRepository({required super.db, required super.api});
 
   Future<Device?> getDeviceByPrivateName(String privateName) async {
     try {
@@ -12,7 +11,7 @@ class DeviceRepository extends GeneralRepository {
 
       final device = Device.fromMap(data as Map<String, dynamic>);
 
-      await insert(device);
+      await insertInDb(device);
 
       return device;
     } catch (e) {
@@ -37,7 +36,7 @@ class DeviceRepository extends GeneralRepository {
           .toList();
 
       for (var d in devices) {
-        await insert(d);
+        await insertInDb(d);
       }
 
       return devices;

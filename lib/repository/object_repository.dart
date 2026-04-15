@@ -2,7 +2,7 @@ import 'package:my_project/models/object_model.dart';
 import 'package:my_project/repository/general_repository.dart';
 
 class ObjectRepository extends GeneralRepository {
-  ObjectRepository({required super.db});
+  ObjectRepository({required super.db, required super.api});
 
   Future<List<MyObject>> getObjectsByUserId(int userId) async {
     final List<Map<String, Object?>> objects = await db.query(
