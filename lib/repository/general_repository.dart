@@ -99,7 +99,7 @@ class GeneralRepository extends ILocalRepository {
   ) async {
     try {
       final data = await api.get(table);
-      final list = (data as List)
+      final list = (data['list'] as List)
           .map((e) => fromMap(e as Map<String, dynamic>))
           .toList();
 
@@ -123,7 +123,7 @@ class GeneralRepository extends ILocalRepository {
   ) async {
     try {
       final data = await api.get('$table/$id');
-      final obj = (data as List)
+      final obj = (data['obj'] as List)
           .map((e) => fromMap(e as Map<String, dynamic>))
           .first;
 
@@ -146,12 +146,9 @@ class GeneralRepository extends ILocalRepository {
 
   @override
   Future<bool> modelExists(String table, String privateName) async {
-    final List<Map<String, Object?>> objects = await db.query(
-      table,
-      where: 'privateName = ?',
-      whereArgs: [privateName],
-    );
-    return objects.isNotEmpty;
+    final data = await api.get('$table/privateName/$privateName');
+    final isExists = data['exists'] as bool;
+    return isExists;
   }
 
   @override

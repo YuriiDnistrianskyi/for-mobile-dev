@@ -46,69 +46,70 @@ class MyApp extends StatelessWidget {
   final ApiService api;
 
   const MyApp({
-    required this.db, 
-    required this.service, 
-    required this.api, 
-    super.key
+    required this.db,
+    required this.service,
+    required this.api,
+    super.key,
   });
-
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         Provider<DeviceRepository>(
-          create: (_) => DeviceRepository(db: db, api: api)
+          create: (_) => DeviceRepository(db: db, api: api),
         ),
         Provider<ObjectRepository>(
-          create: (_) => ObjectRepository(db: db)
+          create: (_) => ObjectRepository(db: db, api: api),
         ),
 
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(repository: UserRepository(db: db))
+          create: (_) => AuthProvider(
+            repository: UserRepository(db: db, api: api),
+          ),
         ),
         ChangeNotifierProvider(
-          create: (context) => 
-          DeviceProvider(
-            repository: context.read<DeviceRepository>(), 
+          create: (context) => DeviceProvider(
+            repository: context.read<DeviceRepository>(),
             mqttService: service,
-          )
+          ),
         ),
         ChangeNotifierProvider(
-          create: (context) => 
-          ObjectProvider(
-            repository: context.read<ObjectRepository>(), 
+          create: (context) => ObjectProvider(
+            repository: context.read<ObjectRepository>(),
             mqttService: service,
-          )
+          ),
         ),
         ChangeNotifierProvider(
           create: (context) {
             final provider = SpeedGraphProvider(
-              repository: GraphRepository(db: db),
+              repository: GraphRepository(db: db, api: api),
               deviceRepository: context.read<DeviceRepository>(),
             );
             provider.listen(service);
             return provider;
-          }
+          },
         ),
         ChangeNotifierProvider(
           create: (context) {
             final provider = TemperatureGraphProvider(
-              repository: GraphRepository(db: db), 
+              repository: GraphRepository(db: db, api: api),
               objectRepository: context.read<ObjectRepository>(),
             );
             provider.listen(service);
             return provider;
-          }
+          },
         ),
         ChangeNotifierProvider(
-          create: (_) => UserProvider(repository: UserRepository(db: db))
+          create: (_) => UserProvider(
+            repository: UserRepository(db: db, api: api),
+          ),
         ),
         ChangeNotifierProvider(
           create: (_) {
             final provider = WiFiProvider();
             return provider;
-          }
+          },
         ),
       ],
       child: MaterialApp(
@@ -118,8 +119,8 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return AppBackground(child: child!);
         },
-        home: const RootPage()
-      )
+        home: const RootPage(),
+      ),
     );
   }
 }
