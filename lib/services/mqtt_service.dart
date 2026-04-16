@@ -26,6 +26,16 @@ class MqttService {
     }
   }
 
+  Future<void> setBroker() async {
+    _isConnected = false;
+    await manager.setBroker();
+    await init();
+  }
+
+  String getHost() {
+    return manager.broker;
+  }
+
   Future<void> newSubcription(String type, String privateName) async {
     if (!_isConnected) return;
     final end = type == 'object'

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 
 class UserProvider extends ChangeNotifier {
+  final MqttService service;
   final Repository repository;
   User? _user;
 
   User? get user => _user;
 
   UserProvider ({
-    required this.repository,
+    required this.repository, required this.service
   });
 
   Future<void> getUser(int id) async {

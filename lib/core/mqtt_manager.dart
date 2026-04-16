@@ -4,7 +4,9 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttManager {
-  final String host;
+  String host;
+  String get broker => host;
+
   final String clientName;
   final int port;
 
@@ -31,6 +33,12 @@ class MqttManager {
 
       await _client.connect();
 
+      if (currentSubscribes.isNotEmpty) {
+        for (final topic in currentSubscribes) {
+          _client.subscribe(topic, MqttQos.atLeastOnce);
+        }
+      }
+
       _client.updates!.listen((events) {
         for (var event in events) {
           final msg = event.payload as MqttPublishMessage;
@@ -48,6 +56,15 @@ class MqttManager {
       });
     } catch (ex) {
       rethrow;
+    }
+  }
+
+  Future<void> setBroker() async {
+    _client.disconnect();
+    if (host == 'broker.hivemq.com') {
+      host = 'broker.bevywise.com';
+    } else {
+      host = 'broker.hivemq.com';
     }
   }
 

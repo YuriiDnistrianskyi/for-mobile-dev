@@ -31,7 +31,7 @@ void main() async {
     port: 1883,
   );
   final service = MqttService(manager: manager, repository: appRepository);
-  service.init();
+  await service.init();
 
   runApp(MyApp(repository: appRepository, service: service,));
 }
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
           }
         ),
         ChangeNotifierProvider(
-          create: (_) => UserProvider(repository: repository)
+          create: (_) => UserProvider(repository: repository, service: service)
         ),
         ChangeNotifierProvider(
           create: (_) {

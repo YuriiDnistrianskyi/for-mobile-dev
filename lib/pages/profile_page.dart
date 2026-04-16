@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/models/user_model.dart';
+// import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
@@ -68,9 +68,16 @@ class _ProfilePageState extends State<ProfilePage> {
     ).showSnackBar(const SnackBar(content: Text('Account deleted')));
   }
 
+  Future<void> _setBroker() async {
+    final service = context.read<UserProvider>().service;
+    await service.setBroker();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final User user = context.watch<UserProvider>().user!;
+    final userProvider = context.watch<UserProvider>();
+    final user = userProvider.user!;
+    final host = userProvider.service.getHost();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -148,6 +155,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     text: 'Delete Account',
                     icon: const Icon(Icons.delete, color: Colors.red),
                     func: _delete,
+                  ),
+                  const SizedBox(height: 20),
+                  SettingField(
+                    text: host,
+                    icon: const Icon(Icons.business),
+                    func: _setBroker,
                   ),
                 ],
               ),
