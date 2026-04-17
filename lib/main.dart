@@ -40,13 +40,14 @@ void main() async {
   service.init();
 
   final TokenStore tokenStore = TokenStore();
-  final ApiClient client = ApiClient(tokenStore: tokenStore);
+  final ApiClient apiClient = ApiClient(tokenStore: tokenStore);
 
   runApp(
     MyApp(
       db: db, 
       service: service, 
-      api: ApiService(dio: client.dio), 
+      apiClient: apiClient,
+      apiService: ApiService(dio: apiClient.dio), 
       tokenStore: tokenStore
     )
   );
@@ -55,13 +56,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Database db;
   final MqttService service;
-  final ApiService api;
+  final ApiClient apiClient;
+  final ApiService apiService;
   final TokenStore tokenStore;
 
   const MyApp({
     required this.db,
     required this.service,
-    required this.api,
+    required this.apiClient,
+    required this.apiService,
     required this.tokenStore,
     super.key,
   });
@@ -71,16 +74,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<DeviceRepository>(
-          create: (_) => DeviceRepository(db: db, api: api),
+          create: (_) => DeviceRepository(db: db, api: apiService),
         ),
         Provider<ObjectRepository>(
-          create: (_) => ObjectRepository(db: db, api: api),
+          create: (_) => ObjectRepository(db: db, api: apiService),
         ),
 
         ChangeNotifierProvider(
           create: (_) => AuthProvider(
-            repository: UserRepository(db: db, api: api),
+            repository: UserRepository(db: db, api: apiService),
             tokenStore: tokenStore,
+            apiClient: apiClient
           ),
         ),
         ChangeNotifierProvider(
@@ -98,7 +102,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) {
             final provider = SpeedGraphProvider(
-              repository: GraphRepository(db: db, api: api),
+              repository: GraphRepository(db: db, api: apiService),
               deviceRepository: context.read<DeviceRepository>(),
             );
             provider.listen(service);
@@ -108,7 +112,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) {
             final provider = TemperatureGraphProvider(
-              repository: GraphRepository(db: db, api: api),
+              repository: GraphRepository(db: db, api: apiService),
               objectRepository: context.read<ObjectRepository>(),
             );
             provider.listen(service);
@@ -117,7 +121,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => UserProvider(
-            repository: UserRepository(db: db, api: api),
+            repository: UserRepository(db: db, api: apiService),
           ),
         ),
         ChangeNotifierProvider(

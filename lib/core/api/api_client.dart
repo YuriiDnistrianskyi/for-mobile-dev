@@ -1,13 +1,18 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:my_project/core/token_store.dart';
 
 class ApiClient {
+  final _authController = StreamController<bool>.broadcast();
+  Stream<bool> get authStream => _authController.stream;
+
   final TokenStore tokenStore;
   Future<void>? _refreshFuture;
+
   late Dio dio;
   final Dio _refreshDio = Dio(
     BaseOptions(
-      baseUrl: 'http://192.168.0.101:8000',
+      baseUrl: 'http://10.187.74.82:8000',
       headers: {'Content-Type': 'application/json'},
     ),
   );
@@ -15,7 +20,7 @@ class ApiClient {
   ApiClient({required this.tokenStore}) {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.0.101:8000',
+        baseUrl: 'http://10.187.74.82:8000',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5),
         headers: {
@@ -79,7 +84,12 @@ class ApiClient {
 
             return handle.resolve(response);
           } catch (error) {
-            return handle.next(e);
+            _refreshFuture = null;
+
+            tokenStore.accessToken = null;
+            tokenStore.refreshToken = null;
+
+            _authController.add(false);
           }
         }
       )

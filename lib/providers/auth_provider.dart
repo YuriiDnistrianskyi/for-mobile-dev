@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:my_project/models/user_model.dart';
+import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/token_store.dart';
 import 'package:my_project/repository/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,17 @@ class AuthProvider with ChangeNotifier {
 
   final TokenStore tokenStore;
 
-  AuthProvider({required this.repository, required this.tokenStore});
+  AuthProvider({
+    required this.repository, 
+    required this.tokenStore,
+    required ApiClient apiClient,
+  }) {
+    apiClient.authStream.listen((event) {
+      if (!event) {
+        logout();
+      }
+    });
+  }
 
   bool _isLoggin = false;
   bool get isLoggin => _isLoggin;

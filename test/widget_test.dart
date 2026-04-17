@@ -37,13 +37,14 @@ void main() {
     await service.init();
 
     final TokenStore tokenStore = TokenStore();
-    final ApiClient client = ApiClient(tokenStore: tokenStore);
+    final ApiClient apiClient = ApiClient(tokenStore: tokenStore);
 
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp(
       db: db, 
       service: service, 
-      api: ApiService(dio: client.dio), 
+      apiClient: apiClient,
+      apiService: ApiService(dio: apiClient.dio), 
       tokenStore: tokenStore
     ));
 

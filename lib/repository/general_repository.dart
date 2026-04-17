@@ -158,7 +158,7 @@ class GeneralRepository extends ILocalRepository {
   Future<int> update(IModel obj, int id) async {
     final table = obj.getTableName();
     final data = await api.patch('/$table/$id', obj.toMap());
-    return (data as Map)['id'] as int;
+    return (data as Map)['obj']['id'] as int;
   }
 
   @override
