@@ -33,6 +33,7 @@ class Device extends IModel {
       'publicName': publicName,
       'privateName': privateName,
       'objectId': objectId,
+      'password': password,
     };
     return data;
   }

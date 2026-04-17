@@ -23,10 +23,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final userId = context.read<AuthProvider>().userId;
     context.read<ObjectProvider>().getObjects(userId!);
-    print('-----------------------------');
-    print(context.read<ObjectProvider>().objects);
-    print('1');
-    print('-----------------------------');
   }
 
   void _navigateToCreateObject() {

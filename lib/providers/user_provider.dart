@@ -14,10 +14,6 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> getUser(int id) async {
     _user = await repository.getById<User>('user', id, User.fromMap);
-    print('-----------------------------');
-    print(_user);
-    print('2');
-    print('-----------------------------');
     notifyListeners();
   }
 

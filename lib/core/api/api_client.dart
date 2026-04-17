@@ -9,7 +9,7 @@ class ApiClient {
   ApiClient({required this.tokenStore}) {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.0.104:8000',
+        baseUrl: 'http://192.168.0.101:8000',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5),
         headers: {
@@ -39,6 +39,9 @@ class ApiClient {
         },
 
         onError: (DioException e, handle) async {
+          print('----------------------------');
+          print('Error: ${e.message}');
+          print('----------------------------');
           if (e.response?.statusCode != 401) {
             return handle.next(e);
           }
@@ -52,6 +55,8 @@ class ApiClient {
               _isRefreshing = true;
               await _refreshToken();
               _isRefreshing = false;
+              print('---------------------------');
+              print('Token refresh try');
             }
 
             final options = e.requestOptions;

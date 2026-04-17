@@ -8,11 +8,6 @@ class ObjectRepository extends GeneralRepository {
     try {
       final data = await api.get('/object/user/$userId');
 
-      print('-----------------------------');
-      print('3');
-      print(data['list']);
-      print('-----------------------------');
-
       final list = (data['list'] as List)
           .map((e) => MyObject.fromMap(e as Map<String, dynamic>))
           .toList();
@@ -23,9 +18,6 @@ class ObjectRepository extends GeneralRepository {
 
       return list;
     } catch (e) {
-      print('-----------------------------');
-      print('e: $e');
-      print('-----------------------------');
       final List<Map<String, Object?>> objects = await db.query(
         'object',
         where: 'userId = ?',

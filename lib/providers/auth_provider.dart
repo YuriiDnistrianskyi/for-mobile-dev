@@ -24,6 +24,7 @@ class AuthProvider with ChangeNotifier {
       _userId = response['user_id'] as int;
 
       final prefs = await SharedPreferences.getInstance();
+
       await prefs.setString('__accessToken', tokenStore.accessToken as String);
       await prefs.setString(
         '__refreshToken',

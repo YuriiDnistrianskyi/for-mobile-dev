@@ -33,6 +33,7 @@ class User extends IModel {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'password': password,
     };
 
     return data;

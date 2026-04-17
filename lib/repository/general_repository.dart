@@ -109,9 +109,6 @@ class GeneralRepository extends ILocalRepository {
           .toList();
 
       for (var i in list) {
-        print('-----------------------------');
-        print("INSERT ID: ${(i as IModel).toMap()['id']}");
-        print('-----------------------------');
         await insertInDb(i as IModel);
       }
 
