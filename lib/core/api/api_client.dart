@@ -3,8 +3,14 @@ import 'package:my_project/core/token_store.dart';
 
 class ApiClient {
   final TokenStore tokenStore;
-  bool _isRefreshing = false;
+  Future<void>? _refreshFuture;
   late Dio dio;
+  final Dio _refreshDio = Dio(
+    BaseOptions(
+      baseUrl: 'http://192.168.0.101:8000',
+      headers: {'Content-Type': 'application/json'},
+    ),
+  );
 
   ApiClient({required this.tokenStore}) {
     dio = Dio(
@@ -39,9 +45,6 @@ class ApiClient {
         },
 
         onError: (DioException e, handle) async {
-          print('----------------------------');
-          print('Error: ${e.message}');
-          print('----------------------------');
           if (e.response?.statusCode != 401) {
             return handle.next(e);
           }
@@ -51,23 +54,31 @@ class ApiClient {
           }
 
           try {
-            if (!_isRefreshing) {
-              _isRefreshing = true;
-              await _refreshToken();
-              _isRefreshing = false;
-              print('---------------------------');
-              print('Token refresh try');
-            }
+            _refreshFuture ??= _refreshToken();
+
+            await _refreshFuture;
+            _refreshFuture = null;
 
             final options = e.requestOptions;
 
             options.headers['Authorization'] = 
                 'Bearer ${tokenStore.accessToken}';
 
-            final response = await dio.fetch<dynamic>(options);
+            final response = await dio.request<dynamic>(
+              options.path,
+              data: options.data,
+              queryParameters: options.queryParameters,
+              options: Options(
+                method: options.method,
+                headers: {
+                  ...options.headers,
+                  'Authorization': 'Bearer ${tokenStore.accessToken}',
+                }
+              )
+            );
+
             return handle.resolve(response);
           } catch (error) {
-            _isRefreshing = false;
             return handle.next(e);
           }
         }
@@ -81,7 +92,7 @@ class ApiClient {
         throw Exception('No refresh token');
       }
 
-      final response = await dio.post<dynamic>(
+      final response = await _refreshDio.post<dynamic>(
         '/auth/refresh',
         data: {
           'refresh_token': tokenStore.refreshToken,
@@ -93,7 +104,7 @@ class ApiClient {
     } catch (error) {
       tokenStore.accessToken = null;
       tokenStore.refreshToken = null;
-      throw Exception('Token refresh failed');
+      throw Exception('Token refresh failed: $error');
     }
   }
 }
