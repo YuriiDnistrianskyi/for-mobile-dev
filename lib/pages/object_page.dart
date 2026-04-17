@@ -10,6 +10,7 @@ import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
+import 'package:my_project/widgets/parameter_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:my_project/widgets/wifi_status.dart';
 import 'package:provider/provider.dart';
@@ -108,38 +109,9 @@ class _ObjectPageState extends State<ObjectPage> {
             width: MediaQuery.of(context).size.width * 0.95,
             child: Column(
               children: [
-                Container(
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Current Temperature: ',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              '$currentTemperature ℃',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Icon(Icons.thermostat),
-                      ],
-                    ),
-                  ),
+                ParameterField(
+                  parameter: 'temperature', 
+                  value: '$currentTemperature'
                 ),
                 const WiFiStatus(),
                 GraphBox(type: 'temperature', id: widget.objectId),

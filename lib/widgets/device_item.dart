@@ -3,6 +3,7 @@ import 'package:my_project/models/device_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
+import 'package:my_project/widgets/parameter_field.dart';
 import 'package:provider/provider.dart';
 
 class DeviceItem extends StatefulWidget {
@@ -56,38 +57,9 @@ class _DeviceItemState extends State<DeviceItem> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Current power:',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              '$power %',
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Icon(Icons.speed),
-                      ],
-                    ),
-                  ),
+                ParameterField(
+                  parameter: 'power',
+                  value: '$power'
                 ),
                 const SizedBox(height: 10),
                 GraphBox(type: 'speed', id: widget.device.id!),
