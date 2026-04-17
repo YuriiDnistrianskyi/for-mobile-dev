@@ -12,7 +12,7 @@ class ApiClient {
   late Dio dio;
   final Dio _refreshDio = Dio(
     BaseOptions(
-      baseUrl: 'http://10.187.74.82:8000',
+      baseUrl: 'http://10.143.61.82:8000',
       headers: {'Content-Type': 'application/json'},
     ),
   );
@@ -20,7 +20,7 @@ class ApiClient {
   ApiClient({required this.tokenStore}) {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://10.187.74.82:8000',
+        baseUrl: 'http://10.143.61.82:8000',
         connectTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 5),
         headers: {

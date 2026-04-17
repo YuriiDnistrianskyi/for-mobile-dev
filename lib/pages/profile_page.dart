@@ -6,6 +6,7 @@ import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/units/dialog.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
+import 'package:my_project/widgets/profile_header.dart';
 import 'package:my_project/widgets/setting_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
@@ -98,44 +99,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 93, 174, 129),
-                      radius: 50,
-                      child: Icon(Icons.account_circle),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.05),
-                    Expanded(
-                      child: Container(
-                        height: 100,
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(96, 82, 95, 87),
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${user.firstName}  ${user.lastName}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              user.email,
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: ProfileHeader(
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+              )
             ),
             const SizedBox(height: 20),
             Expanded(
