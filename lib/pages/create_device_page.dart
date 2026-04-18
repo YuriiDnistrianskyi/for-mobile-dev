@@ -98,13 +98,30 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
     return FormLayer(
       title: widget.isCreate ? 'Create Device' : 'Edit Device',
       backAction: () => Navigator.pop(context),
+      actions: widget.isCreate
+          ? null
+          : [
+              IconButton(
+                onPressed: () {
+                  context.read<DeviceProvider>().deleteDevice(
+                    widget.deviceId!,
+                    widget.objectId,
+                  );
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Device deleted')),
+                  );
+                },
+                icon: const Icon(Icons.delete, color: Colors.red),
+              ),
+            ],
       fields: DeviceFields(
         formKey: _formKey,
         publicNameController: _publicNameController,
         privateNameController: widget.isCreate ? _privateNameController : null,
         passwordController: widget.isCreate ? _passwordController : null,
-        confirmPasswordController: widget.isCreate 
-            ? _confirmPasswordController 
+        confirmPasswordController: widget.isCreate
+            ? _confirmPasswordController
             : null,
       ),
       textButton: widget.isCreate ? 'Create' : 'Update',

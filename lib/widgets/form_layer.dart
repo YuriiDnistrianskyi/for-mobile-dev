@@ -6,6 +6,7 @@ import 'package:my_project/widgets/title_page_text.dart';
 class FormLayer extends StatelessWidget {
   final String title;
   final void Function() backAction;
+  final List<Widget>? actions;
   final Widget fields;
   final String textButton;
   final void Function() pressAction;
@@ -16,6 +17,7 @@ class FormLayer extends StatelessWidget {
     required this.fields,
     required this.textButton,
     required this.pressAction,
+    this.actions,
     super.key,
   });
 
@@ -32,6 +34,7 @@ class FormLayer extends StatelessWidget {
           onPressed: backAction,
         ),
         title: TitlePageText(text: title),
+        actions: actions ?? [],
       ),
       body: Center(
         child: SingleChildScrollView(
