@@ -92,6 +92,10 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text.trim()),
         );
+
+        if (!mounted) return;
+        
+        context.read<ObjectProvider>().getObject(widget.id!);
       }
 
       if (!mounted) return;
