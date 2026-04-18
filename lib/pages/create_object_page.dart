@@ -104,11 +104,32 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     }
   }
 
+  void _deleteObject() async {
+      final objectProvider = context.read<ObjectProvider>();
+      await objectProvider.deleteObject(
+        widget.id!,
+        context.read<AuthProvider>().userId!,
+      );
+      if (!mounted) return;
+      Navigator.pop(context);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Object deleted')));
+    }
+
   @override
   Widget build(BuildContext context) {
     return FormLayer(
       title: widget.isCreate ? 'Create Object' : 'Edit Object',
       backAction: () => Navigator.pop(context),
+      actions: widget.isCreate 
+          ? null
+          : [
+            IconButton(
+              onPressed: _deleteObject,
+              icon: const Icon(Icons.delete, color: Colors.red)
+            )
+          ],
       fields: ObjectFields(
         formKey: _formKey,
         publicNameController: _publicNameController,
