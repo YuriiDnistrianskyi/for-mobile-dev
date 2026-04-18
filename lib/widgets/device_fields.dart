@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:my_project/widgets/custom_field.dart';
+import 'package:my_project/widgets/password_field.dart';
+
+class DeviceFields extends StatelessWidget {
+  final TextEditingController publicNameController;
+  final TextEditingController? privateNameController;
+  final TextEditingController? passwordController;
+  final TextEditingController? confirmPasswordController;
+
+  const DeviceFields({
+    required this.publicNameController,
+    this.privateNameController,
+    this.passwordController,
+    this.confirmPasswordController,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CustomField(
+          text: 'Public Name',
+          icon: const Icon(Icons.devices_rounded),
+          controller: publicNameController,
+          keyboardType: TextInputType.text,
+        ),
+        if (privateNameController != null)
+          CustomField(
+            text: 'Private Name',
+            icon: const Icon(Icons.shield),
+            controller: privateNameController!,
+            keyboardType: TextInputType.text,
+          ),
+        if (passwordController != null &&
+            confirmPasswordController != null) ...[
+          PasswordField(
+            text: 'Password',
+            icon: const Icon(Icons.lock),
+            controller: passwordController!,
+          ),
+          PasswordField(
+            text: 'Confirm Password',
+            icon: const Icon(Icons.lock_reset),
+            controller: confirmPasswordController!,
+          ),
+        ],
+      ],
+    );
+  }
+}
