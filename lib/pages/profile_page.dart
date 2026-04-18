@@ -19,6 +19,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late Future<void> _userFuture;
+
   @override
   void initState() {
     super.initState();
@@ -59,9 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Provider.of<AuthProvider>(context, listen: false).logout();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => const LoginPage(),
-      ),
+      MaterialPageRoute<void>(builder: (context) => const LoginPage()),
     );
 
     ScaffoldMessenger.of(
@@ -71,68 +71,76 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = context.watch<UserProvider>().user;
+    return FutureBuilder(
+      future: _userFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator(color: Colors.green)),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        } else {
+          final User user = context.watch<UserProvider>().user!;
 
-    if (user == null) {
-      return const Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.green),
-        ),
-      );
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: const TitlePageText(text: 'Profile'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: 170,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: ProfileHeader(
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-              )
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              title: const TitlePageText(text: 'Profile'),
             ),
-            const SizedBox(height: 20),
-            Expanded(
+            body: Center(
               child: Column(
                 children: [
-                  SettingField(
-                    text: 'Edit',
-                    icon: const Icon(Icons.edit),
-                    func: _edit,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    height: 170,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: ProfileHeader(
+                      firstName: user.firstName,
+                      lastName: user.lastName,
+                      email: user.email,
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  SettingField(
-                    text: 'Log Out',
-                    icon: const Icon(Icons.logout),
-                    func: _logOut,
-                  ),
-                  const SizedBox(height: 20),
-                  SettingField(
-                    text: 'Delete Account',
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    func: _delete,
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SettingField(
+                          text: 'Edit',
+                          icon: const Icon(Icons.edit),
+                          func: _edit,
+                        ),
+                        const SizedBox(height: 20),
+                        SettingField(
+                          text: 'Log Out',
+                          icon: const Icon(Icons.logout),
+                          func: _logOut,
+                        ),
+                        const SizedBox(height: 20),
+                        SettingField(
+                          text: 'Delete Account',
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          func: _delete,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: const CustomNavigationBar(currentPage: 'profile'),
+            bottomNavigationBar: const CustomNavigationBar(
+              currentPage: 'profile',
+            ),
+          );
+        }
+      },
     );
   }
 }
