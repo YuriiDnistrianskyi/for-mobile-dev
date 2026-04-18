@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
-import 'package:my_project/widgets/custom_field.dart';
-import 'package:my_project/widgets/important_button.dart';
-import 'package:my_project/widgets/password_field.dart';
-import 'package:my_project/widgets/title_page_text.dart';
+import 'package:my_project/widgets/form_layer.dart';
+import 'package:my_project/widgets/object_fields.dart';
+// import 'package:my_project/widgets/custom_field.dart';
+// import 'package:my_project/widgets/important_button.dart';
+// import 'package:my_project/widgets/password_field.dart';
+// import 'package:my_project/widgets/title_page_text.dart';
 import 'package:provider/provider.dart';
 
 class CreateObjectPage extends StatefulWidget {
@@ -100,87 +102,21 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: TitlePageText(
-          text: '${widget.isCreate ? 'Create' : 'Edit'} Object',
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
+    return FormLayer(
+      title: widget.isCreate ? 'Create Object' : 'Edit Object',
+      backAction: () => Navigator.pop(context),
+      fields: ObjectFields(
+        publicNameController: _publicNameController,
+        privateNameController: widget.isCreate ? _privateNameController : null,
+        passwordController: widget.isCreate ? _passwordController : null,
+        confirmPasswordController: widget.isCreate 
+            ? _confirmPasswordController
+            : null,
+        maxTemperatureController: _maxTemperatureComtroller,
+        defaultSpeedController: _defaulSpeedController,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.95,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomField(
-                      text: 'Public Name',
-                      icon: const Icon(Icons.devices_rounded),
-                      controller: _publicNameController,
-                      keyboardType: TextInputType.text,
-                    ),
-                    if (widget.isCreate)
-                      CustomField(
-                        text: 'Private Name',
-                        icon: const Icon(Icons.shield),
-                        controller: _privateNameController,
-                        keyboardType: TextInputType.text,
-                      ),
-                    CustomField(
-                      text: 'Max Temperature',
-                      icon: const Icon(Icons.thermostat),
-                      controller: _maxTemperatureComtroller,
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                    ),
-                    CustomField(
-                      text: 'Defaul Speed for Devices',
-                      icon: const Icon(Icons.speed),
-                      controller: _defaulSpeedController,
-                      keyboardType: TextInputType.number,
-                    ),
-                    if (widget.isCreate) ...[
-                      PasswordField(
-                        text: 'Password',
-                        icon: const Icon(Icons.lock),
-                        controller: _passwordController,
-                      ),
-                      PasswordField(
-                        text: 'Confirm Password',
-                        icon: const Icon(Icons.lock_reset),
-                        controller: _confirmPasswordController,
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    ImportantButton(
-                      text: '${widget.isCreate ? 'Create' : 'Edit'} object',
-                      func: _action,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      textButton: widget.isCreate ? 'Create' : 'Edit',
+      pressAction: _action,
     );
   }
 }
