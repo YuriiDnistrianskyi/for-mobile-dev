@@ -25,18 +25,25 @@ class ObjectPage extends StatefulWidget {
 }
 
 class _ObjectPageState extends State<ObjectPage> {
+  late Future<void> awaitProviders;
+
   @override
   void initState() {
     super.initState();
-    context.read<ObjectProvider>().getObject(widget.objectId);
-    context.read<DeviceProvider>().getDevices(widget.objectId);
+    awaitProviders = _awaitProviders();
+  }
+
+  Future<void> _awaitProviders() async {
+    await context.read<ObjectProvider>().getObject(widget.objectId);
+    if (!mounted) return;
+    await context.read<DeviceProvider>().getDevices(widget.objectId);
   }
 
   void _navigateToCreateDevice() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => 
+        builder: (context) =>
             CreateDevicePage(isCreate: true, objectId: widget.objectId),
       ),
     );
@@ -48,7 +55,7 @@ class _ObjectPageState extends State<ObjectPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => 
+        builder: (context) =>
             CreateObjectPage(isCreate: false, id: widget.objectId),
       ),
     );
@@ -73,75 +80,90 @@ class _ObjectPageState extends State<ObjectPage> {
 
   @override
   Widget build(BuildContext context) {
-    final MyObject object = context.watch<ObjectProvider>().object!;
-    final List<Device> devices = context.watch<DeviceProvider>().devices;
-    final double currentTemperature = context
-        .watch<TemperatureGraphProvider>()
-        .getLastPoint(widget.objectId)!
-        .value;
+    return FutureBuilder(
+      future: awaitProviders,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator(color: Colors.green)),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        } else {
+          final MyObject object = context.watch<ObjectProvider>().object!;
+          final List<Device> devices = context.watch<DeviceProvider>().devices;
+          final double currentTemperature = context
+              .watch<TemperatureGraphProvider>()
+              .getLastPoint(widget.objectId)!
+              .value;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: TitlePageText(text: object.publicName),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            onPressed: _navigateToUpdateObject,
-            icon: const Icon(Icons.edit, color: Colors.white),
-          ),
-          IconButton(
-            onPressed: _deleteObject,
-            icon: const Icon(Icons.delete, color: Colors.red),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95,
-            child: Column(
-              children: [
-                ParameterField(
-                  parameter: 'temperature', 
-                  value: '$currentTemperature'
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              title: TitlePageText(text: object.publicName),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: _navigateToUpdateObject,
+                  icon: const Icon(Icons.edit, color: Colors.white),
                 ),
-                const WiFiStatus(),
-                GraphBox(type: 'temperature', id: widget.objectId),
-                const SizedBox(height: 20),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: devices.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        DeviceItem(device: devices[index]),
-                      ],
-                    );
-                  },
+                IconButton(
+                  onPressed: _deleteObject,
+                  icon: const Icon(Icons.delete, color: Colors.red),
                 ),
-                SizedBox(
-                  height: 50,
-                  child: CustomButton(
-                    text: 'Add device',
-                    func: _navigateToCreateDevice,
-                  ),
-                ),
-                const SizedBox(height: 70),
               ],
             ),
-          ),
-        ),
-      ),
+            body: SingleChildScrollView(
+              child: Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: Column(
+                    children: [
+                      ParameterField(
+                        parameter: 'temperature',
+                        value: '$currentTemperature',
+                      ),
+                      const WiFiStatus(),
+                      GraphBox(type: 'temperature', id: widget.objectId),
+                      const SizedBox(height: 20),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: devices.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              DeviceItem(device: devices[index]),
+                            ],
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: 50,
+                        child: CustomButton(
+                          text: 'Add device',
+                          func: _navigateToCreateDevice,
+                        ),
+                      ),
+                      const SizedBox(height: 70),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
