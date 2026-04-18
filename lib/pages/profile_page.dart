@@ -24,7 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<UserProvider>().getUser(context.read<AuthProvider>().userId!);
+    _userFuture = context.read<UserProvider>().getUser(
+      context.read<AuthProvider>().userId!,
+    );
   }
 
   void _edit() {
