@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/widgets/custom_field.dart';
+import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/password_field.dart';
 
-class DeviceFields extends StatelessWidget {
+class UserFields extends StatelessWidget {
   final GlobalKey formKey;
-  final TextEditingController publicNameController;
-  final TextEditingController? privateNameController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController emailController;
   final TextEditingController? passwordController;
   final TextEditingController? confirmPasswordController;
 
-  const DeviceFields({
+  const UserFields({
     required this.formKey,
-    required this.publicNameController,
-    this.privateNameController,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.emailController,
     this.passwordController,
     this.confirmPasswordController,
     super.key,
@@ -27,16 +30,16 @@ class DeviceFields extends StatelessWidget {
           CustomField(
             text: 'Public Name',
             icon: const Icon(Icons.devices_rounded),
-            controller: publicNameController,
+            controller: firstNameController,
             keyboardType: TextInputType.text,
           ),
-          if (privateNameController != null)
-            CustomField(
-              text: 'Private Name',
-              icon: const Icon(Icons.shield),
-              controller: privateNameController!,
-              keyboardType: TextInputType.text,
-            ),
+          CustomField(
+            text: 'Private Name',
+            icon: const Icon(Icons.shield),
+            controller: lastNameController,
+            keyboardType: TextInputType.text,
+          ),
+          EmailField(controller: emailController),
           if (passwordController != null &&
               confirmPasswordController != null) ...[
             PasswordField(

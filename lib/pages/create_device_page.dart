@@ -99,6 +99,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
       title: widget.isCreate ? 'Create Device' : 'Edit Device',
       backAction: () => Navigator.pop(context),
       fields: DeviceFields(
+        formKey: _formKey,
         publicNameController: _publicNameController,
         privateNameController: widget.isCreate ? _privateNameController : null,
         passwordController: widget.isCreate ? _passwordController : null,

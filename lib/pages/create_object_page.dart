@@ -106,6 +106,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
       title: widget.isCreate ? 'Create Object' : 'Edit Object',
       backAction: () => Navigator.pop(context),
       fields: ObjectFields(
+        formKey: _formKey,
         publicNameController: _publicNameController,
         privateNameController: widget.isCreate ? _privateNameController : null,
         passwordController: widget.isCreate ? _passwordController : null,
