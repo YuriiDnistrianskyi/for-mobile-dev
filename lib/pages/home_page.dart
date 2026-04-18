@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/models/object_model.dart';
+// import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/object_provider.dart';
@@ -18,95 +18,111 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<void> _objectsFuture;
+
   @override
   void initState() {
     super.initState();
     final userId = context.read<AuthProvider>().userId;
-    context.read<ObjectProvider>().getObjects(userId!);
+    _objectsFuture = context.read<ObjectProvider>().getObjects(userId!);
   }
 
   void _navigateToCreateObject() {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) =>
-            const CreateObjectPage(isCreate: true),
+        builder: (context) => const CreateObjectPage(isCreate: true),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<MyObject> objects = context.watch<ObjectProvider>().objects;
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: const TitlePageText(text: 'Home'),
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Your Objects',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+    return FutureBuilder(
+      future: _objectsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator(color: Colors.green)),
+          );
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(child: Text('Error: ${snapshot.error}')),
+          );
+        } else {
+          final objects = context.watch<ObjectProvider>().objects;
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              title: const TitlePageText(text: 'Home'),
+            ),
+            body: Column(
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Your Objects',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        const Expanded(child: SizedBox()),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: 50,
+                          child: CustomButton(
+                            text: 'Add Object',
+                            func: _navigateToCreateObject,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const Expanded(child: SizedBox()),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: 50,
-                    child: CustomButton(
-                      text: 'Add Object',
-                      func: _navigateToCreateObject,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const WiFiStatus(),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.95,
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Expanded(
-              child: GridView.builder(
-                itemCount: objects.length,
-                padding: const EdgeInsets.all(8),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.7,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
                 ),
-                itemBuilder: (context, index) {
-                  return ObjectItem(object: objects[index]);
-                },
-              ),
+                const WiFiStatus(),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Expanded(
+                    child: GridView.builder(
+                      itemCount: objects.length,
+                      padding: const EdgeInsets.all(8),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1.7,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                          ),
+                      itemBuilder: (context, index) {
+                        return ObjectItem(object: objects[index]);
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: const CustomNavigationBar(currentPage: 'home'),
+            bottomNavigationBar: const CustomNavigationBar(currentPage: 'home'),
+          );
+        }
+      },
     );
   }
 }
