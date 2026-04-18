@@ -29,7 +29,7 @@ class DeviceRepository extends GeneralRepository {
 
   Future<List<Device>> getDevicesByObjectId(int objectId) async {
     try {
-      final data = await api.get('device/object/$objectId');
+      final data = await api.get('/device/object/$objectId');
 
       final devices = (data['list'] as List)
           .map((e) => Device.fromMap(e as Map<String, dynamic>))
