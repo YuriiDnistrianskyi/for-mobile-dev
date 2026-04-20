@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "941564235403",
+    "firebase_url": "https://fluterr-realtime-database-default-rtdb.firebaseio.com",
+    "project_id": "fluterr-realtime-database",
+    "storage_bucket": "fluterr-realtime-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941564235403:android:2c2e62e7e16ff7fed38e8e",
+        "android_client_info": {
+          "package_name": "com.example.my_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGflvPOH5gxBPhNQTuXom_AmzUIa0dPk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

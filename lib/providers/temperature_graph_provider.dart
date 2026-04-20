@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/models/temperature_graph_point_model.dart';
 import 'package:my_project/repository/graph_repository.dart';
@@ -39,9 +40,15 @@ class TemperatureGraphProvider extends ChangeNotifier {
         );
 
         if (object != null) {
+          final db = FirebaseDatabase.instance.ref();
+
+          await db.child('current_temperature/${object.id!}').set({
+            'value': double.parse(payload as  String),
+          });
+
           await createTemperaturePoint(
             object.id!,
-            double.parse(payload as String),
+            double.parse(payload),
           );
           await getLastTemperatureGraphPoint(object.id!);
           await getTemperatureGraph(object.id!);
