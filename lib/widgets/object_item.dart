@@ -18,7 +18,7 @@ class _ObjectItemState extends State<ObjectItem> {
   void initState() {
     super.initState();
     context.read<TemperatureGraphProvider>().getLastTemperatureGraphPoint(
-      widget.object.id!
+      widget.object.id!,
     );
   }
 

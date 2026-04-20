@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/profile_page.dart';
 import 'package:my_project/providers/user_provider.dart';
-import 'package:my_project/widgets/custom_field.dart';
-import 'package:my_project/widgets/email_field.dart';
-import 'package:my_project/widgets/important_button.dart';
-import 'package:my_project/widgets/password_field.dart';
-import 'package:my_project/widgets/title_page_text.dart';
+import 'package:my_project/providers/wifi_provider.dart';
+import 'package:my_project/widgets/form_layer.dart';
+import 'package:my_project/widgets/user_fields.dart';
 import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -44,6 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
   void _action() async {
     if (_formKey.currentState!.validate()) {
       final userProvider = context.read<UserProvider>();
+      final wifiStatus = context.read<WiFiProvider>().isConnected;
+
+      if (!wifiStatus) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('No internet connection')));
+        return;
+      }
 
       final bool userExists = await userProvider.userExists(
         _emailController.text.trim(),
@@ -80,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
           _firstNameController.text.trim(),
           _lastNameController.text.trim(),
           user.email,
-          user.password,
+          user.password ?? '123456789',
         );
       }
 
@@ -103,78 +109,30 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            widget.isRegister
-                ? Navigator.pop(context)
-                : Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute<void>(
-                      builder: (context) => const ProfilePage(),
-                    ),
-                  );
-          },
-        ),
-        title: TitlePageText(text: widget.isRegister ? 'Sign Up' : 'User'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: 300,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: Padding(
-              padding: const EdgeInsetsGeometry.all(15),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    CustomField(
-                      text: 'First Name',
-                      icon: const Icon(Icons.account_circle),
-                      controller: _firstNameController,
-                      keyboardType: TextInputType.name,
-                    ),
-                    CustomField(
-                      text: 'Last Name',
-                      icon: const Icon(Icons.account_circle),
-                      controller: _lastNameController,
-                      keyboardType: TextInputType.name,
-                    ),
-                    if (widget.isRegister) ...[
-                      EmailField(controller: _emailController),
-                      PasswordField(
-                        text: 'Password',
-                        icon: const Icon(Icons.lock),
-                        controller: _passwordController,
-                      ),
-                      PasswordField(
-                        text: 'Confirm Password',
-                        icon: const Icon(Icons.lock_reset),
-                        controller: _confirmPasswordController,
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    ImportantButton(
-                      text: widget.isRegister ? 'Sign up' : 'Edit',
-                      func: _action,
-                    ),
-                  ],
+    return FormLayer(
+      title: widget.isRegister ? 'Register' : 'Edit Profile',
+      backAction: () {
+        widget.isRegister
+            ? Navigator.pop(context)
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => const ProfilePage(),
                 ),
-              ),
-            ),
-          ),
-        ),
+              );
+      },
+      fields: UserFields(
+        formKey: _formKey,
+        firstNameController: _firstNameController,
+        lastNameController: _lastNameController,
+        emailController: _emailController,
+        passwordController: widget.isRegister ? _passwordController : null,
+        confirmPasswordController: widget.isRegister
+            ? _confirmPasswordController
+            : null,
       ),
+      textButton: widget.isRegister ? 'Register' : 'Edit',
+      pressAction: _action,
     );
   }
 }

@@ -7,9 +7,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_project/core/api/api_client.dart';
+import 'package:my_project/core/api/api_service.dart';
+
+import 'package:my_project/core/mqtt_manager.dart';
+import 'package:my_project/core/token_store.dart';
 
 import 'package:my_project/main.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/general_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -20,10 +26,27 @@ void main() {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'cooling_system_db');
 
-    final Repository appRepository = Repository();
-    await appRepository.open(path);
+    final db = await GeneralRepository.open(path);
+
+    final manager = MqttManager(
+      host: 'broker.hivemq.com',
+      clientName: 'flutter_client',
+      port: 1883,
+    );
+    final service = MqttService(manager: manager);
+    await service.init();
+
+    final TokenStore tokenStore = TokenStore();
+    final ApiClient apiClient = ApiClient(tokenStore: tokenStore);
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp(repository: appRepository));
+    await tester.pumpWidget(MyApp(
+      db: db, 
+      service: service, 
+      apiClient: apiClient,
+      apiService: ApiService(dio: apiClient.dio), 
+      tokenStore: tokenStore
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

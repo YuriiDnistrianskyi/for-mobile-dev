@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/object_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/object_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 
 class ObjectProvider extends ChangeNotifier {
-  final Repository repository;
+  final ObjectRepository repository;
+  final MqttService mqttService;
   List<MyObject> _objects = [];
   List<MyObject> get objects => _objects;
 
@@ -12,10 +14,16 @@ class ObjectProvider extends ChangeNotifier {
 
   ObjectProvider({
     required this.repository,
+    required this.mqttService,
   });
 
   Future<void> getObjects(int userId) async {
     _objects = await repository.getObjectsByUserId(userId);
+
+    for (var obj in _objects) {
+      await mqttService.newSubcription('object', obj.privateName);
+    }
+
     notifyListeners();
   }
 
@@ -51,8 +59,9 @@ class ObjectProvider extends ChangeNotifier {
       maxTemperature: maxTemperature, 
       defaultSpeedForDevices: defaultSpeedForDevices,
     );
-    await repository.insert(newObject);
+    await repository.insert<MyObject>(newObject, MyObject.fromMap);
     await getObjects(userId);
+    await mqttService.publishMessage('creation/object/new', 'Create object $publicName');
   }
 
   Future<void> updateObject(
@@ -78,7 +87,9 @@ class ObjectProvider extends ChangeNotifier {
   }
 
   Future<void> deleteObject(int id, int userId) async {
+    final object = await repository.getById('object', id, MyObject.fromMap);
     await repository.delete('object', id);
+    await mqttService.removeSubscription('object', object!.privateName);
     await getObjects(userId);
   }
 

@@ -4,24 +4,23 @@ class Device extends IModel {
   final int? id;
   final String publicName;
   final String privateName;
-  final String password;
+  final String? password;
   final int objectId;
 
   Device({
     required this.publicName,
     required this.privateName,
-    required this.password,
     required this.objectId,
+    this.password,
     this.id,
   });
 
   @override
   factory Device.fromMap(Map<String, dynamic> map) => Device(
-    id: map['id'] as int,
+    id: int.parse(map['id'].toString()),
     publicName: map['publicName'] as String,
     privateName: map['privateName'] as String,
-    password: map['password'] as String,
-    objectId: map['objectId'] as int,
+    objectId: int.parse(map['objectId'].toString()),
   );
 
   @override
@@ -30,10 +29,11 @@ class Device extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'id': id,
       'publicName': publicName,
       'privateName': privateName,
-      'password': password,
       'objectId': objectId,
+      'password': password,
     };
     return data;
   }

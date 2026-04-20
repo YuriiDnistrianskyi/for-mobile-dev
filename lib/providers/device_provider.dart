@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/models/device_model.dart';
-import 'package:my_project/repository/local_repository.dart';
+import 'package:my_project/repository/device_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 
 class DeviceProvider extends ChangeNotifier {
-  final Repository repository;
+  final DeviceRepository repository;
+  final MqttService mqttService;
   List<Device> _devices = [];
   List<Device> get devices => _devices;
   
   Device? _device;
   Device? get device => _device;
 
-  DeviceProvider({required this.repository});
+  DeviceProvider({
+    required this.repository,
+    required this.mqttService,
+  });
 
   Future<void> getDevices(int objectId) async {
     _devices = await repository.getDevicesByObjectId(objectId);
@@ -42,7 +47,7 @@ class DeviceProvider extends ChangeNotifier {
       password: password,
       objectId: objectId,
     );
-    await repository.insert(newDevice);
+    await repository.insert<Device>(newDevice, Device.fromMap);
     await getDevices(objectId);
   }
 

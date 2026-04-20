@@ -4,7 +4,7 @@ class MyObject extends IModel {
   final int? id;
   final String publicName;
   final String privateName;
-  final String password;
+  final String? password;
   final int userId;
   final double maxTemperature;
   final int defaultSpeedForDevices;
@@ -12,21 +12,20 @@ class MyObject extends IModel {
   MyObject({
     required this.publicName,
     required this.privateName,
-    required this.password,
     required this.userId,
     required this.maxTemperature,
     required this.defaultSpeedForDevices,
+    this.password,
     this.id,
   });
 
   @override
   factory MyObject.fromMap(Map<String, dynamic> map) => MyObject(
-    id: map['id'] as int,
+    id: int.parse(map['id'].toString()),
     publicName: map['publicName'] as String,
     privateName: map['privateName'] as String,
-    password: map['password'] as String,
-    userId: map['userId'] as int,
-    maxTemperature: map['maxTemperature'] as double,
+    userId: int.parse(map['userId'].toString()),
+    maxTemperature: double.parse(map['maxTemperature'].toString()),
     defaultSpeedForDevices: map['defaultSpeedForDevices'] as int,
   );
 
@@ -36,6 +35,7 @@ class MyObject extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'id': id,
       'publicName': publicName,
       'privateName': privateName,
       'password': password,

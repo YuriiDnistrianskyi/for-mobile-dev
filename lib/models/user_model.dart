@@ -5,23 +5,22 @@ class User extends IModel {
   final String firstName;
   final String lastName;
   final String email;
-  final String password;
+  final String? password;
 
   User({
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.password,
+    this.password,
     this.id,
   });
 
   @override
   factory User.fromMap(Map<String, dynamic> map) => User(
-    id: map['id'] as int,
+    id: int.parse(map['id'].toString()),
     firstName: map['firstName'] as String,
     lastName: map['lastName'] as String,
     email: map['email'] as String,
-    password: map['password'] as String,
   );
 
   @override
@@ -30,6 +29,7 @@ class User extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
+      'id': id,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,

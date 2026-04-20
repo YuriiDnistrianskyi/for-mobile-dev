@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/register_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
+import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
@@ -21,6 +22,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() async {
     final auth = context.read<AuthProvider>();
+    final wifiStatus = context.read<WiFiProvider>().isConnected;
+
+    if (!wifiStatus) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('No internet connection')));
+      return;
+    }
 
     await auth.login(_emailController.text, _passwordController.text);
 
@@ -29,7 +38,9 @@ class _LoginPageState extends State<LoginPage> {
     if (auth.isLoggin) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(builder: (context) => const HomePage()),
+        MaterialPageRoute<void>(
+          builder: (context) => const HomePage(),
+        ),
       );
     } else {
       ScaffoldMessenger.of(
@@ -71,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     ImportantButton(text: 'Login', func: _login),
                   ],
                 ),
-              )
+              ),
             ),
             TextButton(
               child: const Text(
@@ -82,7 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => const RegisterPage(isRegister: true),
+                    builder: (context) =>
+                        const RegisterPage(isRegister: true),
                   ),
                 );
               },

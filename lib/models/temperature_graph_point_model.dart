@@ -1,21 +1,24 @@
 import 'package:my_project/models/i_model.dart';
 
 class TemperatureGraphPoint extends IModel {
+  final int? id;
   final int objectId;
-  final DateTime time;
+  final int time;
   final double value;
 
   TemperatureGraphPoint({
     required this.objectId,
     required this.time,
     required this.value,
+    this.id,
   });
 
   @override
   factory TemperatureGraphPoint.fromMap(Map<String, dynamic> map) =>
       TemperatureGraphPoint(
+        id: map['id'] as int,
         objectId: map['objectId'] as int,
-        time: map['time'] as DateTime,
+        time: map['time'] as int,
         value: map['value'] as double,
       );
 
@@ -25,7 +28,7 @@ class TemperatureGraphPoint extends IModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = {
-      'object_id': objectId,
+      'objectId': objectId,
       'time': time,
       'value': value,
     };
