@@ -35,13 +35,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
     if (!widget.isCreate) {
       context.read<ObjectCubit>().getObject(widget.id!);
     }
-   }
-
-  // super.initState();
-
-  // if (!widget.isCreate) {
-  //   context.read<ObjectCubit>().getObject(widget.id!);
-  // }
+  }
 
   void _action() async {
     final cubit = context.read<ObjectCubit>();
@@ -111,12 +105,17 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (!widget.isCreate) {
+    //     context.read<ObjectCubit>().getObject(widget.id!);
+    //   }
+    // });
+
     return BlocProvider.value(
       value: context.read<ObjectCubit>(),
       child: BlocListener<ObjectCubit, ObjectState>(
         listener: (context, state) {
           if (!widget.isCreate) {
-            // context.read<ObjectProvider>().getObject(widget.id!);
             final MyObject object = state.object!;
 
             _publicNameController.text = object.publicName;

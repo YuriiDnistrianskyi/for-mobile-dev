@@ -8,6 +8,8 @@ import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
+// import 'package:my_project/repository/object_repository.dart';
+// import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
@@ -15,76 +17,37 @@ import 'package:my_project/widgets/parameter_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:my_project/widgets/wifi_status.dart';
 
-class ObjectPage extends StatefulWidget {
+class ObjectPage extends StatelessWidget {
   final int objectId;
 
   const ObjectPage({required this.objectId, super.key});
 
   @override
-  State<ObjectPage> createState() => _ObjectPageState();
-}
-
-class _ObjectPageState extends State<ObjectPage> {
-  late Future<void> awaitProviders;
-
-  @override
-  void initState() {
-    super.initState();
-    awaitProviders = _awaitProviders();
-  }
-
-  Future<void> _awaitProviders() async {
-    await context.read<ObjectCubit>().getObject(widget.objectId);
-    if (!mounted) return;
-    await context.read<DeviceProvider>().getDevices(widget.objectId);
-  }
-
-  void _navigateToCreateDevice() {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) =>
-            CreateDevicePage(isCreate: true, objectId: widget.objectId),
-      ),
-    );
-
-    context.read<DeviceProvider>().getDevices(widget.objectId);
-  }
-
-  void _navigateToUpdateObject() {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) =>
-            CreateObjectPage(isCreate: false, id: widget.objectId),
-      ),
-    );
-    context.read<ObjectCubit>().getObject(widget.objectId);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ObjectCubit>().getObject(objectId);
+      context.read<DeviceProvider>().getDevices(objectId);
+    });
+
     return BlocProvider.value(
       value: context.read<ObjectCubit>(),
       child: BlocBuilder<ObjectCubit, ObjectState>(
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: Colors.green)
+              child: CircularProgressIndicator(color: Colors.green),
             );
           }
 
           if (state.error != null) {
-            return Center(
-              child: Text('Error: ${state.error}')
-            );
+            return Center(child: Text('Error: ${state.error}'));
           }
 
-          final MyObject object = context.watch<ObjectCubit>().state.object!;
+          final MyObject object = state.object!;
           final List<Device> devices = context.watch<DeviceProvider>().devices;
           final double currentTemperature = context
               .watch<TemperatureGraphProvider>()
-              .getLastPoint(widget.objectId)!
+              .getLastPoint(objectId)!
               .value;
 
           return Scaffold(
@@ -101,7 +64,16 @@ class _ObjectPageState extends State<ObjectPage> {
               ),
               actions: [
                 IconButton(
-                  onPressed: _navigateToUpdateObject,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) =>
+                            CreateObjectPage(isCreate: false, id: objectId),
+                      ),
+                    );
+                    context.read<ObjectCubit>().getObject(objectId);
+                  },
                   icon: const Icon(Icons.edit, color: Colors.white),
                 ),
               ],
@@ -117,7 +89,7 @@ class _ObjectPageState extends State<ObjectPage> {
                         value: '$currentTemperature',
                       ),
                       const WiFiStatus(),
-                      GraphBox(type: 'temperature', id: widget.objectId),
+                      GraphBox(type: 'temperature', id: objectId),
                       const SizedBox(height: 20),
                       ListView.builder(
                         shrinkWrap: true,
@@ -136,7 +108,19 @@ class _ObjectPageState extends State<ObjectPage> {
                         height: 50,
                         child: CustomButton(
                           text: 'Add device',
-                          func: _navigateToCreateDevice,
+                          func: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (context) => CreateDevicePage(
+                                  isCreate: true,
+                                  objectId: objectId,
+                                ),
+                              ),
+                            );
+
+                            context.read<DeviceProvider>().getDevices(objectId);
+                          },
                         ),
                       ),
                       const SizedBox(height: 70),
@@ -146,8 +130,8 @@ class _ObjectPageState extends State<ObjectPage> {
               ),
             ),
           );
-        }
-      )
+        },
+      ),
     );
   }
 }
