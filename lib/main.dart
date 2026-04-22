@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/core/token_store.dart';
+// import 'package:my_project/cubit/object/object_cubit.dart';
 import 'package:my_project/pages/root_page.dart';
 // import 'package:my_project/providers/auth_provider.dart';
 // import 'package:my_project/providers/device_provider.dart';
@@ -81,7 +83,7 @@ class MyApp extends StatelessWidget {
         ),
         Provider<MqttService>(
           create: (context) => service,
-        )
+        ),
 
       ],
       child: MaterialApp(

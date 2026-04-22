@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/object/object_cubit.dart';
+import 'package:my_project/cubit/object/object_state.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
-// import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/device_provider.dart';
-import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
@@ -13,7 +14,6 @@ import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/parameter_field.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:my_project/widgets/wifi_status.dart';
-import 'package:provider/provider.dart';
 
 class ObjectPage extends StatefulWidget {
   final int objectId;
@@ -34,7 +34,7 @@ class _ObjectPageState extends State<ObjectPage> {
   }
 
   Future<void> _awaitProviders() async {
-    await context.read<ObjectProvider>().getObject(widget.objectId);
+    await context.read<ObjectCubit>().getObject(widget.objectId);
     if (!mounted) return;
     await context.read<DeviceProvider>().getDevices(widget.objectId);
   }
@@ -59,24 +59,28 @@ class _ObjectPageState extends State<ObjectPage> {
             CreateObjectPage(isCreate: false, id: widget.objectId),
       ),
     );
-    context.read<ObjectProvider>().getObject(widget.objectId);
+    context.read<ObjectCubit>().getObject(widget.objectId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: awaitProviders,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator(color: Colors.green)),
-          );
-        } else if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(child: Text('Error: ${snapshot.error}')),
-          );
-        } else {
-          final MyObject object = context.watch<ObjectProvider>().object!;
+    return BlocProvider.value(
+      value: context.read<ObjectCubit>(),
+      child: BlocBuilder<ObjectCubit, ObjectState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.green)
+            );
+          }
+
+          if (state.error != null) {
+            return Center(
+              child: Text('Error: ${state.error}')
+            );
+          }
+
+          final MyObject object = context.watch<ObjectCubit>().state.object!;
           final List<Device> devices = context.watch<DeviceProvider>().devices;
           final double currentTemperature = context
               .watch<TemperatureGraphProvider>()
@@ -143,7 +147,7 @@ class _ObjectPageState extends State<ObjectPage> {
             ),
           );
         }
-      },
+      )
     );
   }
 }
