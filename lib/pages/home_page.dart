@@ -1,64 +1,50 @@
 import 'package:flutter/material.dart';
-// import 'package:my_project/models/object_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/object/object_cubit.dart';
+import 'package:my_project/cubit/object/object_state.dart';
 import 'package:my_project/pages/create_object_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
-import 'package:my_project/providers/object_provider.dart';
+import 'package:my_project/repository/object_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
 import 'package:my_project/widgets/title_page_text.dart';
 import 'package:my_project/widgets/wifi_status.dart';
-import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late Future<void> _objectsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    final userId = context.read<AuthProvider>().userId;
-    _objectsFuture = context.read<ObjectProvider>().getObjects(userId!);
-  }
-
-  void _navigateToCreateObject() {
-    Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => const CreateObjectPage(isCreate: true),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _objectsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator(color: Colors.green)),
-          );
-        } else if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(child: Text('Error: ${snapshot.error}')),
-          );
-        } else {
-          final objects = context.watch<ObjectProvider>().objects;
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              centerTitle: true,
-              title: const TitlePageText(text: 'Home'),
-            ),
-            body: Column(
+    final userId = context.read<AuthProvider>().userId!;
+
+    return BlocProvider(
+      create: (context) => ObjectCubit(
+        repository: context.read<ObjectRepository>(),
+        mqttService: context.read<MqttService>(),
+      )..getObjects(userId),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: const TitlePageText(text: 'Home'),
+        ),
+        body: BlocBuilder<ObjectCubit, ObjectState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.green),
+              );
+            }
+
+            if (state.error != null) {
+              return Center(child: Text('Error: ${state.error}'));
+            }
+
+            final objects = state.objects;
+            return Column(
               children: [
                 Center(
                   child: SizedBox(
@@ -89,7 +75,15 @@ class _HomePageState extends State<HomePage> {
                           height: 50,
                           child: CustomButton(
                             text: 'Add Object',
-                            func: _navigateToCreateObject,
+                            func: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (context) =>
+                                      const CreateObjectPage(isCreate: true),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -118,11 +112,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
-            ),
-            bottomNavigationBar: const CustomNavigationBar(currentPage: 'home'),
-          );
-        }
-      },
+            );
+          },
+        ),
+        bottomNavigationBar: const CustomNavigationBar(currentPage: 'home'),
+      ),
     );
   }
 }
