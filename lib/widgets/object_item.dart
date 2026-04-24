@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/cubit/object/object_cubit.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/object_page.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
@@ -23,6 +24,7 @@ class _ObjectItemState extends State<ObjectItem> {
   }
 
   void _navigateToObjectPage() {
+    context.read<ObjectCubit>().getObject(widget.object.id!);
     Navigator.push(
       context,
       MaterialPageRoute<void>(
