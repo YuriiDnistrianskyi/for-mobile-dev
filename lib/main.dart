@@ -6,13 +6,11 @@ import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/core/token_store.dart';
 import 'package:my_project/cubit/device/device_cubit.dart';
 import 'package:my_project/cubit/object/object_cubit.dart';
+import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
-// import 'package:my_project/providers/device_provider.dart';
-// import 'package:my_project/providers/object_provider.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
-import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/repository/general_repository.dart';
@@ -97,6 +95,11 @@ class MyApp extends StatelessWidget {
             mqttService: service,
           )
         ),
+        BlocProvider(
+          create: (context) => UserCubit(
+            repository: UserRepository(db: db, api: apiService)
+          )
+        ),
 
 
 
@@ -107,12 +110,6 @@ class MyApp extends StatelessWidget {
             apiClient: apiClient
           ),
         ),
-        // ChangeNotifierProvider(
-        //   create: (context) => DeviceProvider(
-        //     repository: context.read<DeviceRepository>(),
-        //     mqttService: service,
-        //   ),
-        // ),
         ChangeNotifierProvider(
           create: (context) {
             final provider = SpeedGraphProvider(
@@ -132,11 +129,6 @@ class MyApp extends StatelessWidget {
             provider.listen(service);
             return provider;
           },
-        ),
-        ChangeNotifierProvider(
-          create: (_) => UserProvider(
-            repository: UserRepository(db: db, api: apiService),
-          ),
         ),
         ChangeNotifierProvider(
           create: (_) {

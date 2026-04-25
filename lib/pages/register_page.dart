@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/user/user_cubit.dart';
+import 'package:my_project/cubit/user/user_state.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/pages/profile_page.dart';
-import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/widgets/form_layer.dart';
 import 'package:my_project/widgets/user_fields.dart';
-import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final bool isRegister;
@@ -26,22 +27,9 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.isRegister == false) {
-      final User currentUser = context.read<UserProvider>().user!;
-
-      _firstNameController.text = currentUser.firstName;
-      _lastNameController.text = currentUser.lastName;
-      _emailController.text = currentUser.email;
-    }
-  }
-
   void _action() async {
     if (_formKey.currentState!.validate()) {
-      final userProvider = context.read<UserProvider>();
+      final userProvider = context.read<UserCubit>();
       final wifiStatus = context.read<WiFiProvider>().isConnected;
 
       if (!wifiStatus) {
@@ -80,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       } else {
         if (!mounted) return;
-        final User user = context.read<UserProvider>().user!;
+        final User user = context.read<UserCubit>().state.user!;
         await userProvider.updateUser(
           widget.id!,
           _firstNameController.text.trim(),
@@ -109,30 +97,56 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FormLayer(
-      title: widget.isRegister ? 'Register' : 'Edit Profile',
-      backAction: () {
-        widget.isRegister
-            ? Navigator.pop(context)
-            : Navigator.pushReplacement(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (context) => const ProfilePage(),
-                ),
-              );
-      },
-      fields: UserFields(
-        formKey: _formKey,
-        firstNameController: _firstNameController,
-        lastNameController: _lastNameController,
-        emailController: _emailController,
-        passwordController: widget.isRegister ? _passwordController : null,
-        confirmPasswordController: widget.isRegister
-            ? _confirmPasswordController
-            : null,
+    return BlocProvider.value(
+      value: context.read<UserCubit>(),
+      child: BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          if (widget.isRegister == false) {
+            final user = state.user!;
+            _firstNameController.text = user.firstName;
+            _lastNameController.text = user.lastName;
+            _emailController.text = user.email;
+          }
+
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.green),
+            );
+          }
+
+          if (state.error != null) {
+            return Center(child: Text('Error: ${state.error}'));
+          }
+
+          return FormLayer(
+            title: widget.isRegister ? 'Register' : 'Edit Profile',
+            backAction: () {
+              widget.isRegister
+                  ? Navigator.pop(context)
+                  : Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => const ProfilePage(),
+                      ),
+                    );
+            },
+            fields: UserFields(
+              formKey: _formKey,
+              firstNameController: _firstNameController,
+              lastNameController: _lastNameController,
+              emailController: _emailController,
+              passwordController: widget.isRegister
+                  ? _passwordController
+                  : null,
+              confirmPasswordController: widget.isRegister
+                  ? _confirmPasswordController
+                  : null,
+            ),
+            textButton: widget.isRegister ? 'Register' : 'Edit',
+            pressAction: _action,
+          );
+        },
       ),
-      textButton: widget.isRegister ? 'Register' : 'Edit',
-      pressAction: _action,
     );
   }
 }
