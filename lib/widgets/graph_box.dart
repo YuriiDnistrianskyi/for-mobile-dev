@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_cubit.dart';
 import 'package:my_project/cubit/tempeture_graph/temperature_graph_cubit.dart';
-import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:provider/provider.dart';
 
 class GraphBox extends StatelessWidget {
@@ -9,6 +10,7 @@ class GraphBox extends StatelessWidget {
 
   final String type;
   final int id;
+      
 
   List<FlSpot> _buildSpots(List<dynamic> data) {
     final List<FlSpot> spots = [];
@@ -26,7 +28,7 @@ class GraphBox extends StatelessWidget {
     List<dynamic> data = [];
 
     if (type == 'speed') {
-      data = context.watch<SpeedGraphProvider>().getGraph(id);
+      data = context.watch<SpeedGraphCubit>().state.graphs[id] ?? [];
     } else {
       data = context.watch<TemperatureGraphCubit>().state.graphs[id] ?? [];
     }

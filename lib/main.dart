@@ -6,11 +6,11 @@ import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/core/token_store.dart';
 import 'package:my_project/cubit/device/device_cubit.dart';
 import 'package:my_project/cubit/object/object_cubit.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_cubit.dart';
 import 'package:my_project/cubit/tempeture_graph/temperature_graph_cubit.dart';
 import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/pages/root_page.dart';
 import 'package:my_project/providers/auth_provider.dart';
-import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/repository/general_repository.dart';
@@ -102,6 +102,16 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) {
+            final cubit = SpeedGraphCubit(
+              repository: GraphRepository(db: db, api: apiService), 
+              deviceRepository: context.read<DeviceRepository>(),
+            );
+            cubit.listen(service);
+            return cubit;
+          }
+        ),
+        BlocProvider(
+          create: (context) {
             final cubit = TemperatureGraphCubit(
               repository: GraphRepository(db: db, api: apiService), 
               objectRepository: context.read<ObjectRepository>(),
@@ -120,16 +130,16 @@ class MyApp extends StatelessWidget {
             apiClient: apiClient
           ),
         ),
-        ChangeNotifierProvider(
-          create: (context) {
-            final provider = SpeedGraphProvider(
-              repository: GraphRepository(db: db, api: apiService),
-              deviceRepository: context.read<DeviceRepository>(),
-            );
-            provider.listen(service);
-            return provider;
-          },
-        ),
+        // ChangeNotifierProvider(
+        //   create: (context) {
+        //     final provider = SpeedGraphProvider(
+        //       repository: GraphRepository(db: db, api: apiService),
+        //       deviceRepository: context.read<DeviceRepository>(),
+        //     );
+        //     provider.listen(service);
+        //     return provider;
+        //   },
+        // ),
         ChangeNotifierProvider(
           create: (_) {
             final provider = WiFiProvider();

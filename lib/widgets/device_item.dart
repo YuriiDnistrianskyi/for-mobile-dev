@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/device/device_cubit.dart';
 import 'package:my_project/cubit/device/device_state.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_cubit.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_state.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
-import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/widgets/graph_box.dart';
 import 'package:my_project/widgets/parameter_field.dart';
 
@@ -16,7 +17,7 @@ class DeviceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: context.read<DeviceCubit>(), // PowerGraphCubit
+      value: context.read<DeviceCubit>(),
       child: BlocBuilder<DeviceCubit, DeviceState>(
         builder: (context, state) {
           if (state.isLoading) {
@@ -28,11 +29,6 @@ class DeviceItem extends StatelessWidget {
           if (state.error != null) {
             return Center(child: Text('Error: ${state.error}'));
           }
-
-          final int? power = context
-              .watch<SpeedGraphProvider>()
-              .getLastPoint(device.id!)
-              ?.value;
 
           return GestureDetector(
             onTap: () async {
@@ -69,7 +65,22 @@ class DeviceItem extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      ParameterField(parameter: 'power', value: '$power'),
+                      BlocBuilder<SpeedGraphCubit, SpeedGraphState>(
+                        builder: (context, state) {
+                          if (state.isLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.green,
+                              ),
+                            );
+                          }
+                          final power = state.lastPoints[device.id!];
+                          return ParameterField(
+                            parameter: 'power',
+                            value: '${power?.value}',
+                          );
+                        },
+                      ),
                       const SizedBox(height: 10),
                       GraphBox(type: 'speed', id: device.id!),
                     ],
