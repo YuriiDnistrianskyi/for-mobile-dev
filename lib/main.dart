@@ -29,7 +29,6 @@ void main() async {
 
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
-
   final db = await GeneralRepository.open(path);
 
   final manager = MqttManager(
@@ -45,12 +44,12 @@ void main() async {
 
   runApp(
     MyApp(
-      db: db, 
-      service: service, 
+      db: db,
+      service: service,
       apiClient: apiClient,
-      apiService: ApiService(dio: apiClient.dio), 
-      tokenStore: tokenStore
-    )
+      apiService: ApiService(dio: apiClient.dio),
+      tokenStore: tokenStore,
+    ),
   );
 }
 
@@ -80,57 +79,55 @@ class MyApp extends StatelessWidget {
         Provider<ObjectRepository>(
           create: (_) => ObjectRepository(db: db, api: apiService),
         ),
-        Provider<MqttService>(
-          create: (context) => service,
-        ),
+        Provider<MqttService>(create: (context) => service),
         BlocProvider(
           create: (context) {
             final cubit = AuthCubit(
-              repository: UserRepository(db: db, api: apiService), 
-              tokenStore: tokenStore, 
-              apiClient: apiClient
+              repository: UserRepository(db: db, api: apiService),
+              tokenStore: tokenStore,
+              apiClient: apiClient,
             );
             cubit.listen();
             cubit.autoLogin();
             return cubit;
-          }
+          },
         ),
         BlocProvider(
           create: (context) => ObjectCubit(
             repository: context.read<ObjectRepository>(),
-            mqttService: service
-          )
+            mqttService: service,
+          ),
         ),
         BlocProvider(
           create: (context) => DeviceCubit(
             repository: context.read<DeviceRepository>(),
             mqttService: service,
-          )
+          ),
         ),
         BlocProvider(
           create: (context) => UserCubit(
-            repository: UserRepository(db: db, api: apiService)
-          )
+            repository: UserRepository(db: db, api: apiService),
+          ),
         ),
         BlocProvider(
           create: (context) {
             final cubit = SpeedGraphCubit(
-              repository: GraphRepository(db: db, api: apiService), 
+              repository: GraphRepository(db: db, api: apiService),
               deviceRepository: context.read<DeviceRepository>(),
             );
             cubit.listen(service);
             return cubit;
-          }
+          },
         ),
         BlocProvider(
           create: (context) {
             final cubit = TemperatureGraphCubit(
-              repository: GraphRepository(db: db, api: apiService), 
+              repository: GraphRepository(db: db, api: apiService),
               objectRepository: context.read<ObjectRepository>(),
             );
             cubit.listen(service);
             return cubit;
-          }
+          },
         ),
         ChangeNotifierProvider(
           create: (_) {

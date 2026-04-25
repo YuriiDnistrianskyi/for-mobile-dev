@@ -61,6 +61,7 @@ class ObjectPage extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
+                    context.read<ObjectCubit>().getObject(objectId);
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(

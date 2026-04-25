@@ -28,15 +28,6 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
   final TextEditingController _defaulSpeedController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (!widget.isCreate) {
-      context.read<ObjectCubit>().getObject(widget.id!);
-    }
-  }
-
   void _action() async {
     final cubit = context.read<ObjectCubit>();
     final authProvider = context.read<AuthCubit>();
