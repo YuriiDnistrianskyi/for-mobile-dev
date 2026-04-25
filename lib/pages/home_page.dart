@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/object/object_cubit.dart';
 import 'package:my_project/cubit/object/object_state.dart';
 import 'package:my_project/pages/create_object_page.dart';
-import 'package:my_project/providers/auth_provider.dart';
-// import 'package:my_project/repository/object_repository.dart';
-// import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/object_item.dart';
@@ -18,7 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userId = context.read<AuthProvider>().userId!;
+      final userId = context.read<AuthCubit>().state.userId!;
       context.read<ObjectCubit>().getObjects(userId);
     });
 

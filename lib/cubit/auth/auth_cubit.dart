@@ -7,14 +7,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final UserRepository repository;
-
   final TokenStore tokenStore;
+  final ApiClient apiClient;
 
   AuthCubit({
     required this.repository, 
     required this.tokenStore,
-    required ApiClient apiClient,
+    required this.apiClient,
   }) : super(AuthState.initial());
+
+  void listen() {
+    apiClient.authStream.listen((event) {
+      if (!event) {
+        logout();
+      }
+    });
+  }
 
   Future<void> login(String email, String password) async {
     try {

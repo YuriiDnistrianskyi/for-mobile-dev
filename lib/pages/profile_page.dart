@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/cubit/user/user_state.dart';
 import 'package:my_project/pages/login_page.dart';
 import 'package:my_project/pages/register_page.dart';
-import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/units/dialog.dart';
 import 'package:my_project/widgets/custom_navigation_bar.dart';
 import 'package:my_project/widgets/profile_header.dart';
@@ -69,7 +69,7 @@ class ProfilePage extends StatelessWidget {
                               MaterialPageRoute<void>(
                                 builder: (context) => RegisterPage(
                                   isRegister: false,
-                                  id: context.read<AuthProvider>().userId,
+                                  id: context.read<AuthCubit>().state.userId,
                                 ),
                               ),
                             );
@@ -89,7 +89,7 @@ class ProfilePage extends StatelessWidget {
 
                             if (!confirm!) return;
 
-                            Provider.of<AuthProvider>(
+                            Provider.of<AuthCubit>(
                               context,
                               listen: false,
                             ).logout();
@@ -107,10 +107,10 @@ class ProfilePage extends StatelessWidget {
                           icon: const Icon(Icons.delete, color: Colors.red),
                           func: () {
                             context.read<UserCubit>().deleteUser(
-                              context.read<AuthProvider>().userId!,
+                              context.read<AuthCubit>().state.userId!,
                             );
 
-                            Provider.of<AuthProvider>(
+                            Provider.of<AuthCubit>(
                               context,
                               listen: false,
                             ).logout();

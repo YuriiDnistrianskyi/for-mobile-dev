@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/profile_page.dart';
-import 'package:my_project/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomNavigationBar extends StatelessWidget {
@@ -57,7 +57,7 @@ class CustomNavigationBar extends StatelessWidget {
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               onPressed: () {
-                final id = context.read<AuthProvider>().userId!;
+                final id = context.read<AuthCubit>().state.userId!;
                 context.read<UserCubit>().getUser(id);
                 if (currentPage != 'profile') {
                   Navigator.pushReplacement(

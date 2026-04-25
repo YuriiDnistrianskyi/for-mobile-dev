@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/cubit/object/object_cubit.dart';
 import 'package:my_project/cubit/object/object_state.dart';
 import 'package:my_project/models/object_model.dart';
-import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/widgets/form_layer.dart';
 import 'package:my_project/widgets/object_fields.dart';
 
@@ -39,7 +39,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   void _action() async {
     final cubit = context.read<ObjectCubit>();
-    final authProvider = context.read<AuthProvider>();
+    final authProvider = context.read<AuthCubit>();
 
     if (_formKey.currentState!.validate()) {
       if (widget.isCreate) {
@@ -66,7 +66,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           _publicNameController.text,
           _privateNameController.text,
           _passwordController.text,
-          authProvider.userId!,
+          authProvider.state.userId!,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text),
         );
@@ -77,7 +77,7 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
           _publicNameController.text.trim(),
           currentObject.privateName,
           currentObject.password ?? '123456789',
-          authProvider.userId!,
+          authProvider.state.userId!,
           double.parse(_maxTemperatureComtroller.text.trim()),
           int.parse(_defaulSpeedController.text.trim()),
         );
@@ -95,7 +95,10 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   void _deleteObject() async {
     final cubit = context.read<ObjectCubit>();
-    await cubit.deleteObject(widget.id!, context.read<AuthProvider>().userId!);
+    await cubit.deleteObject(
+      widget.id!, 
+      context.read<AuthCubit>().state.userId!
+    );
     if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(
@@ -105,12 +108,6 @@ class _CreateObjectPageState extends State<CreateObjectPage> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (!widget.isCreate) {
-    //     context.read<ObjectCubit>().getObject(widget.id!);
-    //   }
-    // });
-
     return BlocProvider.value(
       value: context.read<ObjectCubit>(),
       child: BlocListener<ObjectCubit, ObjectState>(
