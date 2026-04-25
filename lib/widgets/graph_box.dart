@@ -4,17 +4,12 @@ import 'package:my_project/providers/speed_graph_provider.dart';
 import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:provider/provider.dart';
 
-class GraphBox extends StatefulWidget {
+class GraphBox extends StatelessWidget {
   const GraphBox({required this.type, required this.id, super.key});
 
   final String type;
   final int id;
 
-  @override
-  State<GraphBox> createState() => _GraphBoxState();
-}
-
-class _GraphBoxState extends State<GraphBox> {
   List<FlSpot> _buildSpots(List<dynamic> data) {
     final List<FlSpot> spots = [];
 
@@ -30,10 +25,10 @@ class _GraphBoxState extends State<GraphBox> {
   Widget build(BuildContext context) {
     List<dynamic> data = [];
 
-    if (widget.type == 'speed') {
-      data = context.watch<SpeedGraphProvider>().getGraph(widget.id);
+    if (type == 'speed') {
+      data = context.watch<SpeedGraphProvider>().getGraph(id);
     } else {
-      data = context.watch<TemperatureGraphProvider>().getGraph(widget.id);
+      data = context.watch<TemperatureGraphProvider>().getGraph(id);
     }
 
     return DecoratedBox(
@@ -45,7 +40,7 @@ class _GraphBoxState extends State<GraphBox> {
         child: Column(
           children: [
             Text(
-              widget.type == 'speed' ? 'Speed graph' : 'Temperature graph',
+              type == 'speed' ? 'Speed graph' : 'Temperature graph',
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
