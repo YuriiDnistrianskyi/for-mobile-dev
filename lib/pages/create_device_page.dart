@@ -92,11 +92,6 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
               state.device != null &&
               _publicNameController.text.isEmpty) {
             final device = state.device!;
-            print('--------' * 20);
-            print('use ${device.id}');
-            print('--------' * 20);
-            print('use ${device.toMap()}');
-            print('--------' * 20);
             _publicNameController.text = device.publicName;
           }
 

@@ -32,11 +32,6 @@ class DeviceCubit extends Cubit<DeviceState> {
         deviceId, 
         Device.fromMap
       );
-
-      print('--------' * 20);
-      print('get ${device!.toMap()}');
-
-      print('--------' * 20);
       emit(state.copyWith( isLoading: false, device: device));
     } catch (ex) {
       emit(state.copyWith( isLoading: false, error: ex.toString()));

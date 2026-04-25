@@ -1,7 +1,19 @@
+import 'package:my_project/models/i_model.dart';
 import 'package:my_project/repository/general_repository.dart';
 
 class GraphRepository extends GeneralRepository {
   GraphRepository({required super.db, required super.api});
+
+  @override
+  Future<void> insert<T>(
+    IModel obj, 
+    T Function(Map<String, dynamic>) fromMap,
+  ) async {
+    // final table = obj.getTableName();
+    // final data = await api.post('/$table/', obj.toMap());
+    // final newObj = fromMap(data['obj'] as Map<String, dynamic>);
+    await insertInDb(obj);
+  }
 
   Future<List<T>> getGraph<T> (
     String table,
