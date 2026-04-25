@@ -40,12 +40,12 @@ class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
 
         if (object != null) {
           emit(state.copyWith(isLoading: true));
-          createTemperaturePoint(
+          await createTemperaturePoint(
             object.id!,
             double.parse(payload as String),
           );
-          getLastTemperatureGraphPoint(object.id!);
-          getTemperatureGraph(object.id!);
+          await getLastTemperatureGraphPoint(object.id!);
+          await getTemperatureGraph(object.id!);
           emit(state.copyWith(isLoading: false));
         }
       }
@@ -74,7 +74,9 @@ class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
         'temperatureGraphPoint',
         TemperatureGraphPoint.fromMap,
       );
-      emit(state.copyWith(id: objectId, lastPoint: lastPoint));
+      if (lastPoint != null) {
+        emit(state.copyWith(id: objectId, lastPoint: lastPoint));
+      }
     } catch (ex) {
       emit(state.copyWith(isLoading: false, error: ex.toString()));
     }

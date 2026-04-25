@@ -31,7 +31,7 @@ class GraphRepository extends GeneralRepository {
     return result;
   }
 
-  Future<T> getLastPoint<T> (
+  Future<T?> getLastPoint<T> (
     int id,
     String columnId,
     String table,
@@ -44,6 +44,7 @@ class GraphRepository extends GeneralRepository {
       orderBy: 'time DESC',
       limit: 1,
     );
+    if (list.isEmpty) return null;
     final T point = fromMap(list.first);
     return point;
   }

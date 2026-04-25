@@ -3,14 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/cubit/device/device_cubit.dart';
 import 'package:my_project/cubit/object/object_cubit.dart';
 import 'package:my_project/cubit/object/object_state.dart';
+import 'package:my_project/cubit/tempeture_graph/temperature_graph_cubit.dart';
+import 'package:my_project/cubit/tempeture_graph/temperature_graph_state.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/pages/create_device_page.dart';
 import 'package:my_project/pages/create_object_page.dart';
-// import 'package:my_project/providers/device_provider.dart';
-import 'package:my_project/providers/temperature_graph_provider.dart';
-// import 'package:my_project/repository/object_repository.dart';
-// import 'package:my_project/services/mqtt_service.dart';
 import 'package:my_project/widgets/custom_button.dart';
 import 'package:my_project/widgets/device_item.dart';
 import 'package:my_project/widgets/graph_box.dart';
@@ -47,10 +45,6 @@ class ObjectPage extends StatelessWidget {
           final MyObject object = state.object!;
           final List<Device> devices = 
               context.watch<DeviceCubit>().state.devices;
-          final double currentTemperature = context
-              .watch<TemperatureGraphProvider>()
-              .getLastPoint(objectId)!
-              .value;
 
           return Scaffold(
             backgroundColor: Colors.transparent,
@@ -86,9 +80,14 @@ class ObjectPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.95,
                   child: Column(
                     children: [
-                      ParameterField(
-                        parameter: 'temperature',
-                        value: '$currentTemperature',
+                      BlocBuilder<TemperatureGraphCubit, TemperatureGraphState>(
+                        builder: (context, state) {
+                          final temperature = state.lastPoints[objectId];
+                          return ParameterField(
+                            parameter: 'temperature',
+                            value: '${temperature?.value}',
+                          );
+                        }
                       ),
                       const WiFiStatus(),
                       GraphBox(type: 'temperature', id: objectId),

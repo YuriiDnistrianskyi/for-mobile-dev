@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:my_project/cubit/tempeture_graph/temperature_graph_cubit.dart';
 import 'package:my_project/providers/speed_graph_provider.dart';
-import 'package:my_project/providers/temperature_graph_provider.dart';
 import 'package:provider/provider.dart';
 
 class GraphBox extends StatelessWidget {
@@ -28,7 +28,7 @@ class GraphBox extends StatelessWidget {
     if (type == 'speed') {
       data = context.watch<SpeedGraphProvider>().getGraph(id);
     } else {
-      data = context.watch<TemperatureGraphProvider>().getGraph(id);
+      data = context.watch<TemperatureGraphCubit>().state.graphs[id] ?? [];
     }
 
     return DecoratedBox(
