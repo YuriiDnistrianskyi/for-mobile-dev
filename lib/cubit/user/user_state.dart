@@ -17,11 +17,11 @@ class UserState {
     );
   }
 
-  UserState copyWith(
+  UserState copyWith({
     User? user,
     bool? isLoading,
     String? error,
-  ) {
+  }) {
     return UserState(
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
