@@ -42,7 +42,6 @@ class _RegisterPageState extends State<RegisterPage> {
       final bool userExists = await userProvider.userExists(
         _emailController.text.trim(),
       );
-
       if (!mounted) return;
 
       if (_passwordController.text.trim() !=
@@ -86,7 +85,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 builder: (context) => const ProfilePage(),
               ),
             );
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(widget.isRegister ? 'User created' : 'User updated'),
@@ -107,17 +105,15 @@ class _RegisterPageState extends State<RegisterPage> {
             _lastNameController.text = user.lastName;
             _emailController.text = user.email;
           }
-
           if (state.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
           if (state.error != null) {
             return Center(child: Text('Error: ${state.error}'));
           }
-          
+
           return FormLayer(
             title: widget.isRegister ? 'Register' : 'Edit Profile',
             backAction: () {

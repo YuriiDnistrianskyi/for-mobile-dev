@@ -26,11 +26,9 @@ import 'package:sqflite/sqflite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
   final db = await GeneralRepository.open(path);
-
   final manager = MqttManager(
     host: 'broker.hivemq.com',
     clientName: 'flutter_name',
@@ -38,7 +36,6 @@ void main() async {
   );
   final service = MqttService(manager: manager);
   service.init();
-
   final TokenStore tokenStore = TokenStore();
   final ApiClient apiClient = ApiClient(tokenStore: tokenStore);
 
