@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_flashlight_plugin/my_flashlight_plugin.dart';
 import 'package:my_project/cubit/tempeture_graph/temperature_graph_state.dart';
 import 'package:my_project/models/temperature_graph_point_model.dart';
 import 'package:my_project/repository/graph_repository.dart';
@@ -14,19 +15,6 @@ class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
     required this.repository,
     required this.objectRepository,  
   }) : super(TemperatureGraphState.initial());
-
-  // List<TemperatureGraphPoint> getGraph(int objectId) {
-  //   return _graphs[objectId] ?? [];
-  // }
-
-  // TemperatureGraphPoint? getLastPoint(int objectId) {
-  //   return _lastPoints[objectId] ??
-  //       TemperatureGraphPoint(
-  //         objectId: objectId,
-  //         time: DateTime.now().millisecondsSinceEpoch,
-  //         value: 0,
-  //       );
-  // }
 
   void listen(MqttService service) {
     service.manager.stream.listen((message) async {
@@ -47,6 +35,9 @@ class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
           await getLastTemperatureGraphPoint(object.id!);
           await getTemperatureGraph(object.id!);
           emit(state.copyWith(isLoading: false));
+          
+          final plugin = MyFlashlightPlugin();
+          plugin.flash(1);
         }
       }
     });
