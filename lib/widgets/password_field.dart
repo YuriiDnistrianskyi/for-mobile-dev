@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/core/banned_passwords.dart';
 
-class PasswordField extends StatefulWidget {
+class PasswordField extends StatelessWidget {
   const PasswordField({
     required this.text,
     required this.icon,
@@ -13,18 +13,13 @@ class PasswordField extends StatefulWidget {
   final Icon icon;
   final TextEditingController controller;
 
-  @override
-  State<PasswordField> createState() => _PasswordFieldState();
-}
+  // bool _isHidden = true;
 
-class _PasswordFieldState extends State<PasswordField> {
-  bool _isHidden = true;
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
-  }
+  // void _togglePasswordVisibility() {
+  //   setState(() {
+  //     _isHidden = !_isHidden;
+  //   });
+  // }
 
   String? _validation(String? value) {
     if (value == null || value.isEmpty) {
@@ -41,29 +36,36 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final isHidden = ValueNotifier<bool>(true);
+
     return Column(
       children: [
         const SizedBox(height: 20),
         SizedBox(
           width: 250,
-          child: TextFormField(
-            controller: widget.controller,
-            obscureText: _isHidden,
-            keyboardType: TextInputType.visiblePassword,
-            validator: _validation,
-            decoration: InputDecoration(
-              labelText: 'Enter ${widget.text}',
-              icon: widget.icon,
-              suffixIcon: IconButton(
-                icon: _isHidden
-                    ? const Icon(Icons.visibility_off)
-                    : const Icon(Icons.visibility),
-                onPressed: _togglePasswordVisibility,
-              ),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(11)),
-              ),
-            ),
+          child: ValueListenableBuilder<bool>(
+            valueListenable: isHidden,
+            builder: (context, value, _) {
+              return TextFormField(
+                controller: controller,
+                obscureText: value,
+                keyboardType: TextInputType.visiblePassword,
+                validator: _validation,
+                decoration: InputDecoration(
+                  labelText: 'Enter $text',
+                  icon: icon,
+                  suffixIcon: IconButton(
+                    icon: value
+                        ? const Icon(Icons.visibility_off)
+                        : const Icon(Icons.visibility),
+                    onPressed: () => isHidden.value = !isHidden.value,
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(11)),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ],

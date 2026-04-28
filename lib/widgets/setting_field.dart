@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SettingField extends StatefulWidget {
+class SettingField extends StatelessWidget {
   const SettingField({
     required this.text,
     required this.icon,
@@ -13,14 +13,9 @@ class SettingField extends StatefulWidget {
   final void Function() func;
 
   @override
-  State<SettingField> createState() => _SettingFieldState();
-}
-
-class _SettingFieldState extends State<SettingField> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.func,
+      onTap: func,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.95,
         height: 70,
@@ -31,8 +26,8 @@ class _SettingFieldState extends State<SettingField> {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            Expanded(child: Text(widget.text)),
-            widget.icon,
+            Expanded(child: Text(text)),
+            icon,
           ],
         ),
       ),

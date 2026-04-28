@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/device/device_cubit.dart';
+import 'package:my_project/cubit/device/device_state.dart';
+// import 'package:my_project/cubit/device/device_state.dart';
 import 'package:my_project/models/device_model.dart';
-import 'package:my_project/providers/device_provider.dart';
+// import 'package:my_project/providers/device_provider.dart';
 import 'package:my_project/widgets/device_fields.dart';
 import 'package:my_project/widgets/form_layer.dart';
-import 'package:provider/provider.dart';
 
 class CreateDevicePage extends StatefulWidget {
   final bool isCreate;
@@ -29,23 +32,9 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (!widget.isCreate) {
-      context.read<DeviceProvider>().getDevice(widget.deviceId!);
-      final Device device = context.read<DeviceProvider>().device!;
-
-      _publicNameController.text = device.publicName;
-      _privateNameController.text = device.privateName;
-      // _passwordController.text = device.password!;
-    }
-  }
-
   void _action() async {
     if (_formKey.currentState!.validate()) {
-      final deviceProvider = context.read<DeviceProvider>();
+      final deviceProvider = context.read<DeviceCubit>();
 
       if (widget.isCreate) {
         final privateName = _privateNameController.text.trim();
@@ -77,7 +66,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           widget.objectId,
         );
       } else {
-        final Device currentDevice = context.read<DeviceProvider>().device!;
+        final Device currentDevice = context.read<DeviceCubit>().state.device!;
         await deviceProvider.updateDevice(
           widget.deviceId as int,
           _publicNameController.text.trim(),
@@ -95,37 +84,63 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FormLayer(
-      title: widget.isCreate ? 'Create Device' : 'Edit Device',
-      backAction: () => Navigator.pop(context),
-      actions: widget.isCreate
-          ? null
-          : [
-              IconButton(
-                onPressed: () {
-                  context.read<DeviceProvider>().deleteDevice(
-                    widget.deviceId!,
-                    widget.objectId,
-                  );
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Device deleted')),
-                  );
-                },
-                icon: const Icon(Icons.delete, color: Colors.red),
-              ),
-            ],
-      fields: DeviceFields(
-        formKey: _formKey,
-        publicNameController: _publicNameController,
-        privateNameController: widget.isCreate ? _privateNameController : null,
-        passwordController: widget.isCreate ? _passwordController : null,
-        confirmPasswordController: widget.isCreate
-            ? _confirmPasswordController
-            : null,
+    return BlocProvider.value(
+      value: context.read<DeviceCubit>(),
+      child: BlocBuilder<DeviceCubit, DeviceState>(
+        builder: (context, state) {
+          if (!widget.isCreate &&
+              state.device != null &&
+              _publicNameController.text.isEmpty) {
+            final device = state.device!;
+            _publicNameController.text = device.publicName;
+          }
+
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.green),
+            );
+          }
+
+          if (state.error != null) {
+            return Center(child: Text('Error: ${state.error}'));
+          }
+
+          return FormLayer(
+            title: widget.isCreate ? 'Create Device' : 'Edit Device',
+            backAction: () => Navigator.pop(context),
+            actions: widget.isCreate
+                ? null
+                : [
+                    IconButton(
+                      onPressed: () {
+                        context.read<DeviceCubit>().deleteDevice(
+                          widget.deviceId!,
+                          widget.objectId,
+                        );
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Device deleted')),
+                        );
+                      },
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                    ),
+                  ],
+            fields: DeviceFields(
+              formKey: _formKey,
+              publicNameController: _publicNameController,
+              privateNameController: widget.isCreate
+                  ? _privateNameController
+                  : null,
+              passwordController: widget.isCreate ? _passwordController : null,
+              confirmPasswordController: widget.isCreate
+                  ? _confirmPasswordController
+                  : null,
+            ),
+            textButton: widget.isCreate ? 'Create' : 'Update',
+            pressAction: _action,
+          );
+        },
       ),
-      textButton: widget.isCreate ? 'Create' : 'Update',
-      pressAction: _action,
     );
   }
 }

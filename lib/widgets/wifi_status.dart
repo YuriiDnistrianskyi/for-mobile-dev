@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:provider/provider.dart';
 
-class WiFiStatus extends StatefulWidget {
+class WiFiStatus extends StatelessWidget {
   const WiFiStatus({super.key});
 
-  @override
-  State<WiFiStatus> createState() => _WiFiStatusState();
-}
-
-class _WiFiStatusState extends State<WiFiStatus> {
   @override
   Widget build(BuildContext context) {
     final wifiStatus = context.watch<WiFiProvider>().isConnected;

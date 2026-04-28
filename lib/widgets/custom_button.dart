@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatefulWidget {
+class CustomButton extends StatelessWidget {
   const CustomButton({required this.text, required this.func, super.key});
 
   final String text;
   final void Function() func;
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.func,
+      onTap: func,
       child: Expanded(
         child: DecoratedBox(
           decoration: const BoxDecoration(
@@ -23,7 +18,7 @@ class _CustomButtonState extends State<CustomButton> {
           ),
           child: Center(
             child: Text(
-              widget.text,
+              text,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,

@@ -1,32 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_flashlight_plugin/my_flashlight_plugin.dart';
+import 'package:my_project/cubit/tempeture_graph/temperature_graph_state.dart';
 import 'package:my_project/models/temperature_graph_point_model.dart';
 import 'package:my_project/repository/graph_repository.dart';
 import 'package:my_project/repository/object_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
-class TemperatureGraphProvider extends ChangeNotifier {
+
+class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
   final GraphRepository repository;
   final ObjectRepository objectRepository;
-  final Map<int, List<TemperatureGraphPoint>> _graphs = {};
-  final Map<int, TemperatureGraphPoint?> _lastPoints = {};
 
-  TemperatureGraphProvider({
+  TemperatureGraphCubit({
     required this.repository,
     required this.objectRepository,  
-  });
-
-  List<TemperatureGraphPoint> getGraph(int objectId) {
-    return _graphs[objectId] ?? [];
-  }
-
-  TemperatureGraphPoint? getLastPoint(int objectId) {
-    return _lastPoints[objectId] ??
-        TemperatureGraphPoint(
-          objectId: objectId,
-          time: DateTime.now().millisecondsSinceEpoch,
-          value: 0,
-        );
-  }
+  }) : super(TemperatureGraphState.initial());
 
   void listen(MqttService service) {
     service.manager.stream.listen((message) async {
@@ -39,37 +27,48 @@ class TemperatureGraphProvider extends ChangeNotifier {
         );
 
         if (object != null) {
+          emit(state.copyWith(isLoading: true));
           await createTemperaturePoint(
             object.id!,
             double.parse(payload as String),
           );
           await getLastTemperatureGraphPoint(object.id!);
           await getTemperatureGraph(object.id!);
+          emit(state.copyWith(isLoading: false));
+          MyFlashlightPlugin.flash(1);
         }
       }
     });
   }
 
   Future<void> getTemperatureGraph(int objectId) async {
-    final List<TemperatureGraphPoint> graph = await repository.getGraph(
-      'temperatureGraphPoint',
-      'objectId',
-      objectId,
-      TemperatureGraphPoint.fromMap,
-    );
-    _graphs[objectId] = graph;
-    notifyListeners();
+    try {
+      final List<TemperatureGraphPoint> graph = await repository.getGraph(
+        'temperatureGraphPoint',
+        'objectId',
+        objectId,
+        TemperatureGraphPoint.fromMap,
+      );
+      emit(state.copyWith(id: objectId, graph: graph));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<void> getLastTemperatureGraphPoint(int objectId) async {
-    final TemperatureGraphPoint? lastPoint = await repository.getLastPoint(
-      objectId,
-      'objectId',
-      'temperatureGraphPoint',
-      TemperatureGraphPoint.fromMap,
-    );
-    _lastPoints[objectId] = lastPoint;
-    notifyListeners();
+    try {
+      final TemperatureGraphPoint? lastPoint = await repository.getLastPoint(
+        objectId,
+        'objectId',
+        'temperatureGraphPoint',
+        TemperatureGraphPoint.fromMap,
+      );
+      if (lastPoint != null) {
+        emit(state.copyWith(id: objectId, lastPoint: lastPoint));
+      }
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<void> createTemperaturePoint(int objectId, double value) async {
@@ -83,6 +82,6 @@ class TemperatureGraphProvider extends ChangeNotifier {
       TemperatureGraphPoint.fromMap,
     );
     await repository.trimTable('temperatureGraphPoint', 'objectId', objectId);
-    notifyListeners();
+    // notifyListeners();
   }
 }

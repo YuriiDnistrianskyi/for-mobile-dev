@@ -1,20 +1,24 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/user/user_state.dart';
 import 'package:my_project/models/user_model.dart';
 import 'package:my_project/repository/user_repository.dart';
 
-class UserProvider extends ChangeNotifier {
+class UserCubit extends Cubit<UserState> {
   final UserRepository repository;
-  User? _user;
 
-  User? get user => _user;
-
-  UserProvider ({
+  UserCubit({
     required this.repository,
-  });
+  }) : super(UserState.initial());
 
   Future<void> getUser(int id) async {
-    _user = await repository.getById<User>('user', id, User.fromMap);
-    notifyListeners();
+    try {
+      emit(state.copyWith(isLoading: true));
+      final user = await repository.getById<User>('user', id, User.fromMap);
+      emit(state.copyWith(isLoading: false, user: user));
+    } catch (ex) {
+      emit (state.copyWith(error: ex.toString()));
+    }
   }
 
   Future<bool> userExists(String email) async {
@@ -34,7 +38,6 @@ class UserProvider extends ChangeNotifier {
       email: email,
       password: password
     );
-
     await repository.insert<User>(newUser, User.fromMap);
   }
 
@@ -52,8 +55,8 @@ class UserProvider extends ChangeNotifier {
       email: email,
       password: password
     );
-
     await repository.update(newUser, id);
+    getUser(id);
   }
 
   Future<void> deleteUser(int id) async {

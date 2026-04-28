@@ -31,6 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  my_flashlight_plugin:
+    git:
+      url: https://github.com/YuriiDnistrianskyi/my-flashlight-plugin.git
+      ref: master
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -41,7 +46,8 @@ dependencies:
   shared_preferences: ^2.2.2
   internet_connection_checker_plus: ^2.3.0
   mqtt_client: ^10.11.10
-  dio: ^5.4.0
+  dio: ^5.4.0 
+  flutter_bloc: ^9.1.1
 
 
 

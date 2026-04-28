@@ -1,45 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
+import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/profile_page.dart';
+import 'package:provider/provider.dart';
 
-class CustomNavigationBar extends StatefulWidget {
+class CustomNavigationBar extends StatelessWidget {
   const CustomNavigationBar({required this.currentPage, super.key});
 
   final String currentPage;
-
-  @override
-  State<CustomNavigationBar> createState() => _CustomNavigationBarState();
-}
-
-class _CustomNavigationBarState extends State<CustomNavigationBar> {
-  void _navigateToSetting() {
-    if (widget.currentPage != 'setting') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute<void>(
-      //     builder: (context) => const
-      //   )
-      // )
-    }
-  }
-
-  void _navigateToHome() {
-    if (widget.currentPage != 'home') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute<void>(builder: (context) => const HomePage()),
-      );
-    }
-  }
-
-  void _navigateToProfile() {
-    if (widget.currentPage != 'profile') {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute<void>(builder: (context) => const ProfilePage()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +24,50 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               icon: const Icon(Icons.settings),
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              onPressed: _navigateToSetting,
+              onPressed: () {
+                if (currentPage != 'setting') {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute<void>(
+                  //     builder: (context) => const
+                  //   )
+                  // )
+                }
+              },
             ),
             const SizedBox(width: 40),
             IconButton(
               icon: const Icon(Icons.home),
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              onPressed: _navigateToHome,
+              onPressed: () {
+                if (currentPage != 'home') {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => const HomePage(),
+                    ),
+                  );
+                }
+              },
             ),
             const SizedBox(width: 40),
             IconButton(
               icon: const Icon(Icons.account_box),
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              onPressed: _navigateToProfile,
+              onPressed: () {
+                final id = context.read<AuthCubit>().state.userId!;
+                context.read<UserCubit>().getUser(id);
+                if (currentPage != 'profile') {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => const ProfilePage(),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

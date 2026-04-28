@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:my_flashlight_plugin/my_flashlight_plugin.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
 import 'package:my_project/pages/home_page.dart';
 import 'package:my_project/pages/register_page.dart';
-import 'package:my_project/providers/auth_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
+import 'package:my_project/units/dialog.dart';
 import 'package:my_project/widgets/email_field.dart';
 import 'package:my_project/widgets/important_button.dart';
 import 'package:my_project/widgets/password_field.dart';
@@ -21,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() async {
-    final auth = context.read<AuthProvider>();
+    final auth = context.read<AuthCubit>();
     final wifiStatus = context.read<WiFiProvider>().isConnected;
 
     if (!wifiStatus) {
@@ -35,7 +37,15 @@ class _LoginPageState extends State<LoginPage> {
 
     if (!mounted) return;
 
-    if (auth.isLoggin) {
+    if (auth.state.isLoggin) {
+      final isSupported = await MyFlashlightPlugin.isSupported();
+      if (!mounted) return;
+      if (!isSupported) {
+        showInfoDialog(
+          context, 
+          'Not supported', 'Flash is not supported on this device',
+        );
+      }
       Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(

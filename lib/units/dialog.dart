@@ -27,3 +27,24 @@ Future<bool?> showConfirmDialog(BuildContext context, String text) {
     }
   );
 }
+
+Future<void> showInfoDialog(BuildContext context, String title, String text) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(text),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), 
+            child: const Text(
+              'Ok',
+              style: TextStyle(color: Color(0xFF033E27))
+            ),
+          )
+        ],
+      );
+    }
+  );
+}
