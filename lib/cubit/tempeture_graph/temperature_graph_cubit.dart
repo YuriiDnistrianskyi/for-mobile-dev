@@ -35,9 +35,7 @@ class TemperatureGraphCubit extends Cubit<TemperatureGraphState> {
           await getLastTemperatureGraphPoint(object.id!);
           await getTemperatureGraph(object.id!);
           emit(state.copyWith(isLoading: false));
-          
-          final plugin = MyFlashlightPlugin();
-          plugin.flash(1);
+          MyFlashlightPlugin.flash(1);
         }
       }
     });

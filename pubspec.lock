@@ -293,7 +293,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: f245b9e1492157b5e1c1148b85041da05d6ea09d
+      resolved-ref: "046acfada8ab2cbdb26ad54bae4bf491a2eb2546"
       url: "https://github.com/YuriiDnistrianskyi/my-flashlight-plugin.git"
     source: git
     version: "0.0.1"
