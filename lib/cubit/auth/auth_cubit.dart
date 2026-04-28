@@ -53,17 +53,20 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(state.copyWith(isLoading: true));
       final prefs = await SharedPreferences.getInstance();
-      final accessToken = prefs.getString('__accessToken');
-      final refreshToken = prefs.getString('__refreshToken');
-      final userId = prefs.getInt('__userId');
+      final accessToken = prefs.getString('_____accessToken');
+      final refreshToken = prefs.getString('_____refreshToken');
+      final userId = prefs.getInt('_____userId');
 
-      if (accessToken == null || refreshToken == null || userId == null) return;
+      if (accessToken == null || refreshToken == null || userId == null) {
+        emit(state.copyWith(isLoading: false, isLoggin: false));
+        return;
+      }
 
       tokenStore.accessToken = accessToken;
       tokenStore.refreshToken = refreshToken;
       emit(state.copyWith(isLoggin: true, userId: userId, isLoading: false));
     } catch (ex) {
-      emit(state.copyWith(error: ex.toString()));
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
     }
   }
 
@@ -72,9 +75,9 @@ class AuthCubit extends Cubit<AuthState> {
       tokenStore.accessToken = null;
       tokenStore.refreshToken = null;
       final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('__accessToken');
-      await prefs.remove('__refreshToken');
-      await prefs.remove('__userId');
+      await prefs.remove('_____accessToken');
+      await prefs.remove('_____refreshToken');
+      await prefs.remove('_____userId');
       await repository.delete('user', state.userId!);
       emit(state.copyWith(isLoggin: false, isLoading: false));
       emit(state.copyRemoveUserId());
