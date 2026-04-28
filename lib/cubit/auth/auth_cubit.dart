@@ -3,17 +3,20 @@ import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/token_store.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
 import 'package:my_project/repository/user_repository.dart';
+import 'package:my_project/services/mqtt_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final UserRepository repository;
   final TokenStore tokenStore;
   final ApiClient apiClient;
+  final MqttService mqttService;
 
   AuthCubit({
     required this.repository, 
     required this.tokenStore,
     required this.apiClient,
+    required this.mqttService,
   }) : super(AuthState.initial());
 
   void listen() {
@@ -35,12 +38,12 @@ class AuthCubit extends Cubit<AuthState> {
 
       final prefs = await SharedPreferences.getInstance();
 
-      await prefs.setString('_____accessToken', tokenStore.accessToken as String);
+      await prefs.setString('___accessToken', tokenStore.accessToken as String);
       await prefs.setString(
-        '_____refreshToken',
+        '___refreshToken',
         tokenStore.refreshToken as String,
       );
-      await prefs.setInt('_____userId', state.userId as int);
+      await prefs.setInt('___userId', state.userId as int);
 
       emit(state.copyWith(isLoggin: true, isLoading: false));
     } catch (ex) {
@@ -53,9 +56,9 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(state.copyWith(isLoading: true));
       final prefs = await SharedPreferences.getInstance();
-      final accessToken = prefs.getString('_____accessToken');
-      final refreshToken = prefs.getString('_____refreshToken');
-      final userId = prefs.getInt('_____userId');
+      final accessToken = prefs.getString('___accessToken');
+      final refreshToken = prefs.getString('___refreshToken');
+      final userId = prefs.getInt('___userId');
 
       if (accessToken == null || refreshToken == null || userId == null) {
         emit(state.copyWith(isLoading: false, isLoggin: false));
@@ -75,14 +78,16 @@ class AuthCubit extends Cubit<AuthState> {
       tokenStore.accessToken = null;
       tokenStore.refreshToken = null;
       final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('_____accessToken');
-      await prefs.remove('_____refreshToken');
-      await prefs.remove('_____userId');
+      await prefs.remove('___accessToken');
+      await prefs.remove('___refreshToken');
+      await prefs.remove('___userId');
       await repository.delete('user', state.userId!);
+      // mqttService.removeAllSubscriptions();
+      mqttService.dispose();
       emit(state.copyWith(isLoggin: false, isLoading: false));
       emit(state.copyRemoveUserId());
     } catch (ex) {
-      emit(state.copyWith(error: ex.toString()));
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
     }
   }
 }
