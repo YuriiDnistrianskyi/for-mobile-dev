@@ -82,8 +82,6 @@ class AuthCubit extends Cubit<AuthState> {
       await prefs.remove('___refreshToken');
       await prefs.remove('___userId');
       await repository.delete('user', state.userId!);
-      // mqttService.removeAllSubscriptions();
-      mqttService.dispose();
       emit(state.copyWith(isLoggin: false, isLoading: false));
       emit(state.copyRemoveUserId());
     } catch (ex) {
