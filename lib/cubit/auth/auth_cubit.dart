@@ -35,12 +35,12 @@ class AuthCubit extends Cubit<AuthState> {
 
       final prefs = await SharedPreferences.getInstance();
 
-      await prefs.setString('__accessToken', tokenStore.accessToken as String);
+      await prefs.setString('_____accessToken', tokenStore.accessToken as String);
       await prefs.setString(
-        '__refreshToken',
+        '_____refreshToken',
         tokenStore.refreshToken as String,
       );
-      await prefs.setInt('__userId', state.userId as int);
+      await prefs.setInt('_____userId', state.userId as int);
 
       emit(state.copyWith(isLoggin: true, isLoading: false));
     } catch (ex) {
