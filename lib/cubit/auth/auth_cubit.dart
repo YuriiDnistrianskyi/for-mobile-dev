@@ -3,20 +3,17 @@ import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/token_store.dart';
 import 'package:my_project/cubit/auth/auth_state.dart';
 import 'package:my_project/repository/user_repository.dart';
-import 'package:my_project/services/mqtt_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final UserRepository repository;
   final TokenStore tokenStore;
   final ApiClient apiClient;
-  final MqttService mqttService;
 
   AuthCubit({
     required this.repository, 
     required this.tokenStore,
     required this.apiClient,
-    required this.mqttService,
   }) : super(AuthState.initial());
 
   void listen() {
