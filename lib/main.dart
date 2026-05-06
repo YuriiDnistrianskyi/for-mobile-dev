@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_project/core/api/api_client.dart';
 import 'package:my_project/core/api/api_service.dart';
 import 'package:my_project/core/mqtt_manager.dart';
 import 'package:my_project/core/token_store.dart';
+import 'package:my_project/cubit/auth/auth_cubit.dart';
+import 'package:my_project/cubit/device/device_cubit.dart';
+import 'package:my_project/cubit/object/object_cubit.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_cubit.dart';
+import 'package:my_project/cubit/tempeture_graph/temperature_graph_cubit.dart';
+import 'package:my_project/cubit/user/user_cubit.dart';
 import 'package:my_project/pages/root_page.dart';
-import 'package:my_project/providers/auth_provider.dart';
-import 'package:my_project/providers/device_provider.dart';
-import 'package:my_project/providers/object_provider.dart';
-import 'package:my_project/providers/speed_graph_provider.dart';
-import 'package:my_project/providers/temperature_graph_provider.dart';
-import 'package:my_project/providers/user_provider.dart';
 import 'package:my_project/providers/wifi_provider.dart';
 import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/repository/general_repository.dart';
@@ -25,12 +26,9 @@ import 'package:sqflite/sqflite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   final dbPath = await getDatabasesPath();
   final path = join(dbPath, 'cooling_system_db');
-
   final db = await GeneralRepository.open(path);
-
   final manager = MqttManager(
     host: 'broker.hivemq.com',
     clientName: 'flutter_name',
@@ -38,18 +36,17 @@ void main() async {
   );
   final service = MqttService(manager: manager);
   service.init();
-
   final TokenStore tokenStore = TokenStore();
   final ApiClient apiClient = ApiClient(tokenStore: tokenStore);
 
   runApp(
     MyApp(
-      db: db, 
-      service: service, 
+      db: db,
+      service: service,
       apiClient: apiClient,
-      apiService: ApiService(dio: apiClient.dio), 
-      tokenStore: tokenStore
-    )
+      apiService: ApiService(dio: apiClient.dio),
+      tokenStore: tokenStore,
+    ),
   );
 }
 
@@ -79,54 +76,60 @@ class MyApp extends StatelessWidget {
         Provider<ObjectRepository>(
           create: (_) => ObjectRepository(db: db, api: apiService),
         ),
-
-        ChangeNotifierProvider(
-          create: (_) => AuthProvider(
-            repository: UserRepository(db: db, api: apiService),
-            tokenStore: tokenStore,
-            apiClient: apiClient
-          ),
+        Provider<MqttService>(create: (context) => service),
+        BlocProvider(
+          create: (context) {
+            final cubit = AuthCubit(
+              repository: UserRepository(db: db, api: apiService),
+              tokenStore: tokenStore,
+              apiClient: apiClient,
+            );
+            cubit.listen();
+            cubit.autoLogin();
+            return cubit;
+          },
         ),
-        ChangeNotifierProvider(
-          create: (context) => DeviceProvider(
-            repository: context.read<DeviceRepository>(),
-            mqttService: service,
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ObjectProvider(
+        BlocProvider(
+          create: (context) => ObjectCubit(
             repository: context.read<ObjectRepository>(),
             mqttService: service,
           ),
         ),
-        ChangeNotifierProvider(
+        BlocProvider(
+          create: (context) => DeviceCubit(
+            repository: context.read<DeviceRepository>(),
+            mqttService: service,
+          ),
+        ),
+        BlocProvider(
+          create: (context) => UserCubit(
+            repository: UserRepository(db: db, api: apiService),
+          ),
+        ),
+        BlocProvider(
           create: (context) {
-            final provider = SpeedGraphProvider(
+            final cubit = SpeedGraphCubit(
               repository: GraphRepository(db: db, api: apiService),
               deviceRepository: context.read<DeviceRepository>(),
             );
-            provider.listen(service);
-            return provider;
+            cubit.listen(service);
+            return cubit;
           },
         ),
-        ChangeNotifierProvider(
+        BlocProvider(
           create: (context) {
-            final provider = TemperatureGraphProvider(
+            final cubit = TemperatureGraphCubit(
               repository: GraphRepository(db: db, api: apiService),
               objectRepository: context.read<ObjectRepository>(),
             );
-            provider.listen(service);
-            return provider;
+            cubit.listen(service);
+            return cubit;
           },
-        ),
-        ChangeNotifierProvider(
-          create: (_) => UserProvider(
-            repository: UserRepository(db: db, api: apiService),
-          ),
         ),
         ChangeNotifierProvider(
           create: (_) {
             final provider = WiFiProvider();
+            provider.init();
             return provider;
           },
         ),

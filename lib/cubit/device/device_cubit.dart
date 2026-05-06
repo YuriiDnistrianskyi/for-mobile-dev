@@ -1,31 +1,41 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/device/device_state.dart';
 import 'package:my_project/models/device_model.dart';
 import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
-class DeviceProvider extends ChangeNotifier {
+class DeviceCubit extends Cubit<DeviceState> {
   final DeviceRepository repository;
   final MqttService mqttService;
-  List<Device> _devices = [];
-  List<Device> get devices => _devices;
-  
-  Device? _device;
-  Device? get device => _device;
 
-  DeviceProvider({
+  DeviceCubit({
     required this.repository,
     required this.mqttService,
-  });
+  }) : super(DeviceState.initial());
 
   Future<void> getDevices(int objectId) async {
-    _devices = await repository.getDevicesByObjectId(objectId);
-    notifyListeners();
+    try {
+      emit(state.copyWith(isLoading: true));
+      final devices = await repository.getDevicesByObjectId(objectId);
+      emit(state.copyWith(devices: devices, isLoading: false));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<void> getDevice(int deviceId) async {
-    _device = await repository
-      .getById('device', deviceId, Device.fromMap);
-    notifyListeners();
+    try {
+      emit (state.copyWith(isLoading: true));
+      final device = await repository.getById(
+        'device', 
+        deviceId, 
+        Device.fromMap
+      );
+      emit(state.copyWith( isLoading: false, device: device));
+    } catch (ex) {
+      emit(state.copyWith( isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<bool> deviceExists(String privateName) async {

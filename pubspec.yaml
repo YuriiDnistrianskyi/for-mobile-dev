@@ -41,7 +41,8 @@ dependencies:
   shared_preferences: ^2.2.2
   internet_connection_checker_plus: ^2.3.0
   mqtt_client: ^10.11.10
-  dio: ^5.4.0
+  dio: ^5.4.0 
+  flutter_bloc: ^9.1.1
 
 
 

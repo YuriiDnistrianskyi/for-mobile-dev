@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomField extends StatefulWidget {
+class CustomField extends StatelessWidget {
   const CustomField({
     required this.text,
     required this.icon,
@@ -14,11 +14,6 @@ class CustomField extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController controller;
 
-  @override
-  State<CustomField> createState() => _CustomFieldState();
-}
-
-class _CustomFieldState extends State<CustomField> {
   String? _validation(String? value) {
     if (value == null || value.isEmpty) {
       return 'First name is required';
@@ -35,12 +30,12 @@ class _CustomFieldState extends State<CustomField> {
           width: 250,
           // height: 50,
           child: TextFormField(
-            controller: widget.controller,
-            keyboardType: widget.keyboardType,
+            controller: controller,
+            keyboardType: keyboardType,
             validator: _validation,
             decoration: InputDecoration(
-              labelText: 'Enter ${widget.text}',
-              icon: widget.icon,
+              labelText: 'Enter $text',
+              icon: icon,
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(11)),
               ),

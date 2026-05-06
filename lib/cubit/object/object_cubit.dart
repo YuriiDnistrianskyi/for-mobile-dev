@@ -1,39 +1,49 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/object/object_state.dart';
 import 'package:my_project/models/object_model.dart';
 import 'package:my_project/repository/object_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
-class ObjectProvider extends ChangeNotifier {
+
+class ObjectCubit extends Cubit<ObjectState> {
   final ObjectRepository repository;
   final MqttService mqttService;
-  List<MyObject> _objects = [];
-  List<MyObject> get objects => _objects;
 
-  MyObject? _object;
-  MyObject? get object => _object;
-
-  ObjectProvider({
+  ObjectCubit({
     required this.repository,
     required this.mqttService,
-  });
+  }) : super(ObjectState.initial());
 
   Future<void> getObjects(int userId) async {
-    _objects = await repository.getObjectsByUserId(userId);
+    try {
+      emit(state.copyWith(isLoading: true));
 
-    for (var obj in _objects) {
-      await mqttService.newSubcription('object', obj.privateName);
+
+      final objects = await repository.getObjectsByUserId(userId);
+
+      for (var obj in objects) {
+        await mqttService.newSubcription('object', obj.privateName);
+      }
+
+      emit(state.copyWith(isLoading: false, objects: objects));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
     }
-
-    notifyListeners();
   }
 
   Future<void> getObject(int id) async {
-    _object = await repository.getById(
-      'object', 
-      id,
-      MyObject.fromMap,
-    );
-    notifyListeners();
+    try {
+      emit(state.copyWith(isLoading: true));
+        final object = await repository.getById(
+        'object', 
+        id,
+        MyObject.fromMap,
+      );
+      emit(state.copyWith(isLoading: false, object: object));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<bool> objectExists(String privateName) async {
@@ -60,8 +70,8 @@ class ObjectProvider extends ChangeNotifier {
       defaultSpeedForDevices: defaultSpeedForDevices,
     );
     await repository.insert<MyObject>(newObject, MyObject.fromMap);
-    await getObjects(userId);
     await mqttService.publishMessage('creation/object/new', 'Create object $publicName');
+    await getObjects(userId);
   }
 
   Future<void> updateObject(

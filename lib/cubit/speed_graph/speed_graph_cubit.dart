@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_project/cubit/speed_graph/speed_graph_state.dart';
 import 'package:my_project/models/speed_graph_point_model.dart';
 import 'package:my_project/repository/device_repository.dart';
 import 'package:my_project/repository/graph_repository.dart';
 import 'package:my_project/services/mqtt_service.dart';
 
-class SpeedGraphProvider extends ChangeNotifier {
+class SpeedGraphCubit extends Cubit<SpeedGraphState> {
   final GraphRepository repository;
   final DeviceRepository deviceRepository;
-  final Map<int, List<SpeedGraphPoint>> _graphs = {};
-  final Map<int, SpeedGraphPoint?> _lastPoints = {};
 
-  SpeedGraphProvider({
+  SpeedGraphCubit({
     required this.repository, 
     required this.deviceRepository
-  });
+  }) : super(SpeedGraphState.initial());
 
   void listen(MqttService service) {
     service.manager.stream.listen((message) async {
@@ -26,44 +25,42 @@ class SpeedGraphProvider extends ChangeNotifier {
         );
 
         if (device != null) {
+          emit(state.copyWith(isLoading: true));
           await createSpeedPoint(device.id!, int.parse(payload as String));
           await getLastSpeedGraphPoint(device.id!);
           await getSpeedGraph(device.id!);
+          emit(state.copyWith(isLoading: false));
         }
       }
     });
   }
 
-  List<SpeedGraphPoint> getGraph(int deviceId) {
-    return _graphs[deviceId] ?? [];
-  }
-
-  SpeedGraphPoint? getLastPoint(int deviceId) {
-    return _lastPoints[deviceId];
-  }
-
   Future<void> getSpeedGraph(int deviceId) async {
-    final List<SpeedGraphPoint> graph = await repository.getGraph(
-      'speedGraphPoint',
-      'device_id',
-      deviceId,
-      SpeedGraphPoint.fromMap,
-    );
-
-    _graphs[deviceId] = graph;
-    notifyListeners();
+    try {
+      final List<SpeedGraphPoint> graph = await repository.getGraph(
+        'speedGraphPoint',
+        'device_id',
+        deviceId,
+        SpeedGraphPoint.fromMap,
+      );
+      emit(state.copyWith(id: deviceId, graph: graph));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
   Future<void> getLastSpeedGraphPoint(int deviceId) async {
-    final SpeedGraphPoint? lastPoint = await repository.getLastPoint(
-      deviceId,
-      'deviceId',
-      'speedGraphPoint',
-      SpeedGraphPoint.fromMap,
-    );
-
-    _lastPoints[deviceId] = lastPoint;
-    notifyListeners();
+    try {
+      final SpeedGraphPoint? lastPoint = await repository.getLastPoint(
+        deviceId,
+        'deviceId',
+        'speedGraphPoint',
+        SpeedGraphPoint.fromMap,
+      );
+      emit(state.copyWith(id: deviceId, lastPoint: lastPoint));
+    } catch (ex) {
+      emit(state.copyWith(isLoading: false, error: ex.toString()));
+    }
   }
 
 
@@ -75,6 +72,5 @@ class SpeedGraphProvider extends ChangeNotifier {
     );
     await repository.insert<SpeedGraphPoint>(point, SpeedGraphPoint.fromMap);
     await repository.trimTable('speedGraphPoint', 'deviceId', deviceId);
-    notifyListeners();
   }
 }
